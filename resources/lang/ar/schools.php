@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'عنوان',
+    'Is active' => 'الحاله',
+    'name' => 'الاسم',
+    'Country' => 'الدوله',
+    'Educational System' => 'النظام التعليمي',
+    'Address' => 'العنوان',
+    'Create' => 'انشاء',
+    'mobile' => 'التليفون المحمول',
+    'email' => 'البريد الإكتروني',
+    'created on' => 'تاريخ الانشاء',
+    'Actions' => 'الاوامر',
+    'active' => 'نشط',
+    'not active' => 'غير نشط',
+    'view' => 'عرض',
+    'edit' => 'تعديل',
+    'Schools' => 'المدارس',
+    'address' => 'العنوان',
+    'is_active' => 'نشط',
+    'id' => 'الرقم التعريفي',
+    'country_name' => 'الدوله',
+    'educational_system_name' => 'النظام التعليمي',
+    'Instructors' => 'المعلمون',
+];

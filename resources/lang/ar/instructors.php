@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'Instructor Name' => 'اسم المعلم',
+    'Country' => 'الدوله',
+    'Subject' => 'المادة',
+    'total hours' => 'مجموع الساعات',
+    'Rate' => 'التقييم',
+    'Rates' => 'التقييمات',
+    'Name' => 'الاسم',
+    'number of student' => 'عدد الطلاب',
+    'number of hours' => 'عدد الساعات',
+    'Instructors' => 'المعلمون',
+    'Instructor' => 'المعلم',
+    'Student Name' => 'اسم الطالب',
+    'Comment' => 'التعليقات',
+    'rating details' => 'تفاصيل التقيم',
+    'created on' => 'تاريخ التقييم',
+    'view' => 'عرض',
+    'Total Rates' => 'عدد التقييمات',
+    'Instructor ID' => 'رقم هوية المعلم',
+    'Branch Name' => 'اسم الفرع',
+    'Total of Sessions' => 'العدد الكلى للحصص',
+    'Session Attend' => 'عدد الحضور',
+    'Session Absence' => 'عدد الغياب',
+    'Instructor Attendance' => 'حضور المدرسين',
+    'id' => 'رقم التعريف',
+    'export' => 'تصدير',
+    'instructor' => 'معلم'
+];

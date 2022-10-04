@@ -1,0 +1,40 @@
+{
+    "authHost": "https://ouredu.testenv.tech",
+    "authEndpoint": "/broadcasting/auth",
+    "clients": [
+        {
+            "appId": "b3005a0c70b9ad14",
+            "key": "16d22c4bc9dbeb4ad4cdb6a27450a82a"
+        }
+    ],
+    "database": "redis",
+    "databaseConfig": {
+        "redis": {
+            "port": "6379",
+            "host": "localhost"
+        },
+        "sqlite": {
+            "databasePath": "/database/laravel-echo-server.sqlite"
+        }
+    },
+    "devMode": true,
+    "host": "ouredu.testenv.tech",
+    "port": "6001",
+    "protocol": "https",
+    "socketio": {},
+    "secureOptions": 67108864,
+    "sslCertPath": "/etc/letsencrypt/live/ouredu.testenv.tech/fullchain.pem",
+    "sslKeyPath": "/etc/letsencrypt/live/ouredu.testenv.tech/privkey.pem",
+    "sslCertChainPath": "",
+    "sslPassphrase": "",
+    "subscribers": {
+        "http": false,
+        "redis": true
+    },
+    "apiOriginAllow": {
+        "allowCors": true,
+        "allowOrigin": "0.0.0.0",
+        "allowMethods": "GET, POST",
+        "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+    }
+}

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 267.96 34">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #2f3e98;
+        font-size: 17px;
+        font-family: Helvetica-Bold, Helvetica;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        font-family: Helvetica;
+        font-weight: 400;
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient-3);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="-1.007" y1="-1.09" x2="1.783" y2="1.853" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#2e4197"/>
+      <stop offset="0.039" stop-color="#394092"/>
+      <stop offset="1" stop-color="#c32026"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-0.659" y1="-0.675" x2="2.452" y2="2.363" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="-0.176" y1="-0.203" x2="2.871" y2="2.751" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="Group_457" data-name="Group 457" transform="translate(-60 -181)">
+    <text id="SMART_CAMPAIGN_SYSTEM" data-name="SMART 
+CAMPAIGN SYSTEM" class="cls-1" transform="translate(162.96 194)"><tspan x="0" y="0">SMART </tspan><tspan class="cls-2"><tspan x="0" y="17">CAMPAIGN SYSTEM</tspan></tspan></text>
+    <g id="Group_456" data-name="Group 456" transform="translate(60 181.376)">
+      <path id="Path_2125" data-name="Path 2125" class="cls-3" d="M91.873,5.389a13.259,13.259,0,0,1,8.1,8.355h0l5.148,1.857A18.02,18.02,0,0,0,72.632,7.415h0V7.5a25.446,25.446,0,0,0-2.194,4.3,3.573,3.573,0,0,0-.338,1.013h0l4.3,1.6h0l1.1.422.338.084a3.023,3.023,0,0,1,.928.338l21.858,7.849a13.35,13.35,0,0,1-15.36,4.557,13.819,13.819,0,0,1-6.414-4.895l-.675-1.1-5.148-.844a16.423,16.423,0,0,0,2.11,4.642l.084.084h0a18.026,18.026,0,0,0,31.647-4.3c.084-.169.169-.422.253-.591l-28.694-10.3A13.186,13.186,0,0,1,91.873,5.389ZM74.995,12.731Zm.253.928Zm-.928,9.705Z" transform="translate(-10.94 0.076)"/>
+      <path id="Path_2126" data-name="Path 2126" class="cls-4" d="M49.629,27.995a13.492,13.492,0,0,1-4.473-2.025c-.084-.084-.253-.169-.338-.253h0a13.233,13.233,0,0,1-3.713-4.388,11.172,11.172,0,0,1-.928-7.764,11.622,11.622,0,0,1,2.7-4.895A13.006,13.006,0,0,1,49.207,5.04,15.705,15.705,0,0,1,52.077,4.7a14.662,14.662,0,0,1,3.291.422,13.184,13.184,0,0,1,7.933,5.57,6.975,6.975,0,0,1,.591,1.1c.084-.169.084-.253.169-.422a26.616,26.616,0,0,1,2.11-4.135A17.78,17.78,0,0,0,44.4,2.17a17.252,17.252,0,0,0-8.524,9.874.64.64,0,0,1-.169.338c-.084.169-.084.338-.169.506a17.747,17.747,0,0,0-.338,3.966c.675,7.258,4.473,11.984,11.646,14.6a16.92,16.92,0,0,0,19.748-5.823A19.191,19.191,0,0,1,64.4,20.568l-.422,1.013C61.7,26.729,55.621,29.514,49.629,27.995Z" transform="translate(-5.492 0.004)"/>
+      <path id="Path_2127" data-name="Path 2127" class="cls-5" d="M6.414,10.292A13.419,13.419,0,0,1,29.369,11.98c0-.084.084-.253.084-.338a16.474,16.474,0,0,1,2.279-4.557,18.067,18.067,0,0,0-8.186-6.076A18.2,18.2,0,0,0,.422,11.811a4.114,4.114,0,0,1-.338.928l4.388,1.6h0l24.221,8.692a13.35,13.35,0,0,1-15.36,4.557,13.505,13.505,0,0,1-8.271-8.861L0,16.874a17.985,17.985,0,0,0,32.069,9.283,17.837,17.837,0,0,1-3.207-7.764Z" transform="translate(0 0.068)"/>
+    </g>
+  </g>
+</svg>

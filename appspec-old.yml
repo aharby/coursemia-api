@@ -1,0 +1,14 @@
+version: 0.0
+os: linux 
+files:
+  - source: /
+    destination: /var/www/deploy/
+permissions:
+  - object : /var/www/deploy/
+    owner: root
+    group: root
+    mode:  750
+hooks:
+    AfterInstall:
+    - location: pull_backend.sh
+

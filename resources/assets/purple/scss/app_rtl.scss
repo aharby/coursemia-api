@@ -1,0 +1,82 @@
+$mdi-font-path: "/assets/fonts" !default;
+
+@import 'node_modules/@mdi/font/scss/materialdesignicons';
+@import 'node_modules/perfect-scrollbar/css/perfect-scrollbar';
+@import '../css/purple-admin';
+@import '_rtl';
+@import '_datepicker';
+
+.alert {
+    p {
+        margin: 0;
+    }
+}
+
+.btn {
+    &-xs {
+        i {
+            font-size: 0.6rem;
+        }
+    }
+}
+
+.modal-footer {
+    > :not(:last-child) {
+        margin-right: 0;
+        margin-left: .25rem;
+    }
+    > :not(:first-child) {
+        margin-right: .25rem;
+        margin-left: 0;
+    }
+}
+
+.modal-header {
+    .close {
+        margin: -1rem auto -1rem -1rem;
+    }
+}
+
+.auth {
+    .brand-logo {
+        text-align: center;
+        img {
+            width: 90%;
+        }
+    }
+}
+
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.btn-group > .btn:not(:first-child), .btn-group > .btn-group:not(:first-child) > .btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.mdi-spin {
+    position: relative;
+    display: inline-block;
+
+    &:before {
+        animation: spin 1s linear infinite;
+    }
+}
+
+body,
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    // .card .card-title,
+    // .font-weight-normal,
+    // .sidebar {
+    font-family: 'DroidKufi-Regular', sans-serif;
+}
+
+.sidebar {
+    width: 320px;
+}

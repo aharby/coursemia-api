@@ -1,0 +1,26 @@
+<?php 
+
+return [
+    'title' => 'title',
+    'Is active' => 'Is active',
+    'name' => 'name',
+    'Country' => 'Country',
+    'Educational System' => 'Educational System',
+    'Address' => 'Address',
+    'Create' => 'Create',
+    'mobile' => 'mobile',
+    'email' => 'email',
+    'created on' => 'Created On',
+    'Actions' => 'Actions',
+    'active' => 'active',
+    'not active' => 'not active',
+    'view' => 'view',
+    'edit' => 'edit',
+    'Schools' => 'Schools',
+    'address' => 'Address',
+    'is_active' => 'Is active',
+    'id' => 'ID',
+    'country_name' => 'Country Name',
+    'educational_system_name' => 'Educational System Name',
+    'Instructors' => 'Instructors',
+];

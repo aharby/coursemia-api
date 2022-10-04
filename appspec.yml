@@ -1,0 +1,17 @@
+version: 0.0
+os: linux 
+files:
+  - source: /
+    destination: /var/www/html/production/ouredube
+    overwrite: true
+permissions:
+  - object : /var/www/html/production/ouredube
+    owner: www-data
+    group: www-data
+    mode:  755
+hooks:
+    AfterInstall:
+    - location: php-backend.sh
+      timeout: 300
+      runas: root
+

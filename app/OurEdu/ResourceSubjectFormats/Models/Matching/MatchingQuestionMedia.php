@@ -1,0 +1,20 @@
+<?php
+
+namespace App\OurEdu\ResourceSubjectFormats\Models\Matching;
+
+use App\OurEdu\BaseApp\BaseModel;
+
+class MatchingQuestionMedia extends BaseModel
+{
+    protected $table = 'matching_question_media';
+
+    protected $fillable =[
+        'source_filename',
+        'filename',
+        'mime_type',
+        'url',
+        'extension',
+        'status',
+        'res_matching_question_id'
+    ];
+}

@@ -1,0 +1,115 @@
+<?php
+
+namespace App\OurEdu\Exams\Student\Transformers\Questions;
+
+use Illuminate\Support\Str;
+use League\Fractal\TransformerAbstract;
+use App\OurEdu\Exams\Models\ExamQuestionAnswer;
+use App\OurEdu\Exams\Models\Competitions\CompetitionStudent;
+use App\OurEdu\ResourceSubjectFormats\Models\Complete\CompleteData;
+use App\OurEdu\ResourceSubjectFormats\Models\Complete\CompleteAcceptedAnswer;
+
+class CompetitionQuestionCompleteTransformer extends TransformerAbstract
+{
+    protected array $defaultIncludes = [
+    ];
+
+    protected array $availableIncludes = [
+    ];
+
+    private $params;
+    private $student;
+    private $examQuestion;
+    private $answers;
+
+    public function __construct($params = [])
+    {
+        $this->params = $params;
+        $this->student = $this->params['student'];
+        $this->examQuestion = $this->params['examQuestion'];
+        $this->params['is_exam'] = $this->params['is_exam'] ?? false;
+    }
+
+    /**
+     * @param CompleteData $multipleChoiceData
+     * @return array
+     */
+    public function transform($question)
+    {
+        $transformedData = [];
+
+
+        if (isset($this->params['exam_id']) && (isset($this->params['is_answer']))) {
+            $count = CompetitionStudent::where('exam_id', $this->params['exam_id'])
+                ->count();
+        }
+
+        $transformedData = [
+            'id' => Str::uuid(),
+            'question' => $question->question,
+        ];
+
+        $answers = [];
+
+        if (isset($this->params['is_answer']) && (bool)$this->params['is_answer']) {
+            foreach ($question->options as $answer) {
+                $answersData = [
+                    'id' => $answer->id,
+                    'answer' => $answer->answer,
+                ];
+
+                $singleOptionsCount = ExamQuestionAnswer::where('option_table_type', CompleteAcceptedAnswer::class)
+                    ->where('option_table_id', $answer->id)->count();
+
+                $answersData['percent'] = round(getNumberOfPercent($singleOptionsCount, $count));
+                $answers[] = $answersData;
+            }
+        }
+        $transformedData['is_answered'] = false;
+        $transformedData['is_correct_answer'] = false;
+        $transformedData['answer'] = $question->answer->answer ?? '';
+        $transformedData['student_answer'] = (object) $this->studentAnswer();
+        $transformedData['selected_options'] =  $this->SelectedOptions();
+
+        if(isset($this->params['is_answered']) && (bool)$this->params['is_answered']){
+            $transformedData['is_answered'] = (bool) $this->params['is_answered'];
+            $transformedData['is_correct_answer']  = isset($this->params['answers']) ? (bool)$this->params['answers']->is_correct_answer : false;
+        }
+
+        $transformedData['accepted_answers'] = $answers;
+
+        return $transformedData;
+    }
+
+    private function studentAnswer()
+    {
+        $answer = $this->student->answers()
+            ->where('question_id', $this->examQuestion->id)
+            ->first();
+
+        if (!is_null($answer)) {
+            $returnedData = [
+                'answer_text' => (string) $answer->answer_text
+            ];
+            return $returnedData;
+        }
+    }
+
+    private function SelectedOptions()
+    {
+        $selectedAnswers = [];
+        $answer = $this->student->answers()
+            ->where('question_id', $this->examQuestion->id)
+            ->first();
+
+        if (!is_null($answer)) {
+            $returnedData = [
+                'answer_text' => (string) $answer->answer_text
+            ];
+
+            $selectedAnswers =  $returnedData;
+        }
+
+        return $selectedAnswers;
+    }
+}
