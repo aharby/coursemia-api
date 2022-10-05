@@ -8,7 +8,7 @@ use App\Modules\Assessments\Models\AssessmentUser;
 use App\Modules\BaseApp\Traits\CreatedBy;
 use App\Modules\BaseApp\Traits\HasAttach;
 use App\Modules\Certificates\Models\ThankingCertificate;
-use App\Modules\Countries\Country;
+use App\Modules\Country\Models\Country;
 use App\Modules\Courses\Models\Course;
 use App\Modules\GeneralQuizzes\Models\GeneralQuizStudent;
 use App\Modules\GeneralQuizzes\Models\GeneralQuizStudentAnswer;
@@ -53,7 +53,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends Authenticatable implements Auditable
 {
-    use SoftDeletes, CreatedBy, HasAttach, Notifiable, Invitable, UserRatingable, HasFactory;
+    use CreatedBy, HasAttach, Notifiable, Invitable, UserRatingable, HasFactory;
     use \OwenIt\Auditing\Auditable;
     use HasApiTokens; //passport auth
 

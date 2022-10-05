@@ -18,11 +18,11 @@ use function Aws\boolean_value;
 
 class AuthController extends BaseController
 {
-    public function __construct(LoginUseCaseInterface $loginUseCase, ForgetPasswordUseCaseInterface $forgetPasswordUseCase, UserRepositoryInterface $userRepository, ActivateUserUseCaseInterface $activateUserUseCase)
+    public function __construct(/*LoginUseCaseInterface $loginUseCase,*/ ForgetPasswordUseCaseInterface $forgetPasswordUseCase, UserRepositoryInterface $userRepository, ActivateUserUseCaseInterface $activateUserUseCase)
     {
         $this->middleware('guest');
         $this->module = 'auth';
-        $this->loginUseCase = $loginUseCase;
+//        $this->loginUseCase = $loginUseCase;
         $this->forgetPasswordUseCase = $forgetPasswordUseCase;
         $this->repository = $userRepository;
         $this->activateUserUseCase = $activateUserUseCase;

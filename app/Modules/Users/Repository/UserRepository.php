@@ -47,16 +47,24 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::query()
             ->where('email', $email)
-            ->when($abilitiesUser, function ($query) {
-                $query->whereNull('username')
-                    ->whereIn('type',UserEnums::userCanLoginThrowAbilities());
-            })
-            ->unless($abilitiesUser, function ($query) {
-                $query->where(function ($q){
-                    $q->whereNotNull('username')
-                      ->orWhereIn('type',UserEnums::userCanLoginThrowBladeDashboard());
-                });
-            })
+            ->when(
+                $abilitiesUser,
+                function ($query) {
+                    $query->whereNull('username')
+                    ->whereIn('type', UserEnums::userCanLoginThrowAbilities());
+                }
+            )
+            ->unless(
+                $abilitiesUser,
+                function ($query) {
+                    $query->where(
+                        function ($q) {
+                            $q->whereNotNull('username')
+                            ->orWhereIn('type', UserEnums::userCanLoginThrowBladeDashboard());
+                        }
+                    );
+                }
+            )
             ->first();
     }
 
@@ -326,21 +334,35 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $users = User::query()
-            ->where(function (Builder $query) use ($schoolAccount) {
-                $query->whereHas("branch", function (Builder $builder) use ($schoolAccount) {
-                    $builder->where("school_account_id", "=", $schoolAccount->id);
-                })
-                    ->orWhereHas("schoolSupervisor", function (Builder $builder) use ($schoolAccount) {
-                        $builder->where("school_account_id", "=", $schoolAccount->id);
-                    })
-                    ->orWhereHas("schoolLeader", function (Builder $builder) use ($schoolAccount) {
-                        $builder->where("school_account_id", "=", $schoolAccount->id);
-                    })
-                    ->orWhereHas('branches', function (Builder $schoolAccountBranch) use ($schoolAccount) {
-                        $schoolAccountBranch->where("school_account_id", "=", $schoolAccount->id);
-                    })
+            ->where(
+                function (Builder $query) use ($schoolAccount) {
+                    $query->whereHas(
+                        "branch",
+                        function (Builder $builder) use ($schoolAccount) {
+                            $builder->where("school_account_id", "=", $schoolAccount->id);
+                        }
+                    )
+                    ->orWhereHas(
+                        "schoolSupervisor",
+                        function (Builder $builder) use ($schoolAccount) {
+                            $builder->where("school_account_id", "=", $schoolAccount->id);
+                        }
+                    )
+                    ->orWhereHas(
+                        "schoolLeader",
+                        function (Builder $builder) use ($schoolAccount) {
+                            $builder->where("school_account_id", "=", $schoolAccount->id);
+                        }
+                    )
+                    ->orWhereHas(
+                        'branches',
+                        function (Builder $schoolAccountBranch) use ($schoolAccount) {
+                            $schoolAccountBranch->where("school_account_id", "=", $schoolAccount->id);
+                        }
+                    )
                     ->orWhere('school_id', "=", $schoolAccount->id);
-            })
+                }
+            )
             ->where("type", "=", $userType)
             ->pluck("id")
             ->toArray();
@@ -358,18 +380,11 @@ class UserRepository implements UserRepositoryInterface
         return User::query()->where('otp', $otp)->first();
     }
 
-    public function findByPhone(string $phone, bool $abilitiesUser = false): ?User
+    public function findByPhone(string $phone, string $country_code): ?User
     {
-
         return User::query()
-            ->where('mobile', $phone)
-            ->when($abilitiesUser, function ($query) {
-                $query->whereNull('username')
-                    ->whereIn('type',UserEnums::userCanLoginThrowAbilities());
-            })
-            ->unless($abilitiesUser, function ($query) {
-                $query->whereNotNull('username');
-            })
+            ->where('phone', $phone)
+            ->where('country_code', $country_code)
             ->first();
     }
 

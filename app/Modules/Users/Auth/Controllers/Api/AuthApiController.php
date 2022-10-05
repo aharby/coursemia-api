@@ -2,7 +2,11 @@
 
 namespace App\Modules\Users\Auth\Controllers\Api;
 
+use App\Http\Requests\Api\LoginRequest;
+use App\Http\Resources\Api\Users\UserResorce;
+use App\Modules\Users\Models\User;
 use Dompdf\Exception;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Modules\Users\UserEnums;
 use function GuzzleHttp\Psr7\str;
@@ -55,24 +59,24 @@ class AuthApiController extends BaseApiController
     public function __construct(
         LoginUseCaseInterface $loginUseCase,
         UserRepositoryInterface $userRepository,
-        ParserInterface $parserInterface,
-        RegisterUseCaseInterface $registerUseCase,
-        SendActivationMailUseCaseInterface $sendActivationMailUseCase,
-        ActivateUserUseCaseInterface $activateUserUseCase,
-        LoginSocialUseCase $loginSocialUseCase,
-        FirebaseTokenRepositoryInterface $firebaseRepository,
-        TokenManagerInterface $tokenManager
+//        ParserInterface $parserInterface,
+//        RegisterUseCaseInterface $registerUseCase,
+//        SendActivationMailUseCaseInterface $sendActivationMailUseCase,
+//        ActivateUserUseCaseInterface $activateUserUseCase,
+//        LoginSocialUseCase $loginSocialUseCase,
+//        FirebaseTokenRepositoryInterface $firebaseRepository,
+//        TokenManagerInterface $tokenManager
     )
     {
         $this->loginUseCase = $loginUseCase;
-        $this->registerUseCase = $registerUseCase;
-        $this->sendActivationMailUseCase = $sendActivationMailUseCase;
-        $this->activateUserUseCase = $activateUserUseCase;
+//        $this->registerUseCase = $registerUseCase;
+//        $this->sendActivationMailUseCase = $sendActivationMailUseCase;
+//        $this->activateUserUseCase = $activateUserUseCase;
         $this->repository = $userRepository;
-        $this->parserInterface = $parserInterface;
-        $this->loginSocialUseCase = $loginSocialUseCase;
-        $this->firebaseRepository = $firebaseRepository;
-        $this->tokenManager = $tokenManager;
+//        $this->parserInterface = $parserInterface;
+//        $this->loginSocialUseCase = $loginSocialUseCase;
+//        $this->firebaseRepository = $firebaseRepository;
+//        $this->tokenManager = $tokenManager;
     }
 
     public function postLogin(UserLoginRequest $request)
@@ -137,6 +141,12 @@ class AuthApiController extends BaseApiController
             ];
             return formatErrorValidation($errorArray);
         }
+    }
+
+    public function login(LoginRequest $request){
+        $data = $this->loginUseCase->login($request->all(), $this->repository);
+//        return customResponse()
+        return $data;
     }
 
     public function refreshToken()

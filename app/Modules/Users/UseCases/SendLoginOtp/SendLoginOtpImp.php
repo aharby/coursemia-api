@@ -11,10 +11,10 @@ use Illuminate\Support\Str;
 
 class SendLoginOtpImp implements SendLoginOtp
 {
-    public function __construct(NotifierFactoryInterface $notifierFactory)
-    {
-        $this->notifierFactory = $notifierFactory;
-    }
+//    public function __construct(NotifierFactoryInterface $notifierFactory)
+//    {
+//        $this->notifierFactory = $notifierFactory;
+//    }
 
     public function send(User $user)
     {

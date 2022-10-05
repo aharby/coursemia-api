@@ -112,7 +112,7 @@ class UsersController extends Controller
     public function postCreate(CreateUserRequest $request, CreateUserUseCaseInterface $createUserUseCase)
     {
         $request->merge(['confirmed'=>1]);
-          DB::beginTransaction();
+        DB::beginTransaction();
         if ($row = $createUserUseCase->createUser($this->repository, $request->all())) {
             $createZoomUser = $this->createZoomUser->createUser($row);
             if ($createZoomUser['error']) {
@@ -357,8 +357,8 @@ class UsersController extends Controller
     {
         $studentTeacherStudent = new StudentTeacherStudent();
         $relation = $studentTeacherStudent->where('student_teacher_id', $request->student_teacher_id)
-                                        ->where('student_id', $studentId)
-                                        ->first();
+            ->where('student_id', $studentId)
+            ->first();
         if (!is_null($relation)) {
             $assignedToThisSubject = $relation->subjects()->where('subject_id', $request->subject_id)->exists();
             if ($assignedToThisSubject) {
@@ -385,8 +385,8 @@ class UsersController extends Controller
         $studentTeacherStudent = new StudentTeacherStudent();
 
         $studentTeacherStudent = $studentTeacherStudent->where('student_teacher_id', $studentTeacherId)
-                                    ->where('student_id', $studentId)
-                                    ->firstOrFail();
+            ->where('student_id', $studentId)
+            ->firstOrFail();
         $detachSubjects = $studentTeacherStudent->subjects()->detach();
         if ($detachSubjects) {
             $studentTeacherStudent->delete();
