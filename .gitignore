@@ -29,3 +29,4 @@ entrypoint.sh
 .php-cs-fixer.cache
 storage/clockwork
 /.vscode
+composer.lock
