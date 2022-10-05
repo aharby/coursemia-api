@@ -4,8 +4,12 @@ namespace App\Modules\BaseApp\Providers;
 
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepository;
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepositoryInterface;
+use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCase;
+use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCaseInterface;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCase;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCaseInterface;
+use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCase;
+use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCaseInterface;
 use App\Modules\Users\UseCases\SendLoginOtp\SendLoginOtp;
 use App\Modules\Users\UseCases\SendLoginOtp\SendLoginOtpImp;
 use Illuminate\Support\ServiceProvider;
@@ -33,8 +37,18 @@ class RepositoriesServiceProviders extends ServiceProvider
             'App\Modules\Users\Repository\UserRepository'
         );
         $this->app->bind(
+            ActivateUserUseCaseInterface::class,
+            ActivateUserUseCase::class
+        );
+
+        $this->app->bind(
             ContentAuthorRepositoryInterface::class,
             ContentAuthorRepository::class
+        );
+
+        $this->app->bind(
+            RegisterUseCaseInterface::class,
+            RegisterUseCase::class
         );
 
         $this->app->bind(

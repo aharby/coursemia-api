@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
-class VerificationRequest extends FormRequest
+class AddDeviceTokenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,7 @@ class VerificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'country_code'      => 'required|exists:countries,phonecode',
-            'phone_number'      => 'required|exists:users,phone',
-            'verification_code' => 'required'
+            'device_token'      => 'required'
         ];
     }
 

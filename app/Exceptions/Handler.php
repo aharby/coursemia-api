@@ -72,14 +72,11 @@ class Handler extends ExceptionHandler
         $debug = env('APP_DEBUG', false);
         if ($exception instanceof AuthenticationException) {
 
-            throw new HttpResponseException(response()->json(
-                ['errors' => [[
-                    'status' => 403,
-                    'title' => 'unauthorized_action',
-                    'detail' => trans('app.Unauthorized action Please Use Authorized Token')
-                ]]],
-                403
-            ));
+            throw new HttpResponseException(response()->json([
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 403));
         }
 
         if ($exception instanceof ModelNotFoundException) {
@@ -92,97 +89,79 @@ class Handler extends ExceptionHandler
                 $detail = $exception->getTrace();
             }
 
-            throw new HttpResponseException(response()->json(
-                ['errors' => [[
-                    'status' => 404,
-                    'title' => $title,
-                    'detail' => $detail
-                ]]],
-                401
-            ));
+            throw new HttpResponseException(response()->json([
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 404));
         }
 
 
         if ($exception instanceof TokenBlacklistedException) {
-            throw new HttpResponseException(response()->json(
-                ['errors' => [[
-                    'status' => 401,
-                    'title' => 'the_token_has_been_blacklisted',
-                    'detail' => trans('app.The token has been blacklisted')
-                ]]],
-                401
-            ));
+            throw new HttpResponseException(response()->json([
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 401));
         }
 
         if ($exception instanceof AuthorizationException) {
 
-            throw new HttpResponseException(response()->json(
-                ['errors' => [[
-                    'status' => 403,
-                    'title' => 'unAuthorized Action',
-                    'detail' => trans('app.you do not have permission')
-                ]]],
-                403
-            ));
+            throw new HttpResponseException(response()->json([
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 403));
         }
         if ($exception instanceof HttpException  && $exception->getStatusCode() == 403) {
 
-            throw new HttpResponseException(response()->json(
-                ['errors' => [[
-                    'status' => 403,
-                    'title' => 'unAuthorized Action',
-                    'detail' => trans('app.you do not have permission')
-                ]]],
-                403
-            ));
+            throw new HttpResponseException(response()->json([
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 403));
         }
         if ($exception instanceof ValidationException) {
             $errorArray = [];
             $errors = $exception->errors();
-            foreach ($errors as $name => $error) {
-                $errorArray[] = [
-                    'status' => 422,
-                    'title' => $name,
-                    'detail' => $error[0],
-                ];
-            }
-            throw new HttpResponseException(response()->json(["errors" => $errorArray], 422));
+            $index = array_keys($errors)[0];
+            throw new HttpResponseException(
+                response()->json([
+                    'data'  => null,
+                    'message'  => $errors[$index][0],
+                    'success' => (boolean)false
+                ], 422)
+            );
         }
 
 
         if ($exception instanceof TokenExpiredException) {
-            throw new HttpResponseException(response()->json(
-                ['errors' => [[
-                    'status' => 403,
-                    'title' => 'token_expired',
-                    'detail' => trans('app.Unauthorized action Please Use a Valid Token')
-                ]]],
-                403
-            ));
+            throw new HttpResponseException(response()->json([
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 403));
         }
         if ($exception instanceof InvalidAuthTokenException) {
-            throw new HttpResponseException(response()->json(
-                ['errors' => [[
-                    'status' => 403,
-                    'title' => 'invalid token',
-                    'detail' => trans('app.Unauthorized action Please Use a Valid Token')
-                ]]],
-                403
-            ));
+            throw new HttpResponseException(response()->json([
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 403));
         }
 
         if ($exception instanceof OAuthServerException) {
             throw new HttpResponseException(response()->json([
-                'status' => 403,
-                'title' => 'unauthorized_action',
-                'detail' => trans('app.Unauthorized action Please Use a Valid Token')
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
             ], 403));
         }
         if ($exception instanceof \League\OAuth2\Server\Exception\OAuthServerException) {
             throw new HttpResponseException(response()->json([
-                'status' => 403,
-                'title' => 'unauthorized_action',
-                'detail' => trans('app.Unauthorized action Please Use a Valid Token')
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
             ], 403));
         }
         if ($exception instanceof CustomErrorException) {
@@ -236,7 +215,10 @@ class Handler extends ExceptionHandler
             }
 
             throw new HttpResponseException(response()->json([
-                'errors' => $errors], 500));
+                'data'  => null,
+                'message'  => $exception->getMessage(),
+                'success' => (boolean)false
+            ], 500));
         }
     }
 }
