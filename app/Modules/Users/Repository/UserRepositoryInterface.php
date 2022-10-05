@@ -169,7 +169,7 @@ interface UserRepositoryInterface
 
     public function findUserByOtp(string $code): ?User;
 
-    public function findByPhone(string $phone, bool $abilitiesUser = false): ?User;
+    public function findByPhone(string $phone, string $country_code): ?User;
 
     public function findResetPasswordTokenByPhoneOrMail(User $user);
 

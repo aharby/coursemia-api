@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::post('/login', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@postLogin');
 
@@ -52,3 +53,22 @@ Route::post('/fcm-tokens', '\App\Modules\Users\Auth\Controllers\Api\AuthApiContr
 Route::get('/confirm', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@getConfirm');
 
 Route::post('/change-language', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@changeLanguage')->middleware('auth:api');
+
+Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], function (){
+    Route::post('create_account', 'AuthApiController@register');
+    Route::post('verify_phone_number', 'AuthApiController@verifyPhone');
+    Route::post('forgot_password', 'AuthApiController@forgetPassword');
+    Route::post('resend_verification_code', 'AuthApiController@forgetPassword');
+    Route::post('login', 'AuthApiController@login');
+    Route::group(['middleware' => 'auth:api'], function (){
+        Route::post('change_password', 'AuthApiController@changePassword');
+        Route::get('get_profile', 'AuthApiController@getProfile');
+        Route::post('push_device_token', 'AuthApiController@addDeviceToken');
+        Route::post('logout', 'AuthApiController@logout');
+        Route::get('delete_my_account', 'AuthApiController@deleteMyAccount');
+    });
+    Route::group(['middleware' => 'auth:api', 'prefix' => 'home'], function (){
+        Route::get('get_home_content', 'HomeScreenController@home');
+    });
+});
+

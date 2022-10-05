@@ -43,6 +43,17 @@ use App\Modules\ResourceSubjectFormats\Enums\ResourcesConfigurationEnum;
 use App\Modules\Subjects\Models\Subject;
 use Carbon\Carbon;
 
+if (!function_exists('customResponse')) {
+
+    function customResponse($data = [], $message = "", $success = true, $code = 200)
+    {
+        return response()->json([
+            'data'  => $data,
+            'message'  => $message,
+            'success' => (boolean)$success
+        ], $code);
+    }
+}
 
 if (!function_exists('urlLang')) {
     function urlLang($url, $fromlang, $toLang)

@@ -7,6 +7,7 @@ namespace App\Modules\Users\UseCases\LoginUseCase;
 use App\Modules\Users\Auth\Enum\DeviceEnum;
 use App\Modules\Users\Auth\Enum\LoginEnum;
 use App\Modules\Users\Repository\UserRepositoryInterface;
+use App\Modules\Users\Resources\UserResorce;
 use App\Modules\Users\UseCases\SendLoginOtp\SendLoginOtp;
 use App\Modules\Users\User;
 use App\Modules\Users\UserEnums;
@@ -17,15 +18,7 @@ use Illuminate\Support\Str;
 
 class LoginUseCase implements LoginUseCaseInterface
 {
-
-    private SendLoginOtp $sendLoginOtp;
-
-    public function __construct(SendLoginOtp $sendLoginOtp)
-    {
-        $this->sendLoginOtp = $sendLoginOtp;
-    }
-
-    public function login(array $request, UserRepositoryInterface $userRepository, string $attribute = 'email'): array
+    public function login(array $request, UserRepositoryInterface $userRepository, string $attribute = 'mobile'): array
     {
         $user = null;
         if ($attribute == "email") {
@@ -33,45 +26,16 @@ class LoginUseCase implements LoginUseCaseInterface
         }
 
         if ($attribute == "mobile") {
-            $user = $userRepository->findByPhone($request['email'], $request['abilities_user']);
+            $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
         }
 
-        $validateLogin = $this->validateLogin($request, $user);
+        $loginCase = array();
+        $loginCase['user'] = new UserResorce($user);
+        $loginCase['message'] = __('Logged in successfully');
+        $loginCase['code'] = 200;
+        $loginCase['success'] = (boolean)true;
 
-        if ($validateLogin) {
-            return $validateLogin;
-        }
-
-        $login = [$attribute => $request['email'], 'password' => $request['password'], 'username' => $user->username];
-        if (Auth::attempt($login, $request['remember_me'])) {
-            if ($user->type == UserEnums::STUDENT_TYPE) {
-                if (is_null($user->student->classroom_id) && request()->has('otp')) {
-                    $this->sendLoginOtp->send($user);
-                    $confirmToken = Str::random(64);
-                    $user->update([
-                        'confirm_token' => $confirmToken
-                    ]);
-                    $loginCase['status'] = $confirmToken;
-                    $loginCase['message'] = 'please use token';
-                    $loginCase['detail'] = trans('app.please use otp');
-                    $loginCase['user'] = null;
-                    return $loginCase;
-                }
-            }
-
-            $loginCase['user'] = $user;
-            $loginCase['user']['back_ground_slug'] = isset($user->student->gradeClass->gradeColor) ?
-                $user->student->gradeClass->gradeColor->slug : '';
-
-            $loginCase['message'] = 'Welcome to your dashboard';
-            $loginCase['detail'] = trans('auth.Welcome to your dashboard');
-            return $loginCase;
-        } else {
-            $loginCase['user'] = null;
-            $loginCase['message'] = 'Oopps Something is broken';
-            $loginCase['detail'] = trans('app.Oopps Something is broken');
-            return $loginCase;
-        }
+        return $loginCase;
     }
 
     public function loginWithUsername(array $request, UserRepositoryInterface $userRepository): array
