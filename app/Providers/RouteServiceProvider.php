@@ -57,11 +57,6 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware(['api', 'Locale'])
             ->namespace($this->namespace)
             ->group(base_path('routes/api.php'));
-
-        Route::prefix('api/v2/{language}')
-            ->middleware(['api', 'Locale'])
-            ->namespace($this->namespace)
-            ->group(base_path('routes/v2/api.php'));
     }
 
     /**

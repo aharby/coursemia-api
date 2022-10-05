@@ -18,38 +18,38 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        \App\OurEdu\Courses\Admin\Events\CourseSessionUpdated::class => [
-            \App\OurEdu\Courses\Admin\Listeners\NotifyCourseSubscripersOnUpdate::class,
+        \App\Modules\Courses\Admin\Events\CourseSessionUpdated::class => [
+            \App\Modules\Courses\Admin\Listeners\NotifyCourseSubscripersOnUpdate::class,
         ],
-        \App\OurEdu\Courses\Admin\Events\CourseSessionCanceled::class => [
-            \App\OurEdu\Courses\Admin\Listeners\NotifyCourseSubscripersOnCancel::class,
+        \App\Modules\Courses\Admin\Events\CourseSessionCanceled::class => [
+            \App\Modules\Courses\Admin\Listeners\NotifyCourseSubscripersOnCancel::class,
         ],
-        \App\OurEdu\Courses\Admin\Events\LiveSessions\LiveSessionUpdated::class => [
-            \App\OurEdu\Courses\Admin\Listeners\LiveSessions\NotifyLiveSessionSubscripersOnUpdate::class,
+        \App\Modules\Courses\Admin\Events\LiveSessions\LiveSessionUpdated::class => [
+            \App\Modules\Courses\Admin\Listeners\LiveSessions\NotifyLiveSessionSubscripersOnUpdate::class,
         ],
-        \App\OurEdu\Courses\Admin\Events\LiveSessions\LiveSessionDeleted::class => [
-            \App\OurEdu\Courses\Admin\Listeners\LiveSessions\NotifyLiveSessionSubscripersOnDelete::class,
+        \App\Modules\Courses\Admin\Events\LiveSessions\LiveSessionDeleted::class => [
+            \App\Modules\Courses\Admin\Listeners\LiveSessions\NotifyLiveSessionSubscripersOnDelete::class,
         ],
-        \App\OurEdu\Subjects\Events\SubjectPausedEvent::class => [
-            \App\OurEdu\Subjects\Listeners\OnSubjectPause::class,
+        \App\Modules\Subjects\Events\SubjectPausedEvent::class => [
+            \App\Modules\Subjects\Listeners\OnSubjectPause::class,
         ],
-        \App\OurEdu\Subjects\Events\SubjectResumedEvent::class => [
-            \App\OurEdu\Subjects\Listeners\OnSubjectResume::class,
+        \App\Modules\Subjects\Events\SubjectResumedEvent::class => [
+            \App\Modules\Subjects\Listeners\OnSubjectResume::class,
         ],
-        \App\OurEdu\ResourceSubjectFormats\Events\ResourceFormatSubjectFormatPausedEvent::class => [
-            \App\OurEdu\ResourceSubjectFormats\Listeners\OnResourceFormatSubjectFormatPause::class,
+        \App\Modules\ResourceSubjectFormats\Events\ResourceFormatSubjectFormatPausedEvent::class => [
+            \App\Modules\ResourceSubjectFormats\Listeners\OnResourceFormatSubjectFormatPause::class,
         ],
-        \App\OurEdu\ResourceSubjectFormats\Events\ResourceFormatSubjectFormatResumedEvent::class => [
-            \App\OurEdu\ResourceSubjectFormats\Listeners\OnResourceFormatSubjectFormatResume::class,
+        \App\Modules\ResourceSubjectFormats\Events\ResourceFormatSubjectFormatResumedEvent::class => [
+            \App\Modules\ResourceSubjectFormats\Listeners\OnResourceFormatSubjectFormatResume::class,
         ],
-        \App\OurEdu\Subjects\Events\SubjectFormatSubjectPausedEvent::class => [
-            \App\OurEdu\Subjects\Listeners\OnSubjectFormatSubjectPause::class,
+        \App\Modules\Subjects\Events\SubjectFormatSubjectPausedEvent::class => [
+            \App\Modules\Subjects\Listeners\OnSubjectFormatSubjectPause::class,
         ],
-        \App\OurEdu\Subjects\Events\SubjectFormatSubjectResumedEvent::class => [
-            \App\OurEdu\Subjects\Listeners\OnSubjectFormatSubjectResume::class,
+        \App\Modules\Subjects\Events\SubjectFormatSubjectResumedEvent::class => [
+            \App\Modules\Subjects\Listeners\OnSubjectFormatSubjectResume::class,
         ],
-        \App\OurEdu\Courses\Admin\Events\LiveSessions\LiveSessionCanceled::class => [
-            \App\OurEdu\Courses\Admin\Listeners\LiveSessions\NotifyLiveSessionSubscripersOnCancel::class
+        \App\Modules\Courses\Admin\Events\LiveSessions\LiveSessionCanceled::class => [
+            \App\Modules\Courses\Admin\Listeners\LiveSessions\NotifyLiveSessionSubscripersOnCancel::class
         ],
     ];
 

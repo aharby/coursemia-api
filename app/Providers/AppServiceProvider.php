@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
 
         Relation::morphMap(
             [
-                'user' => 'App\OurEdu\Users\User',
+                'user' => 'App\Modules\Users\User',
             ]
         );
         Paginator::useBootstrap();

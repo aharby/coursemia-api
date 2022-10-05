@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\OurEdu\BaseApp\Enums\ParentEnum;
-use App\OurEdu\VCRSessions\Models\VcrSupport;
+use App\Modules\BaseApp\Enums\ParentEnum;
+use App\Modules\VCRSessions\Models\VcrSupport;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 

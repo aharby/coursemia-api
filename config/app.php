@@ -172,21 +172,12 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RabbitEventsServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-//        App\Providers\TelescopeServiceProvider::class,
-        Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
-        App\OurEdu\BaseApp\Providers\RepositoriesServiceProviders::class,
-        App\OurEdu\BaseApp\Providers\UseCasesServiceProvider::class,
-        App\OurEdu\BaseApp\Providers\NotificationsServiceProvider::class,
-        Propaganistas\LaravelPhone\PhoneServiceProvider::class,
-        \Swis\JsonApi\Client\Providers\ServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class,
-        \App\Providers\JsonApiPaginateServiceProvider::class,
+        App\Modules\BaseApp\Providers\RepositoriesServiceProviders::class,
+        App\Modules\BaseApp\Providers\UseCasesServiceProvider::class,
+        App\Modules\BaseApp\Providers\NotificationsServiceProvider::class,
 
-        OwenIt\Auditing\AuditingServiceProvider::class,
         Benwilkins\FCM\FcmNotificationServiceProvider::class,
-        App\Providers\PaymentServiceProvider::class,
 
 
 

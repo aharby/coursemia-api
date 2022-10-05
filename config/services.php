@@ -43,7 +43,7 @@ return [
     'twitter' => [
         'client_id' => env('TWITTER_ID', '9JUqOsv0FOiIPRsEAxk6eDo88'),
         'client_secret' => env('TWITTER_SECRET', 'hsRJOyHJkP6mfBl5umJNyF2wHOPUL05vbu3iVacQALCq0XU6Dh'),
-        'redirect' => env('TWITTER_URL', 'https//ouredu.testenv.tech/twitter/callback'),
+        'redirect' => env('TWITTER_URL', 'https//Modules.testenv.tech/twitter/callback'),
     ],
 
     'stripe' => [
@@ -68,6 +68,6 @@ return [
     'yamamah' => [
         'username' => env('YAMAMAH_USERNAME',''),
         'password' => env('YAMAMAH_PASSWORD',''),
-        'tagName' => 'Ouredu'
+        'tagName' => 'Modules'
     ]
 ];

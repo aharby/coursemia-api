@@ -9,17 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "abraham/twitteroauth": "^3.1",
-        "ahloul/rabbitevents-mod": "^6.0.6",
-        "art4/json-api-client": "^1.3.3",
         "astrotomic/laravel-translatable": "^11.1",
-        "barryvdh/laravel-dompdf": "^0.8.3",
-        "barryvdh/laravel-translation-manager": "^0.5.8",
-        "bensampo/laravel-enum": "^3.0",
+        "bensampo/laravel-enum": "^v4.0.0",
         "benwilkins/laravel-fcm-notification": "^4.0",
-        "bigbluebutton/bigbluebutton-api-php": "~2.0.0",
-        "edsdk/flmngr-server-php": "^1.0",
-        "elwafa/json-api-client": "^1.3.3",
         "facade/ignition": "^2.3.6",
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^2.0",
@@ -32,15 +24,12 @@
         "laravel/helpers": "^1.2",
         "laravel/passport": "^10.1",
         "laravel/scout": "^8.0",
-        "laravel/slack-notification-channel": "^2.1",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "laravelcollective/html": "^6.1",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "maatwebsite/excel": "3.*",
         "mcamara/laravel-localization": "^1.3.19",
-        "mpdf/mpdf": "^8.0",
         "owen-it/laravel-auditing": "^v13.0.2",
         "pdfanonymous/phpanonymous": "dev-master",
         "predis/predis": "^1.1",
@@ -50,9 +39,7 @@
         "spatie/laravel-backup": "^6.11",
         "spatie/laravel-event-sourcing": "^5.0",
         "spatie/laravel-fractal": "^5.5",
-        "spatie/laravel-queued-db-cleanup": "^1.1.2",
-        "ta3lom/laravel-payfort": "^v0.3",
-        "teamtnt/laravel-scout-tntsearch-driver": "^11.5.0"
+        "spatie/laravel-queued-db-cleanup": "^1.1.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
@@ -86,8 +73,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/OurEdu/Helpers/Functions.php",
-            "app/OurEdu/Helpers/Data.php"
+            "app/Modules/Helpers/Functions.php"
         ]
     },
     "autoload-dev": {
@@ -112,20 +98,5 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    },
-    "repositories": {
-        "json-api-client": {
-            "type": "package",
-            "package": {
-                "name": "elwafa/json-api-client",
-                "description": "A PHP package for mapping remote jsonapi resources to Eloquent like models and collections.",
-                "version": "1.3.4",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/elwafa/json-api-client",
-                    "reference": "1.3.4"
-                }
-            }
-        }
     }
 }

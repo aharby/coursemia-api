@@ -115,7 +115,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof AuthorizationException) {
-           
+
             throw new HttpResponseException(response()->json(
                 ['errors' => [[
                     'status' => 403,
@@ -126,7 +126,7 @@ class Handler extends ExceptionHandler
             ));
         }
         if ($exception instanceof HttpException  && $exception->getStatusCode() == 403) {
-           
+
             throw new HttpResponseException(response()->json(
                 ['errors' => [[
                     'status' => 403,
@@ -185,7 +185,7 @@ class Handler extends ExceptionHandler
                 'detail' => trans('app.Unauthorized action Please Use a Valid Token')
             ], 403));
         }
-        if ($exception instanceof OurEduErrorException) {
+        if ($exception instanceof CustomErrorException) {
 
 
             if ($exception->getCode() == 422) {

@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-use App\OurEdu\Courses\Middleware\CheckCourseAvailabiltyForInstructorMiddleware;
+use App\Modules\Courses\Middleware\CheckCourseAvailabiltyForInstructorMiddleware;
 use Barryvdh\Cors\HandleCors;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\Authenticate;
@@ -11,7 +11,7 @@ use App\Http\Middleware\CheckSuspense;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\TypeMiddleware;
 use App\Http\Middleware\VerifyCsrfToken;
-use App\OurEdu\BaseApp\Middleware\Locale;
+use App\Modules\BaseApp\Middleware\Locale;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Session\Middleware\StartSession;

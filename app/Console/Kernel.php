@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\OurEdu\BaseApp\Jobs\CleanNotificationJob;
+use App\Modules\BaseApp\Jobs\CleanNotificationJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\App;
