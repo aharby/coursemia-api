@@ -26,13 +26,9 @@ class ErrorResponseException extends Exception
     {
         $title = ($this->code == 422) ? trans('app.validation error') : trans('general.something went wrong');
         return response()->json([
-            'errors' => [
-                [
-                    'title' => $title,
-                    'detail' => $this->detail,
-                    'status' => $this->code,
-                ]
-            ]
-        ], $this->code);
+            'data'  => null,
+            'message'  => $title,
+            'success' => (boolean)false
+        ], $this->getCode());
     }
 }

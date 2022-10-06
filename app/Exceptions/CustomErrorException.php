@@ -25,23 +25,9 @@ public function __construct($message = "", $code = 500, Throwable $previous = nu
 
             if ($request->wantsJson()) {
                 return response()->json([
-                    'errors' => [
-                        [
-                            'status' => $this->getCode(),
-                            'title' => $file,
-                            'detail' => $file
-                        ],
-                        [
-                            'status' => $this->getCode(),
-                            'title' => $title,
-                            'detail' => $detail
-                        ],
-                        [
-                            'status' => $this->getCode(),
-                            'title' => $line,
-                            'detail' => $detail
-                        ]
-                    ]
+                    'data'  => null,
+                    'message'  => $title,
+                    'success' => (boolean)false
                 ], $this->getCode());
             }
         }
@@ -50,12 +36,9 @@ public function __construct($message = "", $code = 500, Throwable $previous = nu
             $title = trans('app.Oopps Something is broken');
             $detail = trans('app.Oopps Something is broken');
             return response()->json([
-                'errors' => [
-                    [
-                        'status' => $this->getCode(),
-                        'title' => $title,
-                        'detail' => $detail
-                    ]]
+                'data'  => (object)[],
+                'message'  => $title,
+                'success' => (boolean)false
             ], $this->getCode());
         }
 

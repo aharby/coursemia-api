@@ -2,13 +2,22 @@
 
 namespace App\Modules\Users\Auth\Controllers\Api;
 
-use App\Http\Requests\Api\LoginRequest;
-use App\Http\Resources\Api\Users\UserResorce;
+use App\Modules\Users\Auth\Requests\AddDeviceTokenRequest;
+use App\Modules\Users\Auth\Requests\ApiRegisterRequest;
+use App\Modules\Users\Auth\Requests\ChangePasswordRequest;
+use App\Modules\Users\Auth\Requests\ForgetPasswordRequest;
+use App\Modules\Users\Auth\Requests\LoginRequest;
+use App\Modules\Users\Auth\Requests\VerificationRequest;
+use App\Modules\Users\Models\UserDevice;
+use App\Modules\Users\Resources\UserResorce;
 use App\Modules\Users\Models\User;
+use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCaseInterface;
 use Dompdf\Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Modules\Users\UserEnums;
+use Intervention\Image\Facades\Image;
+use Twilio\Rest\Client;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -42,7 +51,6 @@ use App\Modules\Users\Repository\FirebaseTokenRepositoryInterface;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCaseInterface;
 use App\Modules\Users\UseCases\LoginSocialUseCase\LoginSocialUseCase;
 use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCaseInterface;
-use App\Modules\Users\UseCases\ActivateUserUserCase\ActivateUserUseCaseInterface;
 use App\Modules\Users\UseCases\SendActivationMailUseCase\SendActivationMailUseCaseInterface;
 use App\Modules\Users\Auth\Requests\Api\UserActivateOtpRequest;
 
@@ -60,7 +68,7 @@ class AuthApiController extends BaseApiController
         LoginUseCaseInterface $loginUseCase,
         UserRepositoryInterface $userRepository,
 //        ParserInterface $parserInterface,
-//        RegisterUseCaseInterface $registerUseCase,
+        RegisterUseCaseInterface $registerUseCase,
 //        SendActivationMailUseCaseInterface $sendActivationMailUseCase,
 //        ActivateUserUseCaseInterface $activateUserUseCase,
 //        LoginSocialUseCase $loginSocialUseCase,
@@ -69,7 +77,7 @@ class AuthApiController extends BaseApiController
     )
     {
         $this->loginUseCase = $loginUseCase;
-//        $this->registerUseCase = $registerUseCase;
+        $this->registerUseCase = $registerUseCase;
 //        $this->sendActivationMailUseCase = $sendActivationMailUseCase;
 //        $this->activateUserUseCase = $activateUserUseCase;
         $this->repository = $userRepository;
@@ -79,74 +87,14 @@ class AuthApiController extends BaseApiController
 //        $this->tokenManager = $tokenManager;
     }
 
-    public function postLogin(UserLoginRequest $request)
-    {
-        $data = $request->getContent();
-        $data = $this->parserInterface->deserialize($data);
-        $data = $data->getData();
-
-        $requestData = [];
-        $requestData['email'] = $data->email;
-        $requestData['password'] = $data->password;
-        $requestData['device_type'] = $request->device_type;
-        $requestData['abilities_user'] = boolval($request->abilities_user)  ?? false;
-        $requestData['remember_me'] = null;
-
-        // if login with username
-        if (preg_match("/^(05+[^1-2])+([0-9]){7}+$/", $data->email)) {
-            $useCase = $this->loginUseCase->login($requestData, $this->repository, 'mobile');
-        } elseif (filter_var($data->email, FILTER_VALIDATE_EMAIL)) {
-            $useCase = $this->loginUseCase->login($requestData, $this->repository);
-        } else {
-            $useCase = $this->loginUseCase->loginWithUsername($requestData, $this->repository);
-        }
-
-        if (!is_null($useCase['user'])) {
-            $authUser = $useCase['user'];
-
-//            if ($authUser->type == UserEnums::STUDENT_TYPE) {
-//                $this->tokenManager->revokeUserAccessTokenBy(['name' => TokenNameEnum::API_Token], $authUser);
-//            }
-
-            $meta = [
-                'token' => $this->tokenManager->createUserToken(TokenNameEnum::API_Token, $authUser),
-                'message' => trans('api.Successfully Logged In')
-            ];
-
-            $include = '';
-
-            if ($useCase['user']->type == UserEnums::STUDENT_TYPE) {
-                $include = $request->include ?? 'student.schoolAccountBranch.schoolAccount';
-            }
-
-            if ($useCase['user']->type == UserEnums::PARENT_TYPE) {
-                $include = $request->include ?? 'parent';
-            }
-
-            if ($useCase['user']->type == UserEnums::INSTRUCTOR_TYPE || $useCase['user']->type == UserEnums::SCHOOL_INSTRUCTOR) {
-                $include = $request->include ?? 'instructor';
-            }
-            if (isset($useCase['shouldChangePassword'])) {
-                $param = [
-                    'shouldChangePassword' => true
-                ];
-            }
-            //send data to transformer
-            return $this->transformDataModInclude($useCase['user'], $include, new UserAuthTransformer(isset($param) ? $param : []), ResourceTypesEnums::USER, $meta);
-        } else {
-            $errorArray = [
-                'status' => $useCase['status'] ?? 422,
-                'title' => $useCase['message'],
-                'detail' => $useCase['detail'],
-            ];
-            return formatErrorValidation($errorArray);
-        }
-    }
-
     public function login(LoginRequest $request){
         $data = $this->loginUseCase->login($request->all(), $this->repository);
-//        return customResponse()
         return $data;
+    }
+
+    public function getProfile(){
+        $user = $this->loginUseCase->profile($this->repository);
+        return $user;
     }
 
     public function refreshToken()
@@ -172,53 +120,61 @@ class AuthApiController extends BaseApiController
         }
     }
 
-    public function postRegister(UserRegisterRequest $request)
+    private static function getRefererIdByReferCode($refer_code) : int
     {
-        $data = $request->getContent();
-        $data = $this->parserInterface->deserialize($data);
-        $data = $data->getData();
+        $referer = User::where('refer_code', $refer_code)->first();
+        return $referer->id;
+    }
 
+    private static function handleProfileImage($profile_image, $directory) : string
+    {
+        $profile_image_url = "user-".time().".png";
+        $path = public_path().$directory . $profile_image_url;
+        Image::make(file_get_contents($profile_image))->save($path);
+        return $directory.$profile_image_url;
+    }
+
+    private function getUniqueReferCode(){
+        $code = Str::random(8);
+        $user = User::where('refer_code', $code)->first();
+        if (!isset($user)){
+            return $code;
+        }else{
+            $this->getUniqueReferCode();
+        }
+    }
+
+    public function register(ApiRegisterRequest $request)
+    {
         try {
+            if (isset($request->refer_code)){
+                $referer_id = self::getRefererIdByReferCode($request->refer_code);
+            }else{
+                $referer_id = null;
+            }
+            if (isset($request->profile_image)){
+                $photo = self::handleProfileImage($request->profile_image, '/uploads/users/');
+            }else{
+                $photo = null;
+            }
             $requestData = [
-                'profile_picture' => isset($data->attach_media) ? moveSingleGarbageMedia($data->attach_media['id'], 'profiles') : null,
-                'first_name' => $data->first_name,
-                'last_name' => $data->last_name,
-                'email' => $data->email,
-                'birth_date' => $data->birth_date,
-                'country_id' => $data->country_id,
-                'password' => $data->password,
-                'type' => $data->user_type
+                'full_name' => $request->full_name,
+                'phone' => $request->phone_number,
+                'email' => $request->email_address,
+                'country_id' => $request->country_id,
+                'photo' => $photo,
+                'password' => Hash::make($request->password),
+                'country_code' => $request->country_code,
+                'referer_id' => $referer_id,
+                'refer_code' => $this->getUniqueReferCode()
+
             ];
-
-            if ($data->user_type == UserEnums::STUDENT_TYPE) {
-                $studentRequestData = [
-                    'mobile' => $data->mobile,
-                    'educational_system_id' => $data->educational_system_id,
-                    'school_id' => $data->school_id,
-                    'class_id' => $data->class_id,
-                    'academical_year_id' => $data->academical_year_id,
-                ];
-                $requestData = array_merge($requestData, $studentRequestData);
-            }
-
-            if ($data->user_type == UserEnums::PARENT_TYPE) {
-                $parentRequestData = [
-                    'mobile' => $data->mobile,
-                ];
-                $requestData = array_merge($requestData, $parentRequestData);
-            }
-
             $user = $this->registerUseCase->register($requestData, $this->repository);
 
 
             if (!is_null($user)) {
-                UserModified::dispatch($data->toArray(), $user->toArray(), 'User registered');
 
-                return response()->json(
-                    [
-                        'message' => trans('api.Thanks for registeration')
-                    ]
-                );
+                return customResponse(new UserResorce($user), __("Account created successfully"), true, 200);
             }
         } catch (\Throwable $e) {
             Log::error($e);
@@ -228,31 +184,27 @@ class AuthApiController extends BaseApiController
         }
     }
 
-    public function getActivate($token)
+    public function verifyPhone(VerificationRequest $request)
     {
-        try {
-            $user = $this->activateUserUseCase->activate($token, $this->repository);
-
-            if (!is_null($user)) {
-                $meta = [
-                    'token' => $this->tokenManager->createUserToken(TokenNameEnum::API_Token, $user),
-                    'message' => trans('api.Account activated')
-                ];
-
-                UserModified::dispatch([], $user->toArray(), 'Account activated');
-
-                //send data to transformer
-                return $this->transformDataModInclude($user, '', new UserAuthTransformer(), ResourceTypesEnums::USER, $meta);
-            } else {
-                throw new Exception('invalid token');
+        try{
+            $token = getenv("TWILIO_AUTH_TOKEN");
+            $twilio_sid = getenv("TWILIO_SID");
+            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+            $twilio = new Client($twilio_sid, $token);
+            $verification = $twilio->verify->v2->services($twilio_verify_sid)
+                ->verificationChecks
+                ->create([
+                    'to' => $request->country_code.$request->phone_number,
+                    'code' => $request->verification_code
+                ]);
+            if ($verification->valid) {
+                $user = tap(User::where('phone', $request->phone_number))->update(['is_verified' => 1]);
+                /* Authenticate user */
+                return customResponse((object)[], 'Phone number verified successfully', true,200);
             }
-        } catch (\Exception $exception) {
-            $errorArray = [
-                'status' => 422,
-                'title' => $exception->getMessage(),
-                'detail' => $exception->getMessage(),
-            ];
-            return formatErrorValidation($errorArray);
+            return customResponse((object)[], 'verification failed', false,422);
+        }catch (\Exception $e){
+            return customResponse((object)[], $e->getMessage(), false,422);
         }
     }
 
@@ -276,6 +228,63 @@ class AuthApiController extends BaseApiController
             'message' => trans('api.Account activated')
         ]);
 
+    }
+
+    public function forgetPassword(ForgetPasswordRequest $request){
+        try {
+            $this->sendVerifyMessage($request->country_code.$request->phone_number);
+            return customResponse((object)[], __("Verification code sent successfully"), true,200);
+        }catch (\Exception $e){
+            return customResponse((object)[], $e->getMessage(), false,422);
+        }
+    }
+
+    /**
+     * Sends sms to user using Twilio's programmable sms client
+     * @param String $message Body of sms
+     * @param Number $recipients string or array of phone number of recepient
+     */
+    private function sendVerifyMessage($phone)
+    {
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $twilio->verify->v2->services($twilio_verify_sid)
+            ->verifications
+            ->create($phone, "sms");
+    }
+
+    public function changePassword(ChangePasswordRequest $request){
+        try{
+            $user = request()->user();
+            $password_check = Hash::check($request->old_password, $user->password);
+            if ($password_check){
+                $user->password = Hash::make($request->new_password);
+                $user->save();
+                return customResponse((object)[], __("Password changed successfully"), true,200);
+            }else{
+                return customResponse((object)[], __("Password didn't match"), false,422);
+            }
+        }catch (\Exception $e){
+            return customResponse((object)[], $e->getMessage(), false,422);
+        }
+    }
+
+    public function addDeviceToken(AddDeviceTokenRequest $request){
+        try{
+            $user_id = $request->user()->id;
+            $device = UserDevice::updateOrCreate(['user_id' => $user_id, 'device_token' => $request->device_token]);
+            return customResponse((object)[], __("Device Token Added Successfully"), true,200);
+        }catch (\Exception $e){
+            return customResponse((object)[], $e->getMessage(), false,422);
+        }
+    }
+
+    public function logout(){
+        $user = Auth::user()->token();
+        $user->revoke();
+        return customResponse((object)[], __("Logged Out Successfully"), false,422);
     }
 
     public function activateOtp(UserActivateOtp $userActivateOtp)
@@ -368,84 +377,39 @@ class AuthApiController extends BaseApiController
         }
     }
 
-    public function logout(LogoutRequest $request)
-    {
-        $user = Auth::guard('api')->user();
-        $data = $request->getContent();
-        $data = $this->parserInterface->deserialize($data);
-        $data = $data->getData();
+//    public function logout(LogoutRequest $request)
+//    {
+//        $user = Auth::guard('api')->user();
+//        $data = $request->getContent();
+//        $data = $this->parserInterface->deserialize($data);
+//        $data = $data->getData();
+//
+//        try {
+//            $this->firebaseRepository->delete($user, $data->toArray());
+//
+//            $this->tokenManager->revokeAuthAccessToken();
+//
+//            return response()->json(
+//                [
+//                    "meta" => [
+//                        'message' => trans('api.Successfully Logged Out')
+//                    ]
+//                ]
+//            );
+//        } catch (\Exception $e) {
+//            $errorArray = [
+//                'status' => $e->getCode(),
+//                'title' => $e->getMessage(),
+//                'detail' => $e->getTrace()
+//            ];
+//            return formatErrorValidation($errorArray, 500);
+//        }
+//    }
 
-        try {
-            $this->firebaseRepository->delete($user, $data->toArray());
-
-            $this->tokenManager->revokeAuthAccessToken();
-
-            return response()->json(
-                [
-                    "meta" => [
-                        'message' => trans('api.Successfully Logged Out')
-                    ]
-                ]
-            );
-        } catch (\Exception $e) {
-            $errorArray = [
-                'status' => $e->getCode(),
-                'title' => $e->getMessage(),
-                'detail' => $e->getTrace()
-            ];
-            return formatErrorValidation($errorArray, 500);
-        }
-    }
-
-    public function twitterAuthentication(TwitterLoginRequest $request)
-    {
-        $data = $request->getContent();
-        $data = $this->parserInterface->deserialize($data);
-        $data = $data->getData();
-
-        try {
-            $user = $this->loginSocialUseCase->twitterAuthentication($data);
-
-            if(!isset($user['user'])){
-                return errorResponse($user['detail']);
-            }
-
-            $meta = [
-                'token' => $this->tokenManager->createUserToken(TokenNameEnum::API_Token, $user),
-                'message' => trans('api.Successfully Logged In'),
-            ];
-
-            $include = $data->user_type;
-
-            //send data to transformer
-            return $this->transformDataModInclude($user, $include, new UserAuthTransformer(), ResourceTypesEnums::USER, $meta);
-        } catch (\Exception $exception) {
-            if (Str::contains($exception->getMessage(), 'Bad Authentication data')) {
-                $errorArray = [
-                    'status' => 500,
-                    'title' => 'invalid_token',
-                    'detail' => trans('auth.Bad authentication data'),
-                ];
-
-                return formatErrorValidation($errorArray, 500);
-            } elseif (Str::contains($exception->getMessage(), 'Could not authenticate you')) {
-                $errorArray = [
-                    'status' => 500,
-                    'title' => 'invalid_token',
-                    'detail' => trans('auth.Bad access token secret'),
-                ];
-
-                return formatErrorValidation($errorArray, 500);
-            } else {
-                $errorArray = [
-                    'status' => 500,
-                    'title' => snake_case($exception->getMessage()),
-                    'detail' => $exception->getMessage(),
-                ];
-
-                return formatErrorValidation($errorArray, 500);
-            }
-        }
+    public function deleteMyAccount(){
+        $user = Auth::user();
+        $user->delete();
+        return customResponse((object)[], __("Account Deleted Successfully"), false,422);
     }
 
     public function changeLanguage(ChangeLanguageRequest $request)

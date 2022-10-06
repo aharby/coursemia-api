@@ -28,13 +28,33 @@ class LoginUseCase implements LoginUseCaseInterface
         if ($attribute == "mobile") {
             $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
         }
-
         $loginCase = array();
+        $loginCase['user'] = (object)[];
+        $loginCase['message'] = __('Invalid login details');
+        $loginCase['code'] = 422;
+        $loginCase['success'] = (boolean)false;
+        if (isset($user)){
+            $password_check = Hash::check($request['password'], $user->password);
+            if ($password_check){
+                $loginCase['user'] = new UserResorce($user);
+                $loginCase['message'] = __('Logged in successfully');
+                $loginCase['code'] = 200;
+                $loginCase['success'] = (boolean)true;
+
+                return $loginCase;
+            }
+        }
+        return $loginCase;
+
+    }
+
+    public function profile(UserRepositoryInterface $userRepository) : array
+    {
+        $user = request()->user();
         $loginCase['user'] = new UserResorce($user);
         $loginCase['message'] = __('Logged in successfully');
         $loginCase['code'] = 200;
         $loginCase['success'] = (boolean)true;
-
         return $loginCase;
     }
 

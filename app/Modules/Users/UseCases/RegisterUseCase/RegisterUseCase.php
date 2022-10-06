@@ -11,59 +11,33 @@ use App\Modules\Users\UseCases\RegisterStudentUseCase\RegisterStudentUseCaseInte
 use App\Modules\Users\User;
 use App\Modules\Users\UserEnums;
 use Illuminate\Support\Facades\Hash;
+use Twilio\Rest\Client;
 
 class RegisterUseCase implements RegisterUseCaseInterface
 {
-    private $registerStudentUseCase;
-    private $registerStudentTeacherUseCase;
 
-    public function __construct(
-        RegisterStudentUseCaseInterface $registerStudentUseCase,
-        RegisterStudentTeacherUseCaseInterface $registerStudentTeacherUseCase
-    )
-    {
-        $this->registerStudentUseCase = $registerStudentUseCase;
-        $this->registerStudentTeacherUseCase = $registerStudentTeacherUseCase;
-    }
 
     public function register(array $request, UserRepositoryInterface $userRepository): User
     {
         $request['language'] = config('app.locale');
         $user =  $userRepository->create($request);
-        $user_id = $user->id;
-        if ($request['type'] == UserEnums::STUDENT_TYPE) {
-            $student = $this->registerStudentUseCase->registerStudent($request, $user_id);
-            $this->sendActivationCode($user);
-            return $user;
-        }
-
-        if ($request['type'] == UserEnums::STUDENT_TEACHER_TYPE) {
-            $studentTeacher = $this->registerStudentTeacherUseCase->registerStudentTeacher($request, $user_id);
-            $this->sendActivationCode($user);
-            return $user;
-        }
         $this->sendActivationCode($user);
         return $user;
     }
 
+    /**
+     * Sends sms to user using Twilio's programmable sms client
+     * @param String $message Body of sms
+     * @param Number $recipients string or array of phone number of recepient
+     */
     private function sendActivationCode(User $user)
     {
-        $notificationData = [
-            'users' => collect([$user]),
-            'sms' => [
-                'message' => 'app.Activate Code'
-            ]
-        ];
-
-        if ($user->email) {
-            $notificationData['email'] = [
-                'user_type' => $user->type,
-                'subject' => trans('app.Activate Account', [], $user->language),
-                'view' => 'activateAccountEmail'
-            ];
-
-        }
-
-        SendActivationCode::dispatch($user, $notificationData);
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $twilio->verify->v2->services($twilio_verify_sid)
+            ->verifications
+            ->create($user->country_code.$user->phone, "sms");
     }
 }
