@@ -2,9 +2,10 @@
 
 namespace App\Modules\Users\Auth\Requests\Api;
 
-use App\Modules\BaseApp\Api\Requests\BaseApiParserRequest;
 
-class UserActivateOtpRequest extends BaseApiParserRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class UserActivateOtpRequest extends FormRequest
 {
     public function rules()
     {

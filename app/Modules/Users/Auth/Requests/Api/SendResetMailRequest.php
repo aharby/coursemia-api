@@ -2,9 +2,9 @@
 
 namespace App\Modules\Users\Auth\Requests\Api;
 
-use App\Modules\BaseApp\Api\Requests\BaseApiParserRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class SendResetMailRequest extends BaseApiParserRequest
+class SendResetMailRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

@@ -3,27 +3,19 @@
 namespace App\Modules\Users\Auth\Controllers;
 
 use App\Modules\BaseApp\Controllers\BaseController;
-use App\Modules\Users\Auth\Requests\ResetPasswordRequest;
-use App\Modules\Users\Auth\Requests\UpdatePasswordRequest;
-use App\Modules\Users\Auth\Requests\UserLoginRequest;
-use App\Modules\Users\Events\UserModified;
 use App\Modules\Users\Repository\UserRepositoryInterface;
 use App\Modules\Users\UseCases\ActivateUserUserCase\ActivateUserUseCaseInterface;
-use App\Modules\Users\UseCases\ForgetPasswordUseCase\ForgetPasswordUseCaseInterface;
-use App\Modules\Users\UseCases\LoginUseCase\LoginUseCaseInterface;
 use App\Modules\Users\UserEnums;
-use Dompdf\Exception;
 
 use function Aws\boolean_value;
 
 class AuthController extends BaseController
 {
-    public function __construct(/*LoginUseCaseInterface $loginUseCase,*/ ForgetPasswordUseCaseInterface $forgetPasswordUseCase, UserRepositoryInterface $userRepository, ActivateUserUseCaseInterface $activateUserUseCase)
+    public function __construct(UserRepositoryInterface $userRepository, ActivateUserUseCaseInterface $activateUserUseCase)
     {
         $this->middleware('guest');
         $this->module = 'auth';
 //        $this->loginUseCase = $loginUseCase;
-        $this->forgetPasswordUseCase = $forgetPasswordUseCase;
         $this->repository = $userRepository;
         $this->activateUserUseCase = $activateUserUseCase;
 
@@ -48,13 +40,13 @@ class AuthController extends BaseController
         $requestData = [];
         $requestData['email'] = $request->email;
         $requestData['password'] = $request->password;
-        $requestData['abilities_user'] = boolval($request->abilities_user)  ?? false;
+        $requestData['abilities_user'] = boolval($request->abilities_user) ?? false;
         $requestData['user_type'] = $userType;
         $requestData['remember_me'] = $request->get('remember_me');
 
         if (!filter_var($requestData['email'], FILTER_VALIDATE_EMAIL)) {
             $useCase = $this->loginUseCase->loginWithUsername($requestData, $this->repository);
-        }else{
+        } else {
             $useCase = $this->loginUseCase->login($requestData, $this->repository);
         }
 
@@ -63,8 +55,8 @@ class AuthController extends BaseController
 
                 flash()->success($useCase['message']);
                 if ($useCase['user']->type == UserEnums::SCHOOL_ACCOUNT_MANAGER) {
-                    if (isset($useCase['shouldChangePassword'])){
-                        return redirect()->route('auth.get.activate-manager',['confirmToken'=>$useCase['user']->confirm_token]);
+                    if (isset($useCase['shouldChangePassword'])) {
+                        return redirect()->route('auth.get.activate-manager', ['confirmToken' => $useCase['user']->confirm_token]);
                     }
                     return redirect()->to('/school-account-manager/school-account-branches');
 
@@ -72,13 +64,13 @@ class AuthController extends BaseController
                     $useCase['user']->type == UserEnums::SCHOOL_LEADER
                     || $useCase['user']->type == UserEnums::SCHOOL_SUPERVISOR
                     || $useCase['user']->type == UserEnums::ACADEMIC_COORDINATOR) {
-                    if (isset($useCase['shouldChangePassword'])){
-                        return redirect()->route('auth.get.activate-manager', ['confirmToken'=>$useCase['user']->confirm_token]);
+                    if (isset($useCase['shouldChangePassword'])) {
+                        return redirect()->route('auth.get.activate-manager', ['confirmToken' => $useCase['user']->confirm_token]);
                     }
                     return redirect()->to('/school-branch-supervisor/grade-classes');
-                }elseif ($useCase['user']->type == UserEnums::SCHOOL_ADMIN) {
-                    if (isset($useCase['shouldChangePassword'])){
-                        return redirect()->route('auth.get.activate-manager',['confirmToken'=>$useCase['user']->confirm_token]);
+                } elseif ($useCase['user']->type == UserEnums::SCHOOL_ADMIN) {
+                    if (isset($useCase['shouldChangePassword'])) {
+                        return redirect()->route('auth.get.activate-manager', ['confirmToken' => $useCase['user']->confirm_token]);
                     }
                     return redirect()->to('/school-admin/school-account-branches');
                 }
@@ -151,14 +143,14 @@ class AuthController extends BaseController
         return view($this->module . '.activate-manager', $data);
     }
 
-    public function postActivateSchoolAccount(UpdatePasswordRequest $request,$confirmToken)
+    public function postActivateSchoolAccount(UpdatePasswordRequest $request, $confirmToken)
     {
         $data = $request->all();
         try {
-            $user = $this->activateUserUseCase->activateWithSocialId($data,$confirmToken, $this->repository);
+            $user = $this->activateUserUseCase->activateWithSocialId($data, $confirmToken, $this->repository);
             if ($user) {
-            flash('password changed successfully')->success();
-            return redirect()->route('auth.get.schoolLogin');
+                flash('password changed successfully')->success();
+                return redirect()->route('auth.get.schoolLogin');
             } else {
                 flash(trans('app.Oopps The page you were looking for doesnt exist'))->error();
                 return back()->withInput();

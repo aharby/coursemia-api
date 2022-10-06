@@ -34,11 +34,6 @@ Route::post('/reset-password/confirm/code', '\App\Modules\Users\Auth\Controllers
 Route::post('/provider/facebook', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@loginAndRegisterUsingFacebook')
     ->name('socialLogin');
 
-Route::post('/login-with-twitter', '\App\Modules\Users\Auth\Controllers\Api\TwitterAuthStatelessApiController@login')
-    ->name('loginWithTwitter');
-
-Route::post('/twitter/callback', '\App\Modules\Users\Auth\Controllers\Api\TwitterAuthStatelessApiController@callback')
-    ->name('loginCallbackTwitter');
 
     // twitter
 Route::post('/provider/twitter', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@twitterAuthentication')
@@ -66,9 +61,6 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
         Route::post('push_device_token', 'AuthApiController@addDeviceToken');
         Route::post('logout', 'AuthApiController@logout');
         Route::get('delete_my_account', 'AuthApiController@deleteMyAccount');
-    });
-    Route::group(['middleware' => 'auth:api', 'prefix' => 'home'], function (){
-        Route::get('get_home_content', 'HomeScreenController@home');
     });
 });
 

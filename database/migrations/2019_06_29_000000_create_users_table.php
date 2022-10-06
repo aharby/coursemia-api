@@ -36,7 +36,7 @@ class CreateUsersTable extends Migration
             $table->boolean('confirmed')->nullable();
             $table->bigInteger('created_by')->nullable()->index();
             $table->timestamp('suspended_at')->nullable();
-
+            $table->string('username')->unique()->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('SET NULL');
 

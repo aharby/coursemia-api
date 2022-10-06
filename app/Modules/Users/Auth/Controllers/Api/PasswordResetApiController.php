@@ -8,29 +8,17 @@ use App\Modules\Users\Auth\Requests\Api\ConfirmResetCodeRequest;
 use App\Modules\Users\Auth\Requests\Api\ResetUserPasswordCodeRequest;
 use App\Modules\Users\Transformers\ResetPasswordLinkTransformer;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use App\Modules\Users\Events\UserModified;
 use App\Modules\BaseApp\Api\BaseApiController;
-use Illuminate\Support\Facades\Log;
-use Swis\JsonApi\Client\Interfaces\ParserInterface;
 use App\Modules\Users\Repository\UserRepositoryInterface;
 use App\Modules\Users\Auth\Requests\Api\SendResetMailRequest;
 use App\Modules\Users\Auth\Requests\Api\ResetUserPasswordRequest;
-use App\Modules\Users\UseCases\ForgetPasswordUseCase\ForgetPasswordUseCaseInterface;
 
 class PasswordResetApiController extends BaseApiController
 {
-    public $parserInterface;
-    protected $userRepository;
-    protected $forgetPasswordCase;
-
     public function __construct(
-        ParserInterface $parserInterface,
-        ForgetPasswordUseCaseInterface $forgetPasswordCase,
         UserRepositoryInterface $userRepository
     ) {
-        $this->parserInterface = $parserInterface;
-        $this->forgetPasswordCase = $forgetPasswordCase;
         $this->userRepository = $userRepository;
     }
 

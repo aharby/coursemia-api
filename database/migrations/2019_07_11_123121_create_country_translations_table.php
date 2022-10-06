@@ -15,7 +15,7 @@ class CreateCountryTranslationsTable extends Migration
     {
         Schema::create('country_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->nullable();
+            $table->string('title')->nullable();
 
             $table->string('locale')->index();
 

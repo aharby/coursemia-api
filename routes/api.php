@@ -13,18 +13,12 @@
 */
 
 
-
 Route::group(['as' => 'api.'], function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         require base_path('app/Modules/Users/Auth/Routes/api.php');
     });
-
-    Route::get('test-api',function (){
-        return response()->json(
-            [
-                'code' => 200 ,
-                'message' => "hi man"
-            ]
-        );
-    });
+    require base_path('app/Modules/Countries/Routes/api.php');
+});
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    require base_path('app/Modules/Countries/Routes/admin.php');
 });

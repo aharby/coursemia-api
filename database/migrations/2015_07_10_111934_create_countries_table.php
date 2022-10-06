@@ -17,7 +17,7 @@ class CreateCountriesTable extends Migration
             $table->bigIncrements('id');
             $table->boolean('is_active');
             $table->string('country_code')->nullable();
-            $table->string('currency_code')->nullable();
+            $table->string('flag')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
