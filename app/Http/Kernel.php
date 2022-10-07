@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckUserVerified;
 use App\Modules\Courses\Middleware\CheckCourseAvailabiltyForInstructorMiddleware;
 use Barryvdh\Cors\HandleCors;
 use App\Http\Middleware\TrimStrings;
@@ -99,7 +100,7 @@ class Kernel extends HttpKernel
         'Locale' => Locale::class,
         'suspended' => CheckSuspense::class,
         'type' => TypeMiddleware::class,
-        'course_instructor'=>CheckCourseAvailabiltyForInstructorMiddleware::class
+        'userActive'=>CheckUserVerified::class
     ];
 
     /**
