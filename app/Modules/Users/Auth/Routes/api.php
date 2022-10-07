@@ -51,8 +51,5 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
         Route::post('logout', 'AuthApiController@logout');
         Route::get('delete-my-account', 'AuthApiController@deleteMyAccount');
     });
-    Route::group(['middleware' => 'auth:api', 'prefix' => 'home'], function (){
-        Route::get('get_home_content', 'HomeScreenController@home');
-    });
 });
 
