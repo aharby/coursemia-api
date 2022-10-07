@@ -3,6 +3,8 @@
 namespace App\Modules\HomeScreen\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Courses\Models\Course;
+use App\Modules\Courses\Resources\API\CoursesResource;
 use App\Modules\Events\Models\Event;
 use App\Modules\Events\Resources\API\EventsResource;
 use App\Modules\Offers\Models\Offer;
@@ -16,6 +18,7 @@ class HomeScreenController extends Controller
         $offers = Offer::get();
         $events = Event::get();
         $question = Question::inRandomOrder()->first();
+        $courses = Course::take(5)->get();
         return customResponse([
             "offers" => OffersResource::collection($offers),
             "events" => EventsResource::collection($events),
@@ -23,9 +26,7 @@ class HomeScreenController extends Controller
             "specialities"          => [
                 // @todo to be fetched from DB after karim finishes
             ],
-            "courses"   => [
-                // @todo to be fetched from db after i create courses table
-            ]
+            "courses"   => CoursesResource::collection($courses)
         ], __("Get home content successfully"), true, 200);
     }
 }

@@ -273,5 +273,6 @@ class CountriesSeeder extends Seeder
         );
 
         DB::table('countries')->insert($countries);
+        DB::table('countries')->update(['phonecode' => DB::raw("CONCAT('+',phonecode)")]);
     }
 }

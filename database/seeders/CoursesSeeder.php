@@ -25,7 +25,6 @@ class CoursesSeeder extends Seeder
             $course->rate = rand(1,5);
             $course->expire_date = now()->addYear();
             $course->save();
-
         }
     }
 }

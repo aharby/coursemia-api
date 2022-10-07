@@ -25,9 +25,14 @@ class DatabaseSeeder extends Seeder
         //        $this->call(CreateDummySubjectSeeder::class);
 //        $this->call(StaticPagesSeeder::class);
         $this->call(CountriesSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(CoursesSeeder::class);
         $this->call(OffersSeeder::class);
         $this->call(EventsSeeder::class);
         $this->call(UsersSeeder::class);
         $this->call(QuestionsAndAnswersSeeder::class);
+        $this->call(FlashcardsSeeder::class);
+        $this->call(LecturesSeeder::class);
+        $this->call(NotesSeeder::class);
     }
 }
