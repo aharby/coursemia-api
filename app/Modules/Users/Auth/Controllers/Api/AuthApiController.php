@@ -294,7 +294,7 @@ class AuthApiController extends BaseApiController
         if (isset($user)){
             $user->password = Hash::make($request->password);
             $user->save();
-            return customResponse(new UserResorce($user), __("Password reset successfully"), true, 200);
+            return customResponse((object)[], __("Password reset successfully"), true, 200);
         }
         return customResponse((object)[], __("User not found"), false, 422);
     }
