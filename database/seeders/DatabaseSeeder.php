@@ -13,16 +13,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(DummySeeder::class);
-        $this->call(BasicSeeder::class);
+//        $this->call(DummySeeder::class);
+//        $this->call(BasicSeeder::class);
         //        $this->call(CountriesTableSeeder::class);
         //        $this->call(EducationalSystemsTableSeeder::class);
         //        $this->call(AcademicYearsTableSeeder::class);
         //        $this->call(SchoolsSeeder::class);
-        $this->call(ResourcesTableSeeder::class);
-        $this->call(RemoveParentsEmptyStudent::class);
+//        $this->call(ResourcesTableSeeder::class);
+//        $this->call(RemoveParentsEmptyStudent::class);
 
         //        $this->call(CreateDummySubjectSeeder::class);
-        $this->call(StaticPagesSeeder::class);
+//        $this->call(StaticPagesSeeder::class);
+        $this->call(CountriesSeeder::class);
+        $this->call(OffersSeeder::class);
+        $this->call(EventsSeeder::class);
+        $this->call(UsersSeeder::class);
+        $this->call(QuestionsAndAnswersSeeder::class);
     }
 }
