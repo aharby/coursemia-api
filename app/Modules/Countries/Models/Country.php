@@ -22,4 +22,15 @@ class Country extends Model
     protected $translatedAttributes = [
         'title',
     ];
+
+    public function ScopeActive($query)
+    {
+
+        $query->where('is_active',1);
+    }
+
+    public function getTranslatedTitleAttribute()
+    {
+        return $this->translate(app()->getLocale())->title;
+    }
 }

@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 interface CountryRepositoryInterface
 {
-    public function all();
+    public function all($isActive=false);
     public function find(int $id) : Country;
     public function create(array $attributes) : Country;
     public function update(int $id , array $attributes) : bool;

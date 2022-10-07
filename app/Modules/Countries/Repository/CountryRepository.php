@@ -17,10 +17,15 @@ class CountryRepository implements CountryRepositoryInterface
         $this->model = $country;
     }
 
-    public function all()
+    public function all($isActive = false)
     {
-
-        return $this->model->orderBy('id','DESC')->paginate(env('PAGE_LIMIT', 20));
+        $query = $this->model
+            ->query();
+        if ($isActive) {
+            $query->active();
+        }
+        return $query->orderBy('id', 'DESC')
+            ->paginate(env('PAGE_LIMIT', 20));
     }
 
     public function find(int $id): Country
@@ -43,8 +48,11 @@ class CountryRepository implements CountryRepositoryInterface
 
     public function delete(int $id): bool
     {
-
-        return $this->model->find($id)->delete();
+        $course = $this->model->find($id);
+        if ($course) {
+            return $course->delete();
+        }
+        return false;
     }
 
     public function pluck(): Collection

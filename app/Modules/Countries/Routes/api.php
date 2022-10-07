@@ -1,5 +1,8 @@
 <?php
-Route::group(['prefix' => 'configs', 'as' => 'configs.'], function () {
-    Route::get('/edit', '\App\Modules\Config\Controllers\ConfigsController@getEdit')->name('get.edit');
-    Route::put('/edit', '\App\Modules\Config\Controllers\ConfigsController@postEdit')->name('post.edit');
+
+
+use App\Modules\Country\Controllers\CountriesApiControllers;
+
+Route::group(['prefix' => 'countries', 'as' => 'contries.'], function () {
+    Route::get('/', [CountriesApiControllers::class , 'index']);
 });
