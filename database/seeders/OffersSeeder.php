@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Offer;
+use App\Modules\Offers\Models\Offer;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
