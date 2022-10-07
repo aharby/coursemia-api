@@ -15,6 +15,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('course_id');
             $table->string('question_en');
             $table->string('question_ar');
             $table->string('image');
@@ -23,6 +24,9 @@ class CreateQuestionsTable extends Migration
             $table->string('explanation_image')->nullable();
             $table->string('explanation_voice')->nullable();
             $table->timestamps();
+
+            $table->foreign('course_id')->references('id')->on('courses')
+                ->onDelete('cascade');
         });
     }
 

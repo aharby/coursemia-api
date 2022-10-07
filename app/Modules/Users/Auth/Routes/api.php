@@ -45,12 +45,14 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::post('reset-password', 'AuthApiController@resetPassword');
     Route::post('resend-verification-code', 'AuthApiController@forgetPassword');
     Route::post('login', 'AuthApiController@login');
-    Route::group(['middleware' => 'auth:api'], function (){
-        Route::post('change-password', 'AuthApiController@changePassword');
-        Route::get('get-profile', 'AuthApiController@getProfile');
-        Route::post('push-device-token', 'AuthApiController@addDeviceToken');
-        Route::post('logout', 'AuthApiController@logout');
-        Route::get('delete-my-account', 'AuthApiController@deleteMyAccount');
+    Route::group(['middleware' => 'userActive'], function (){
+        Route::group(['middleware' => 'auth:api'], function (){
+            Route::post('change-password', 'AuthApiController@changePassword');
+            Route::get('get-profile', 'AuthApiController@getProfile');
+            Route::post('push-device-token', 'AuthApiController@addDeviceToken');
+            Route::post('logout', 'AuthApiController@logout');
+            Route::get('delete-my-account', 'AuthApiController@deleteMyAccount');
+        });
     });
 });
 
