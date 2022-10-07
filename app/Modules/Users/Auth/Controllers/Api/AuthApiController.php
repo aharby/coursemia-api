@@ -3,6 +3,7 @@
 namespace App\Modules\Users\Auth\Controllers\Api;
 
 use App\Modules\Users\Auth\Requests\AddDeviceTokenRequest;
+use App\Modules\Users\Auth\Requests\Api\ResetPasswordRequest;
 use App\Modules\Users\Auth\Requests\ApiRegisterRequest;
 use App\Modules\Users\Auth\Requests\ChangePasswordRequest;
 use App\Modules\Users\Auth\Requests\ForgetPasswordRequest;
@@ -285,6 +286,17 @@ class AuthApiController extends BaseApiController
         $user = Auth::user()->token();
         $user->revoke();
         return customResponse((object)[], __("Logged Out Successfully"), false,422);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request){
+        $user = User::where(['phone' => $request->phone_number, 'country_code' => $request->country_code])
+            ->first();
+        if (isset($user)){
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return customResponse(new UserResorce($user), __("Password reset successfully"), true, 200);
+        }
+        return customResponse((object)[], __("User not found"), false, 422);
     }
 
     public function activateOtp(UserActivateOtp $userActivateOtp)

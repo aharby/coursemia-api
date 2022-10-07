@@ -39,9 +39,10 @@ Route::any('/no-auth', function(){
 });
 
 Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], function (){
-    Route::post('create_account', 'AuthApiController@register');
+    Route::post('create-account', 'AuthApiController@register');
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
-    Route::post('forgot_password', 'AuthApiController@forgetPassword');
+    Route::post('forgot-password', 'AuthApiController@forgetPassword');
+    Route::post('reset-password', 'AuthApiController@resetPassword');
     Route::post('resend-verification-code', 'AuthApiController@forgetPassword');
     Route::post('login', 'AuthApiController@login');
     Route::group(['middleware' => 'auth:api'], function (){
