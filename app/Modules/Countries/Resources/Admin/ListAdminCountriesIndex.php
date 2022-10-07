@@ -15,7 +15,7 @@ class ListAdminCountriesIndex extends JsonResource
             "title_ar" =>$this->translate('ar')->title,
             "country_code" =>$this->country_code,
             "flag" => image($this->flag , 'large'),
-            "is_active" => $this->is_active ,
+            "is_active" => (bool) $this->is_active ,
             "status" => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,
         ];
     }
