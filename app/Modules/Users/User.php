@@ -51,10 +51,10 @@ use Illuminate\Notifications\Notification;
 use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable implements Auditable
+class User extends Authenticatable
 {
-    use CreatedBy, HasAttach, Notifiable, Invitable, UserRatingable, HasFactory;
-    use \OwenIt\Auditing\Auditable;
+    use HasAttach, Notifiable, Invitable, UserRatingable, HasFactory;
+//    use \OwenIt\Auditing\Auditable;
     use HasApiTokens; //passport auth
 
     protected static $attachFields = [
@@ -72,38 +72,16 @@ class User extends Authenticatable implements Auditable
     protected $appends = ['name'];
     protected $fillable = [
         'first_name',
-        'last_name',
-        'language',
-        'type',
-        'username',
+        'photo',
+        'referer_id',
+        'country_code',
+        'refer_code',
+        'full_name',
         'email',
-        'mobile',
-        'address',
-        'last_logged_in_at',
-        'confirmed',
-        'super_admin',
-        'is_admin',
+        'phone',
         'password',
-        'is_active',
-        'confirm_token',
-        'profile_picture',
-        'suspended_at',
-        'facebook_id',
-        'twitter_id',
         'country_id',
-        'branch_id',
-        'school_id',
-        'role_id',
-        'otp',
-        'deleted_ios_action'
     ];
-
-    public function setPasswordAttribute($value)
-    {
-        if (trim($value)) {
-            $this->attributes['password'] = bcrypt(trim($value));
-        }
-    }
 
     public function scopeActive($query)
     {

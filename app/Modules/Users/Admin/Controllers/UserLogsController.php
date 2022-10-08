@@ -22,7 +22,7 @@ use App\Modules\Users\Admin\Requests\InsturctorStudentsRequest;
 use App\Modules\Users\Repository\InstructorRepositoryInterface;
 use App\Modules\Users\Repository\ContentAuthorRepositoryInterface;
 use App\Modules\Users\UseCases\CreateUserUseCase\CreateUserUseCaseInterface;
-use App\Modules\Users\UseCases\UpdateUserUseCase\UpdateUserUseCaseInterface;
+use App\Modules\Users\UseCases\UpdateUserUseCase\ActivateUserUseCaseInterface;
 use App\Modules\Users\UseCases\SuspendUserUseCase\SuspendUserUseCaseInterface;
 
 class UserLogsController extends Controller

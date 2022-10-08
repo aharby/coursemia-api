@@ -32,7 +32,7 @@ use App\Modules\Users\Admin\Requests\InsturctorStudentsRequest;
 use App\Modules\Users\Repository\InstructorRepositoryInterface;
 use App\Modules\Users\Repository\ContentAuthorRepositoryInterface;
 use App\Modules\Users\UseCases\CreateUserUseCase\CreateUserUseCaseInterface;
-use App\Modules\Users\UseCases\UpdateUserUseCase\UpdateUserUseCaseInterface;
+use App\Modules\Users\UseCases\UpdateUserUseCase\ActivateUserUseCaseInterface;
 use App\Modules\Users\UseCases\SuspendUserUseCase\SuspendUserUseCaseInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -180,7 +180,7 @@ class UsersController extends Controller
         return $relation;
     }
 
-    public function postEdit(UpdateUserRequest $request, UpdateUserUseCaseInterface $updateUserUseCase, $id)
+    public function postEdit(UpdateUserRequest $request, ActivateUserUseCaseInterface $updateUserUseCase, $id)
     {
         $user = $this->repository->findOrFail($id);
         $oldData = $user->toArray();

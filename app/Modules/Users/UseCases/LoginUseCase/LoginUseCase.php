@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Users\UseCases\LoginUseCase;
 
+use App\Enums\StatucCodesEnum;
 use App\Modules\Users\Auth\Enum\DeviceEnum;
 use App\Modules\Users\Auth\Enum\LoginEnum;
 use App\Modules\Users\Repository\UserRepositoryInterface;
@@ -28,13 +29,30 @@ class LoginUseCase implements LoginUseCaseInterface
         if ($attribute == "mobile") {
             $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
         }
-
         $loginCase = array();
-        $loginCase['user'] = new UserResorce($user);
-        $loginCase['message'] = __('Logged in successfully');
-        $loginCase['code'] = 200;
-        $loginCase['success'] = (boolean)true;
+        $loginCase['data'] = (object)[];
+        $loginCase['message'] = __('Invalid login details');
+        $loginCase['status_code'] = StatucCodesEnum::FAILED;
+        if (isset($user)){
+            $password_check = Hash::check($request['password'], $user->password);
+            if ($password_check){
+                $loginCase['data'] = new UserResorce($user);
+                $loginCase['message'] = __('Logged in successfully');
+                $loginCase['status_code'] = StatucCodesEnum::DONE;
 
+                return $loginCase;
+            }
+        }
+        return $loginCase;
+
+    }
+
+    public function profile(UserRepositoryInterface $userRepository) : array
+    {
+        $user = request()->user();
+        $loginCase['data'] = new UserResorce($user);
+        $loginCase['message'] = __('Logged in successfully');
+        $loginCase['status_code'] = StatucCodesEnum::DONE;
         return $loginCase;
     }
 
