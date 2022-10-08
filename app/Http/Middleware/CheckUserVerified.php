@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\StatucCodesEnum;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class CheckUserVerified
     {
         $user = $request->user();
         if (!$user->is_verified){
-            return customResponse(null,__("User not verified"), false, 422);
+            return customResponse(null,__("User not verified"), 422, StatucCodesEnum::FAILED);
         }
         return $next($request);
     }

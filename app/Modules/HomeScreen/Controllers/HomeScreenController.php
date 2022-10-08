@@ -2,6 +2,7 @@
 
 namespace App\Modules\HomeScreen\Controllers;
 
+use App\Enums\StatucCodesEnum;
 use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Resources\API\CoursesResource;
@@ -27,6 +28,6 @@ class HomeScreenController extends Controller
                 // @todo to be fetched from DB after karim finishes
             ],
             "courses"   => CoursesResource::collection($courses)
-        ], __("Get home content successfully"), true, 200);
+        ], __("Get home content successfully"), 200, StatucCodesEnum::DONE);
     }
 }
