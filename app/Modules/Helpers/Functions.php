@@ -45,12 +45,12 @@ use Carbon\Carbon;
 
 if (!function_exists('customResponse')) {
 
-    function customResponse($data = [], $message = "", $success = true, $code = 200)
+    function customResponse($data = [], $message = "", $code = 200, $status_code)
     {
         return response()->json([
             'data'  => $data,
             'message'  => $message,
-            'success' => (boolean)$success
+            'status_code'   => (integer)$status_code
         ], $code);
     }
 }
