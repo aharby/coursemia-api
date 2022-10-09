@@ -24,6 +24,16 @@ class Course extends Model
         return $this->hasMany(CourseLecture::class);
     }
 
+    public function courseLectureCategories(){
+        return $this->hasManyThrough(Category::class, CourseLecture::class, 'course_id', 'id', 'id', 'id');
+    }
+
+    public function lecturesFreeContent(){
+        $result = $this->hasOne(CourseLecture::class)
+            ->where('course_lectures.is_free_content', '=', 1);
+        return $result;
+    }
+
     public function notes(){
         return $this->hasMany(CourseNote::class);
     }
@@ -34,5 +44,9 @@ class Course extends Model
 
     public function flashCards(){
         return $this->hasMany(CourseFlashcard::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(CourseReview::class);
     }
 }

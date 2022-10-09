@@ -5,11 +5,7 @@ namespace App\Modules\Courses\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CourseLecture extends Model
+class CourseReview extends Model
 {
     use HasFactory;
-
-    public function category(){
-        return $this->belongsTo(Category::class);
-    }
 }

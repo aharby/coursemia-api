@@ -5,6 +5,7 @@ namespace App\Modules\Courses\Controllers;
 use App\Enums\StatucCodesEnum;
 use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Course;
+use App\Modules\Courses\Resources\API\CourseDetailsResource;
 use App\Modules\Courses\Resources\API\CoursesCollection;
 use App\Modules\Courses\Resources\API\CoursesResource;
 use Illuminate\Http\Request;
@@ -40,5 +41,10 @@ class CoursesAPIController extends Controller
         $user = request()->user();
         $courses = $user->courses;
         return customResponse(CoursesResource::collection($courses), __("Fetched courses successfully"), 200, StatucCodesEnum::DONE);
+    }
+
+    public function getCourseById(){
+        $course = Course::find(request()->course_id);
+        return customResponse(new CourseDetailsResource($course), __("Get course details successfully"), 200, 1);
     }
 }
