@@ -23,6 +23,10 @@ Route::group(['as' => 'api.'], function () {
         require base_path('app/Modules/HomeScreen/Routes/api.php');
     });
 
+    Route::group(['prefix' => 'courses', 'as' => 'courses.'], function(){
+        require base_path('app/Modules/Courses/Routes/api.php');
+    });
+
     Route::get('test-api',function (){
         return response()->json(
             [

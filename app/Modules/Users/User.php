@@ -10,6 +10,7 @@ use App\Modules\BaseApp\Traits\HasAttach;
 use App\Modules\Certificates\Models\ThankingCertificate;
 use App\Modules\Country\Models\Country;
 use App\Modules\Courses\Models\Course;
+use App\Modules\Courses\Models\CourseUser;
 use App\Modules\GeneralQuizzes\Models\GeneralQuizStudent;
 use App\Modules\GeneralQuizzes\Models\GeneralQuizStudentAnswer;
 use App\Modules\Invitations\Enums\InvitationEnums;
@@ -82,6 +83,10 @@ class User extends Authenticatable
         'password',
         'country_id',
     ];
+
+    public function courses(){
+        return $this->hasManyThrough(Course::class, CourseUser::class, 'user_id', 'id', 'id', 'course_id');
+    }
 
     public function scopeActive($query)
     {
@@ -282,16 +287,6 @@ class User extends Authenticatable
         return $this->hasOne(StudentTeacher::class, 'user_id');
     }
 
-
-    /**
-     * courses relation
-     *  instructor's courses
-     * @return HasMany
-     */
-    public function courses()
-    {
-        return $this->hasMany(Course::class, 'instructor_id');
-    }
 
     /**
      * coursesStudents relation

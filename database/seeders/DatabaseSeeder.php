@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(RemoveParentsEmptyStudent::class);
 
         //        $this->call(CreateDummySubjectSeeder::class);
-//        $this->call(StaticPagesSeeder::class);
+        $this->call(SpecialitiesSeeder::class);
         $this->call(CountriesSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(CoursesSeeder::class);
@@ -34,5 +34,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FlashcardsSeeder::class);
         $this->call(LecturesSeeder::class);
         $this->call(NotesSeeder::class);
+        $this->call(CourseUserSeeder::class);
     }
 }
