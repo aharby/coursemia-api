@@ -28,7 +28,7 @@ class CountryRepository implements CountryRepositoryInterface
             ->paginate(env('PAGE_LIMIT', 20));
     }
 
-    public function find(int $id): Country
+    public function find(int $id): Country|null
     {
 
         return $this->model->find($id);
