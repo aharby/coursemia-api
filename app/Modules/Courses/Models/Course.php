@@ -10,6 +10,16 @@ class Course extends Model
 {
     use HasFactory;
 
+    public function getTitleAttribute(){
+        $lang = app()->getLocale();
+        return $this->attributes["title_$lang"];
+    }
+
+    public function getDescriptionAttribute(){
+        $lang = app()->getLocale();
+        return $this->attributes["description_$lang"];
+    }
+
     public function lectures(){
         return $this->hasMany(CourseLecture::class);
     }
