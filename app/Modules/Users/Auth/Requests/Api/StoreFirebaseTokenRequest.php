@@ -2,9 +2,10 @@
 
 namespace App\Modules\Users\Auth\Requests\Api;
 
-use App\Modules\BaseApp\Api\Requests\BaseApiParserRequest;
 
-class StoreFirebaseTokenRequest extends BaseApiParserRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreFirebaseTokenRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

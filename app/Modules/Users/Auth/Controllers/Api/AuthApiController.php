@@ -30,18 +30,11 @@ use App\Modules\Users\Events\UserModified;
 use App\Modules\BaseApp\Api\BaseApiController;
 use App\Modules\Users\Auth\Enum\TokenNameEnum;
 use App\Modules\BaseApp\Enums\ResourceTypesEnums;
-use App\BaseApp\Api\Requests\BaseApiTokenRequest;
-use App\Modules\Users\Transformers\UserTransformer;
-use Swis\JsonApi\Client\Interfaces\ParserInterface;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use App\Modules\Users\Auth\Requests\Api\LogoutRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Modules\Users\Transformers\UserAuthTransformer;
 use App\Modules\Users\Auth\Requests\Api\UserActivateOtp;
 use App\Modules\Users\Auth\Requests\Api\UserLoginRequest;
 use App\Modules\Users\Repository\UserRepositoryInterface;
-use App\Modules\Users\Auth\Requests\Api\TwitterLoginRequest;
 use App\Modules\Users\Auth\Requests\Api\UserRegisterRequest;
 use App\Modules\Users\Auth\Requests\Api\UserTypeDataRequest;
 use App\Modules\Users\Auth\Requests\Api\UserBasicDataRequest;
@@ -49,7 +42,6 @@ use App\Modules\Users\Auth\Requests\Api\ChangeLanguageRequest;
 use App\Modules\Users\Auth\TokenManager\TokenManagerInterface;
 use App\Modules\Users\Auth\Requests\Api\UserLoginSocialRequest;
 use App\Modules\Users\Auth\Requests\Api\StoreFirebaseTokenRequest;
-use App\Modules\Users\Repository\FirebaseTokenRepositoryInterface;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCaseInterface;
 use App\Modules\Users\UseCases\LoginSocialUseCase\LoginSocialUseCase;
 use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCaseInterface;
@@ -58,7 +50,6 @@ use App\Modules\Users\Auth\Requests\Api\UserActivateOtpRequest;
 
 class AuthApiController extends BaseApiController
 {
-    private $parserInterface;
     private $loginSocialUseCase;
     protected $firebaseRepository;
     /**

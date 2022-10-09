@@ -2,10 +2,14 @@
 
 namespace App\Modules\BaseApp\Providers;
 
+use App\Modules\Countries\Repository\CountryRepository;
+use App\Modules\Countries\Repository\CountryRepositoryInterface;
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepository;
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepositoryInterface;
 use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCase;
 use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCaseInterface;
+use App\Modules\Users\Repository\UserRepository;
+use App\Modules\Users\Repository\UserRepositoryInterface;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCase;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCaseInterface;
 use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCase;
@@ -33,8 +37,8 @@ class RepositoriesServiceProviders extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            'App\Modules\Users\Repository\UserRepositoryInterface',
-            'App\Modules\Users\Repository\UserRepository'
+            UserRepositoryInterface::class,
+            UserRepository::class
         );
         $this->app->bind(
             ActivateUserUseCaseInterface::class,
@@ -90,8 +94,8 @@ class RepositoriesServiceProviders extends ServiceProvider
             StudentTeacherRepository::class
         );
         $this->app->bind(
-            DistinguishedStudentsRepositoryInterface::class,
-            DistinguishedStudentsRepository::class
+            CountryRepositoryInterface::class,
+            CountryRepository::class
         );
 }
 }

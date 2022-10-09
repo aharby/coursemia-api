@@ -2,11 +2,11 @@
 
 namespace App\Modules\Users\Auth\Requests\Api;
 
-use App\Modules\BaseApp\Api\Requests\BaseApiParserRequest;
 use App\Modules\Users\UserEnums;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserRegisterRequest extends BaseApiParserRequest
+class UserRegisterRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

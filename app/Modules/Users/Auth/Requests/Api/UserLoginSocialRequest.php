@@ -2,9 +2,10 @@
 
 namespace App\Modules\Users\Auth\Requests\Api;
 
-use App\Modules\BaseApp\Api\Requests\BaseApiParserRequest;
 
-class UserLoginSocialRequest extends BaseApiParserRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class UserLoginSocialRequest extends FormRequest
 {
     public function rules()
     {

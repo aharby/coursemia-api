@@ -2,10 +2,10 @@
 
 namespace App\Modules\Users\Auth\Requests\Api;
 
-use App\Modules\BaseApp\Api\Requests\BaseApiParserRequest;
 use App\Modules\Users\Auth\Enum\DeviceEnum;
+use Illuminate\Foundation\Http\FormRequest;
 
-class LogoutRequest extends BaseApiParserRequest
+class LogoutRequest extends FormRequest
 {
     protected $deviceTokenRequired = false;
 

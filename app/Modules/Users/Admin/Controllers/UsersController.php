@@ -2,29 +2,15 @@
 
 namespace App\Modules\Users\Admin\Controllers;
 
-use App\Modules\Assessments\Jobs\AddUserToAssessmentJob;
-use App\Modules\Countries\Repository\CountryRepositoryInterface;
-use App\Modules\EducationalSystems\Repository\EducationalSystemRepositoryInterface;
-use App\Modules\GradeClasses\Repository\GradeClassRepositoryInterface;
-use App\Modules\Invitations\Enums\InvitationEnums;
-use App\Modules\Options\Enums\OptionsTypes;
-use App\Modules\Options\Repository\OptionRepositoryInterface;
-use App\Modules\SchoolAccounts\SchoolAccounts\Repository\SchoolAccountRepository;
 use App\Modules\Users\Admin\Requests\AttachStudentTeacherRequest;
 use App\Modules\Users\Models\StudentTeacherStudent;
 use App\Modules\Users\Repository\StudentRepositoryInterface;
-use App\Modules\Users\UseCases\CreateZoomUserUserCase\CreateZoomUserUseCaseInterface;
 use App\Modules\Users\User;
-use FontLib\Table\Type\name;
 use App\Modules\Users\UserEnums;
 use App\Modules\Helpers\MailManger;
 use App\Http\Controllers\Controller;
-use App\Modules\BaseApp\Helpers\Mail;
 use App\Modules\BaseApp\Enums\ParentEnum;
-use App\Modules\Users\Events\UserCreated;
-use App\Modules\BaseApp\Helpers\MailClass;
 use App\Modules\Users\Events\UserModified;
-use App\Modules\Users\Admin\Jobs\SendRegisterEMail;
 use App\Modules\Users\Admin\Requests\CreateUserRequest;
 use App\Modules\Users\Admin\Requests\UpdateUserRequest;
 use App\Modules\Users\Repository\UserRepositoryInterface;
@@ -32,8 +18,7 @@ use App\Modules\Users\Admin\Requests\InsturctorStudentsRequest;
 use App\Modules\Users\Repository\InstructorRepositoryInterface;
 use App\Modules\Users\Repository\ContentAuthorRepositoryInterface;
 use App\Modules\Users\UseCases\CreateUserUseCase\CreateUserUseCaseInterface;
-use App\Modules\Users\UseCases\UpdateUserUseCase\ActivateUserUseCaseInterface;
-use App\Modules\Users\UseCases\SuspendUserUseCase\SuspendUserUseCaseInterface;
+use App\Modules\Users\UseCases\UpdateUserUseCase\UpdateUserUseCaseInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use OwenIt\Auditing\Audit;
@@ -64,13 +49,8 @@ class UsersController extends Controller
         UserRepositoryInterface $userRepository,
         ContentAuthorRepositoryInterface $contentAuthorRepository,
         InstructorRepositoryInterface $instructorRepository,
-        CountryRepositoryInterface $countryRepository,
-        EducationalSystemRepositoryInterface $educationalSystemRepository,
-        OptionRepositoryInterface $optionRepository,
-        GradeClassRepositoryInterface $gradeClassRepository,
+
         StudentRepositoryInterface $studentRepository,
-        CreateZoomUserUseCaseInterface  $createZoomUser,
-        SchoolAccountRepository $schoolAccountRepository
     ) {
         $this->module = 'users';
         $this->title = trans('app.Users');
@@ -78,13 +58,7 @@ class UsersController extends Controller
         $this->parent = ParentEnum::ADMIN;
         $this->contentAuthor = $contentAuthorRepository;
         $this->instructorRepository = $instructorRepository;
-        $this->countryRepository = $countryRepository;
-        $this->educationalSystemRepository = $educationalSystemRepository;
-        $this->optionRepository = $optionRepository;
-        $this->gradeClassRepository = $gradeClassRepository;
         $this->studentRepository = $studentRepository;
-        $this->createZoomUser = $createZoomUser;
-        $this->schoolAccountRepository = $schoolAccountRepository;
     }
 
     public function getIndex()
