@@ -7,6 +7,7 @@ return array(
     'Deleted Successfully' => 'Deleted Successfully',
     'Successfully Logged In' => 'Successfully Logged In',
     'Successfully Logged Out' => 'Successfully Logged Out',
+    'no country found' => 'no country found',
     'Thanks for registration' => 'Thanks for registration',
     'Account activated' => 'Account activated',
     'Wrong old Password' => 'Wrong old Password',

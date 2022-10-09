@@ -7,6 +7,7 @@ return array(
     'Deleted Successfully' => 'حذف بنجاح',
     'Successfully Logged In' => 'تم تسجيل الدخول بنجاح',
     'Successfully Logged Out' => 'تم تسجيل الخروج بنجاح',
+    'no country found' => 'لا يوجد دوله',
     'Thanks for registration' => 'شكرا للتسجيل',
     'Account activated' => 'تم تفعيل الحساب',
     'Wrong old Password' => 'كلمة المرور القديمة خاطئة',
