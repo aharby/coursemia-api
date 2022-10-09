@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Modules\Country\Models\Country;
+use App\Modules\Countries\Models\Country;
 use App\Modules\Users\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +18,7 @@ class UsersSeeder extends Seeder
     public function run()
     {
         DB::table('users')->delete();
-        $country = Country::find(63);
+        $country = Country::find(1);
         for ($i = 0; $i < 10; $i++){
             $user = User::first();
             if (!isset($user)){
@@ -32,7 +32,7 @@ class UsersSeeder extends Seeder
                 'email' => $email,
                 'phone' => $phone,
                 'country_id' => $country->id,
-                'country_code' => $country->phonecode,
+                'country_code' => $country->country_code,
                 'email_verified_at' => now(),
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
                 'remember_token' => Str::random(10),

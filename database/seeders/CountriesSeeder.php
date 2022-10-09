@@ -28,5 +28,6 @@ class CountriesSeeder extends Seeder
             Country::create($country);
             $index++;
         }
+        DB::table('countries')->update(['country_code' => DB::raw("CONCAT('+',country_code)")]);
     }
 }
