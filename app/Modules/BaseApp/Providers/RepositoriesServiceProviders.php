@@ -4,6 +4,8 @@ namespace App\Modules\BaseApp\Providers;
 
 use App\Modules\Countries\Repository\CountryRepository;
 use App\Modules\Countries\Repository\CountryRepositoryInterface;
+use App\Modules\Specialities\Repository\SpecialitiesRepository;
+use App\Modules\Specialities\Repository\SpecialitiesRepositoryInterface;
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepository;
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepositoryInterface;
 use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCase;
@@ -96,6 +98,10 @@ class RepositoriesServiceProviders extends ServiceProvider
         $this->app->bind(
             CountryRepositoryInterface::class,
             CountryRepository::class
+        );
+        $this->app->bind(
+            SpecialitiesRepositoryInterface::class,
+            SpecialitiesRepository::class
         );
 }
 }

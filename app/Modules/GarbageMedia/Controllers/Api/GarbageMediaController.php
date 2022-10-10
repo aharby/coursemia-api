@@ -32,7 +32,7 @@ class GarbageMediaController extends Controller
 
 //            $ids[] = $grabMedia;
 //        }
-        return customResponse(new ListMedia($grabMedia),'',true,200);
+        return customResponse(new ListMedia($grabMedia),'',200,1);
     }
 
 }

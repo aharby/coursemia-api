@@ -9,7 +9,7 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class StatucCodesEnum extends Enum
+final class StatusCodesEnum extends Enum
 {
     const DONE =   1;
     const FAILED =   2;

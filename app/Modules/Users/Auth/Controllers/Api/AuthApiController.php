@@ -2,7 +2,7 @@
 
 namespace App\Modules\Users\Auth\Controllers\Api;
 
-use App\Enums\StatucCodesEnum;
+use App\Enums\StatusCodesEnum;
 use App\Modules\Users\Auth\Requests\AddDeviceTokenRequest;
 use App\Modules\Users\Auth\Requests\Api\ResetPasswordRequest;
 use App\Modules\Users\Auth\Requests\ApiRegisterRequest;
@@ -167,7 +167,7 @@ class AuthApiController extends BaseApiController
 
             if (!is_null($user)) {
 
-                return customResponse(new UserResorce($user), __("Account created successfully"), 200, StatucCodesEnum::DONE);
+                return customResponse(new UserResorce($user), __("Account created successfully"), 200, StatusCodesEnum::DONE);
             }
         } catch (\Throwable $e) {
             Log::error($e);
@@ -193,11 +193,11 @@ class AuthApiController extends BaseApiController
             if ($verification->valid) {
                 $user = tap(User::where('phone', $request->phone_number))->update(['is_verified' => 1]);
                 /* Authenticate user */
-                return customResponse((object)[], 'Phone number verified successfully',200, StatucCodesEnum::DONE);
+                return customResponse((object)[], 'Phone number verified successfully',200, StatusCodesEnum::DONE);
             }
-            return customResponse((object)[], 'verification failed',422, StatucCodesEnum::FAILED);
+            return customResponse((object)[], 'verification failed',422, StatusCodesEnum::FAILED);
         }catch (\Exception $e){
-            return customResponse((object)[], $e->getMessage(),422, StatucCodesEnum::FAILED);
+            return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
     }
 
@@ -226,9 +226,9 @@ class AuthApiController extends BaseApiController
     public function forgetPassword(ForgetPasswordRequest $request){
         try {
             $this->sendVerifyMessage($request->country_code.$request->phone_number);
-            return customResponse((object)[], __("Verification code sent successfully"),200, StatucCodesEnum::DONE);
+            return customResponse((object)[], __("Verification code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
-            return customResponse((object)[], $e->getMessage(),422, StatucCodesEnum::FAILED);
+            return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
     }
 
@@ -255,12 +255,12 @@ class AuthApiController extends BaseApiController
             if ($password_check){
                 $user->password = Hash::make($request->new_password);
                 $user->save();
-                return customResponse((object)[], __("Password changed successfully"),200, StatucCodesEnum::DONE);
+                return customResponse((object)[], __("Password changed successfully"),200, StatusCodesEnum::DONE);
             }else{
-                return customResponse((object)[], __("Password didn't match"),422, StatucCodesEnum::FAILED);
+                return customResponse((object)[], __("Password didn't match"),422, StatusCodesEnum::FAILED);
             }
         }catch (\Exception $e){
-            return customResponse((object)[], $e->getMessage(),422, StatucCodesEnum::FAILED);
+            return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
     }
 
@@ -268,16 +268,16 @@ class AuthApiController extends BaseApiController
         try{
             $user_id = $request->user()->id;
             $device = UserDevice::updateOrCreate(['user_id' => $user_id, 'device_token' => $request->device_token]);
-            return customResponse((object)[], __("Device Token Added Successfully"),200, StatucCodesEnum::DONE);
+            return customResponse((object)[], __("Device Token Added Successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
-            return customResponse((object)[], $e->getMessage(),422, StatucCodesEnum::FAILED);
+            return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
     }
 
     public function logout(){
         $user = Auth::user()->token();
         $user->revoke();
-        return customResponse((object)[], __("Logged Out Successfully"),200, StatucCodesEnum::DONE);
+        return customResponse((object)[], __("Logged Out Successfully"),200, StatusCodesEnum::DONE);
     }
 
     public function resetPassword(ResetPasswordRequest $request){
@@ -286,9 +286,9 @@ class AuthApiController extends BaseApiController
         if (isset($user)){
             $user->password = Hash::make($request->password);
             $user->save();
-            return customResponse((object)[], __("Password reset successfully"), 200, StatucCodesEnum::DONE);
+            return customResponse((object)[], __("Password reset successfully"), 200, StatusCodesEnum::DONE);
         }
-        return customResponse((object)[], __("User not found"), 422, StatucCodesEnum::FAILED);
+        return customResponse((object)[], __("User not found"), 422, StatusCodesEnum::FAILED);
     }
 
     public function activateOtp(UserActivateOtp $userActivateOtp)
@@ -413,7 +413,7 @@ class AuthApiController extends BaseApiController
     public function deleteMyAccount(){
         $user = Auth::user();
         $user->delete();
-        return customResponse((object)[], __("Account Deleted Successfully"),200,StatucCodesEnum::DONE);
+        return customResponse((object)[], __("Account Deleted Successfully"),200,StatusCodesEnum::DONE);
     }
 
     public function changeLanguage(ChangeLanguageRequest $request)

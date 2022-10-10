@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Users\UseCases\LoginUseCase;
 
-use App\Enums\StatucCodesEnum;
+use App\Enums\StatusCodesEnum;
 use App\Modules\Users\Auth\Enum\DeviceEnum;
 use App\Modules\Users\Auth\Enum\LoginEnum;
 use App\Modules\Users\Repository\UserRepositoryInterface;
@@ -32,13 +32,13 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase = array();
         $loginCase['data'] = (object)[];
         $loginCase['message'] = __('Invalid login details');
-        $loginCase['status_code'] = StatucCodesEnum::FAILED;
+        $loginCase['status_code'] = StatusCodesEnum::FAILED;
         if (isset($user)){
             $password_check = Hash::check($request['password'], $user->password);
             if ($password_check){
                 $loginCase['data'] = new UserResorce($user);
                 $loginCase['message'] = __('Logged in successfully');
-                $loginCase['status_code'] = StatucCodesEnum::DONE;
+                $loginCase['status_code'] = StatusCodesEnum::DONE;
 
                 return $loginCase;
             }
@@ -52,7 +52,7 @@ class LoginUseCase implements LoginUseCaseInterface
         $user = request()->user();
         $loginCase['data'] = new UserResorce($user);
         $loginCase['message'] = __('Logged in successfully');
-        $loginCase['status_code'] = StatucCodesEnum::DONE;
+        $loginCase['status_code'] = StatusCodesEnum::DONE;
         return $loginCase;
     }
 

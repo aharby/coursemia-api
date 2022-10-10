@@ -14,12 +14,16 @@ class SpecialitiesSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 10; $i++){
-            $speciality = new Speciality;
-            $speciality->title_ar = "Arabic Speciality #$i";
-            $speciality->title_en = "English Speciality #$i";
-            $speciality->image = "/uploads/events/event-1664893285.png";
-            $speciality->save();
+        $index = 0;
+        while ($index < 10) {
+            $speciality =[
+                'image' => "1665320145qvrbmgpuhc.png",
+                'is_active'=>1,
+                'title:en'=>"speciality ${index} en",
+                'title:ar'=>"speciality ${index} ar"
+            ];
+            Speciality::create($speciality);
+            $index++;
         }
     }
 }

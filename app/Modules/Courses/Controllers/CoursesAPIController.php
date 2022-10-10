@@ -2,7 +2,7 @@
 
 namespace App\Modules\Courses\Controllers;
 
-use App\Enums\StatucCodesEnum;
+use App\Enums\StatusCodesEnum;
 use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Resources\API\CoursesCollection;
@@ -33,12 +33,12 @@ class CoursesAPIController extends Controller
             $courses->whereIn('speciality_id', $request->speciality_ids);
         }
         $courses = $courses->paginate($request->page_size, ['*'], 'page', $request->page_number);
-        return customResponse(new CoursesCollection($courses), __("Fetched courses successfully"), 200, StatucCodesEnum::DONE);
+        return customResponse(new CoursesCollection($courses), __("Fetched courses successfully"), 200, StatusCodesEnum::DONE);
     }
 
     public function myCourses(){
         $user = request()->user();
         $courses = $user->courses;
-        return customResponse(CoursesResource::collection($courses), __("Fetched courses successfully"), 200, StatucCodesEnum::DONE);
+        return customResponse(CoursesResource::collection($courses), __("Fetched courses successfully"), 200, StatusCodesEnum::DONE);
     }
 }
