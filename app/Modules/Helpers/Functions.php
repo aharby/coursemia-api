@@ -1988,7 +1988,7 @@ if (!function_exists('resolveSubscribableName')) {
         function getImagePath($imagePath, $alt = null)
         {
             if (Storage::exists($imagePath)) {
-                return $imagePath;
+                return asset('storage'.'/'.$imagePath);
             }
             if ($alt) {
                 return $alt;
