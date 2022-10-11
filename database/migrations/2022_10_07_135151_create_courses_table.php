@@ -18,8 +18,8 @@ class CreateCoursesTable extends Migration
             $table->string('title_en')->index();
             $table->string('title_ar')->index();
             $table->string('cover_image');
-            $table->text('description_en')->index();
-            $table->text('description_ar')->index();
+            $table->text('description_en');
+            $table->text('description_ar');
             $table->double('price');
             $table->float('rate');
             $table->date('expire_date');
