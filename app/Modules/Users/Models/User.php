@@ -2,7 +2,7 @@
 
 namespace App\Modules\Users\Models;
 
-use App\Modules\Country\Models\Country;
+use App\Modules\Countries\Models\Country;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;

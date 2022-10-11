@@ -8,7 +8,7 @@ use App\Modules\Assessments\Models\AssessmentUser;
 use App\Modules\BaseApp\Traits\CreatedBy;
 use App\Modules\BaseApp\Traits\HasAttach;
 use App\Modules\Certificates\Models\ThankingCertificate;
-use App\Modules\Country\Models\Country;
+use App\Modules\Countries\Models\Country;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseUser;
 use App\Modules\GeneralQuizzes\Models\GeneralQuizStudent;
