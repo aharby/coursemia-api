@@ -10,6 +10,10 @@ class Course extends Model
 {
     use HasFactory;
 
+    public function images(){
+        return $this->hasMany(CourseImage::class);
+    }
+
     public function getTitleAttribute(){
         $lang = app()->getLocale();
         return $this->attributes["title_$lang"];
@@ -22,10 +26,6 @@ class Course extends Model
 
     public function lectures(){
         return $this->hasMany(CourseLecture::class);
-    }
-
-    public function courseLectureCategories(){
-        return $this->hasManyThrough(Category::class, CourseLecture::class, 'course_id', 'id', 'id', 'id');
     }
 
     public function lecturesFreeContent(){

@@ -15,9 +15,9 @@ class CreateCourseReviewsTable extends Migration
     {
         Schema::create('course_reviews', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('course_id');
-            $table->float('rate');
+            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('course_id')->index();
+            $table->float('rate')->index();
             $table->text('comment')->nullable();
             $table->timestamps();
 

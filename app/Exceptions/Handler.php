@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Exceptions;
-use App\Enums\StatucCodesEnum;
+use App\Enums\StatusCodesEnum;
 use Exception;
 use Throwable;
 use Illuminate\Http\Request;
@@ -76,7 +76,7 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 403));
         }
 
@@ -93,7 +93,7 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 404));
         }
 
@@ -102,7 +102,7 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 401));
         }
 
@@ -111,7 +111,7 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 403));
         }
         if ($exception instanceof HttpException  && $exception->getStatusCode() == 403) {
@@ -119,7 +119,7 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 403));
         }
         if ($exception instanceof ValidationException) {
@@ -130,7 +130,7 @@ class Handler extends ExceptionHandler
                 response()->json([
                     'data'  => null,
                     'message'  => $errors[$index][0],
-                    'status_code' => StatucCodesEnum::FAILED
+                    'status_code' => StatusCodesEnum::FAILED
                 ], 422)
             );
         }
@@ -140,14 +140,14 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 403));
         }
         if ($exception instanceof InvalidAuthTokenException) {
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 403));
         }
 
@@ -155,14 +155,14 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 403));
         }
         if ($exception instanceof \League\OAuth2\Server\Exception\OAuthServerException) {
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 403));
         }
         if ($exception instanceof CustomErrorException) {
@@ -218,7 +218,7 @@ class Handler extends ExceptionHandler
             throw new HttpResponseException(response()->json([
                 'data'  => null,
                 'message'  => $exception->getMessage(),
-                'status_code' => StatucCodesEnum::FAILED
+                'status_code' => StatusCodesEnum::FAILED
             ], 500));
         }
     }

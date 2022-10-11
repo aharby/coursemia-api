@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseFlashcard;
 use Illuminate\Database\Seeder;
@@ -17,8 +18,10 @@ class FlashcardsSeeder extends Seeder
     {
         $courses = Course::get();
         foreach ($courses as $course){
+            $category = Category::inRandomOrder()->first();
             $flash = new CourseFlashcard();
             $flash->course_id = $course->id;
+            $flash->category_id = $category->id;
             $flash->front_en = "Front english";
             $flash->front_ar = "الوجه الأمامي";
             $flash->back_en = "Back english";

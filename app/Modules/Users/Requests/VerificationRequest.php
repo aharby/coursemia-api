@@ -26,7 +26,7 @@ class VerificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'country_code'      => 'required|exists:countries,phonecode',
+            'country_code'      => 'required|exists:countries,country_code',
             'phone_number'      => 'required|exists:users,phone',
             'verification_code' => 'required'
         ];

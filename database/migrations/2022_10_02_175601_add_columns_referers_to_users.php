@@ -15,7 +15,7 @@ class AddColumnsReferersToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('referer_id')->nullable();
-            $table->string('refer_code')->nullable()->unique();
+            $table->string('refer_code')->nullable()->unique()->index();
 
             $table->foreign('referer_id')->references('id')
                 ->on('users')->onDelete('set null');

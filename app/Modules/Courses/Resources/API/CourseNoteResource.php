@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Modules\Category\Resources\API;
+namespace App\Modules\Courses\Resources\API;
 
-use App\Modules\Courses\Models\Category;
-use App\Modules\Courses\Models\CourseLecture;
+use App\Modules\Courses\Models\WnatedToLearnCourse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class CategoriesResource extends JsonResource
+class CourseNoteResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +16,10 @@ class CategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $lecs = CourseLecture::where('category_id' , $this->id)->where('is_free_content', 1)->first();
         return [
             'id'            => $this->id,
-            'title'         => $this->title,
-            'have_free_content' => $lecs ? true : false
+            'url'           => $this->url,
+            'is_free_content'=> (boolean)$this->is_free_content,
         ];
     }
 }

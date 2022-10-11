@@ -7,7 +7,7 @@ use App\Modules\Courses\Models\CourseLecture;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class CategoriesResource extends JsonResource
+class LectureCategoriesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

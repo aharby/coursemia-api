@@ -15,11 +15,11 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('title_en');
-            $table->string('title_ar');
+            $table->string('title_en')->index();
+            $table->string('title_ar')->index();
             $table->string('cover_image');
-            $table->text('description_en');
-            $table->text('description_ar');
+            $table->text('description_en')->index();
+            $table->text('description_ar')->index();
             $table->double('price');
             $table->float('rate');
             $table->date('expire_date');

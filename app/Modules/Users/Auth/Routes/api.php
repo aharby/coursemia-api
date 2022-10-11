@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\StatucCodesEnum;
+use App\Enums\StatusCodesEnum;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@postLogin');
@@ -37,7 +37,7 @@ Route::get('/confirm', '\App\Modules\Users\Auth\Controllers\Api\AuthApiControlle
 
 Route::post('/change-language', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@changeLanguage')->middleware('auth:api');
 Route::any('/no-auth', function(){
-    return customResponse(null,"Authentication required", 422, StatucCodesEnum::DONE);
+    return customResponse(null,"Authentication required", 422, StatusCodesEnum::DONE);
 });
 
 Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], function (){

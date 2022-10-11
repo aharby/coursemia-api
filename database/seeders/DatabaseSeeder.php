@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         //        $this->call(CreateDummySubjectSeeder::class);
 //        $this->call(SpecialitiesSeeder::class);
 //        $this->call(CountriesSeeder::class);
-        $this->call(CategorySeeder::class);
+//        $this->call(CategorySeeder::class);
 //        $this->call(CoursesSeeder::class);
 //        $this->call(OffersSeeder::class);
 //        $this->call(EventsSeeder::class);
@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(LecturesSeeder::class);
 //        $this->call(NotesSeeder::class);
 //        $this->call(CourseUserSeeder::class);
-        $this->call(CourseReviewsSeeder::class);
+//        $this->call(CourseReviewsSeeder::class);
+//        $this->call(CourseImageSeeder::class);
     }
 }

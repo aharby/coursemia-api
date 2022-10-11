@@ -15,10 +15,10 @@ class CreateCourseNotesTable extends Migration
     {
         Schema::create('course_notes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('course_id')->index();
+            $table->unsignedBigInteger('category_id')->index();
             $table->string('url');
-            $table->boolean('is_free_content');
+            $table->boolean('is_free_content')->index();
             $table->timestamps();
 
             $table->foreign('course_id')

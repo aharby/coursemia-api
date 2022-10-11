@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Questions\Models\Answer;
 use App\Modules\Questions\Models\Question;
@@ -19,8 +20,10 @@ class QuestionsAndAnswersSeeder extends Seeder
         $courses = Course::get();
         foreach ($courses as $course){
             for ($i = 1; $i <= 10; $i++){
+                $category = Category::inRandomOrder()->first();
                 $question = new Question;
                 $question->course_id = $course->id;
+                $question->category_id = $category->id;
                 $question->question_en = "English Question number $i";
                 $question->question_ar = "السؤال رقم $i";
                 $question->image = 'uploads/questions/question-1665005192.png';

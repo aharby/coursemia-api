@@ -4,10 +4,11 @@ namespace App\Modules\Category\Resources\API;
 
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\CourseLecture;
+use App\Modules\Courses\Models\CourseNote;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class CategoriesResource extends JsonResource
+class NotesCategoriesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +18,7 @@ class CategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $lecs = CourseLecture::where('category_id' , $this->id)->where('is_free_content', 1)->first();
+        $lecs = CourseNote::where('category_id' , $this->id)->where('is_free_content', 1)->first();
         return [
             'id'            => $this->id,
             'title'         => $this->title,

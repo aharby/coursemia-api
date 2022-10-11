@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnIsVerifiedToUsers extends Migration
+class AddColumnIsFreeContentToCourseFlashcards extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnIsVerifiedToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_verified')->default(0)->index();
+        Schema::table('course_flashcards', function (Blueprint $table) {
+            $table->boolean('is_free_content')->default(1)->after('category_id')->index();
         });
     }
 
@@ -25,7 +25,7 @@ class AddColumnIsVerifiedToUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('course_flashcards', function (Blueprint $table) {
             //
         });
     }
