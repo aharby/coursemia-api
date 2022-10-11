@@ -14,7 +14,7 @@ class AddColumnCountryCodeToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('country_code')->after('email');
+            $table->string('country_code')->after('email')->index();
         });
     }
 

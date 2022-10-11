@@ -15,8 +15,8 @@ class CreateCourseUsersTable extends Migration
     {
         Schema::create('course_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('course_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->timestamps();
 
             $table->foreign('course_id')->references('id')->on('courses')

@@ -14,7 +14,7 @@ class AddColumnSpecialityIdToCourses extends Migration
     public function up()
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->unsignedBigInteger('speciality_id')->after('id')->nullable();
+            $table->unsignedBigInteger('speciality_id')->after('id')->nullable()->index();
 
             $table->foreign('speciality_id')->references('id')
                 ->on('specialities')->onDelete('cascade');

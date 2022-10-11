@@ -32,7 +32,7 @@ class ApiRegisterRequest extends FormRequest
             'email_address'     => 'required|unique:users,email',
             'country_id'        => 'required|exists:countries,id',
             'refer_code'        => 'nullable|exists:users,refer_code',
-            'country_code'      => 'required|exists:countries,phonecode',
+            'country_code'      => 'required|exists:countries,country_code',
         ];
     }
 

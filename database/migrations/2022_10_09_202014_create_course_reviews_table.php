@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCourseNotesTable extends Migration
+class CreateCourseReviewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreateCourseNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_notes', function (Blueprint $table) {
+        Schema::create('course_reviews', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('course_id')->index();
-            $table->unsignedBigInteger('category_id')->index();
-            $table->string('url');
-            $table->boolean('is_free_content')->index();
+            $table->float('rate')->index();
+            $table->text('comment')->nullable();
             $table->timestamps();
 
-            $table->foreign('course_id')
-                ->references('id')
-                ->on('courses')
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
-            $table->foreign('category_id')
-                ->references('id')
-                ->on('categories')
+            $table->foreign('course_id')->references('id')->on('courses')
                 ->onDelete('cascade');
         });
     }
@@ -39,6 +35,6 @@ class CreateCourseNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_notes');
+        Schema::dropIfExists('course_reviews');
     }
 }

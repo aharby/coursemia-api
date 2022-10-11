@@ -10,6 +10,10 @@ class Course extends Model
 {
     use HasFactory;
 
+    public function images(){
+        return $this->hasMany(CourseImage::class);
+    }
+
     public function getTitleAttribute(){
         $lang = app()->getLocale();
         return $this->attributes["title_$lang"];
@@ -24,6 +28,12 @@ class Course extends Model
         return $this->hasMany(CourseLecture::class);
     }
 
+    public function lecturesFreeContent(){
+        $result = $this->hasOne(CourseLecture::class)
+            ->where('course_lectures.is_free_content', '=', 1);
+        return $result;
+    }
+
     public function notes(){
         return $this->hasMany(CourseNote::class);
     }
@@ -34,5 +44,9 @@ class Course extends Model
 
     public function flashCards(){
         return $this->hasMany(CourseFlashcard::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(CourseReview::class);
     }
 }
