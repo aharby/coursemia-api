@@ -14,7 +14,7 @@
         "benwilkins/laravel-fcm-notification": "^4.0",
         "facade/ignition": "^2.3.6",
         "fideloper/proxy": "^4.0",
-        "fruitcake/laravel-cors": "^2.0",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.4",
         "jenssegers/model": "^1.2",
