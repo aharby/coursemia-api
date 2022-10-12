@@ -3,6 +3,7 @@
 namespace App\Modules\Courses\Models;
 
 use App\Modules\Questions\Models\Question;
+use App\Modules\Specialities\Models\Speciality;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,10 @@ class Course extends Model
 
     public function images(){
         return $this->hasMany(CourseImage::class);
+    }
+
+    public function speciality(){
+        return $this->belongsTo(Speciality::class);
     }
 
     public function getTitleAttribute(){
