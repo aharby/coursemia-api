@@ -24,7 +24,7 @@ class CoursesResource extends JsonResource
             'image'         => asset($this->cover_image),
             'description_en'=> $this->description_en,
             'description_ar'=> $this->description_ar,
-            'speciality'    => $this->speciality,
+            'speciality'    => $this->speciality->title,
             'rate'          => $this->rate,
             'price'         => $this->price,
             'is_active'     => (bool)$this->is_active,
