@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Intervention\Image\Facades\Image;
 
 if (!function_exists('customResponse')) {
 
@@ -695,6 +696,44 @@ if (!function_exists('moveSingleGarbageMedia')) {
             $garbageMedia->delete();
         }
         return $fileName;
+    }
+}
+
+if (!function_exists('moveSingleGarbageMediaToPublic')) {
+    function moveSingleGarbageMediaToPublic($id, string $storagePath = null)
+    {
+        $garbageMedia = \App\Modules\GarbageMedia\GarbageMedia::find($id);
+        $fileName = null;
+        if ($garbageMedia) {
+            if ($storagePath) {
+                $fileName = $storagePath . '/' . $garbageMedia->filename;
+            } else {
+                $fileName = $garbageMedia->filename;
+            }
+
+//            if (in_array($garbageMedia->extension, getImageTypes())) {
+//                moveGarbageMediaSmallImage($garbageMedia, $fileName);
+//            }
+            moveImagePath(S3Enums::GARBAGE_MEDIA_PATH ,
+                S3Enums::LARGE_PATH ,
+                $storagePath,
+                $garbageMedia->filename
+            );
+        }
+        if ($garbageMedia) {
+            $garbageMedia->delete();
+        }
+        return 'storage/uploads/large/'.$fileName;
+    }
+}
+
+if (!function_exists('handleUploadImage')){
+    function handleUploadImage($image, $directory) : string
+    {
+        $imageName = "$directory-".time().".png";
+        $path = public_path().$directory . $imageName;
+        Image::make(file_get_contents($image))->save($path);
+        return $directory.$imageName;
     }
 }
 
