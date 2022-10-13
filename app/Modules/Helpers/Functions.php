@@ -682,9 +682,9 @@ if (!function_exists('moveSingleGarbageMedia')) {
                 $fileName = $garbageMedia->filename;
             }
 
-            if (in_array($garbageMedia->extension, getImageTypes())) {
-                moveGarbageMediaSmallImage($garbageMedia, $fileName);
-            }
+//            if (in_array($garbageMedia->extension, getImageTypes())) {
+//                moveGarbageMediaSmallImage($garbageMedia, $fileName);
+//            }
             moveImagePath(S3Enums::GARBAGE_MEDIA_PATH ,
                 S3Enums::LARGE_PATH ,
                 $storagePath,
