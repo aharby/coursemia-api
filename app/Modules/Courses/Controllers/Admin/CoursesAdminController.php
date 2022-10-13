@@ -45,7 +45,7 @@ class CoursesAdminController extends Controller
             $course->expire_date = $request->expire_date;
         }
         if ($request->has('cover_image')){
-            $course->cover_image = moveSingleGarbageMedia($request->get('cover_image'), 'courses');
+            $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
         }
         $course->save();
         return customResponse(null, "Updated successfully", 200, StatusCodesEnum::DONE);
