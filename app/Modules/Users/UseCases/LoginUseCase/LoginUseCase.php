@@ -7,6 +7,7 @@ namespace App\Modules\Users\UseCases\LoginUseCase;
 use App\Enums\StatusCodesEnum;
 use App\Modules\Users\Auth\Enum\DeviceEnum;
 use App\Modules\Users\Auth\Enum\LoginEnum;
+use App\Modules\Users\Models\UserDevice;
 use App\Modules\Users\Repository\UserRepositoryInterface;
 use App\Modules\Users\Resources\UserResorce;
 use App\Modules\Users\UseCases\SendLoginOtp\SendLoginOtp;
@@ -34,8 +35,30 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase['message'] = __('Invalid login details');
         $loginCase['status_code'] = StatusCodesEnum::FAILED;
         if (isset($user)){
+            $devices = UserDevice::where('user_id', $user->id)->get();
+            $device_names = array();
+            foreach ($devices as $device){
+                if ($request['is_tablet'] == 0 && $device->is_tablet == 0){
+                    $loginCase['message'] = __('You already logged in from a mobile phone, you can only login from tablet.');
+                    return $loginCase;
+                }
+                array_push($device_names, $device->device_name);
+            }
+
+            if (count($devices) >= 2 && !in_array($request['device_name'], $device_names)){
+                $loginCase['message'] = __('Maximum device numbers exceeded');
+                return $loginCase;
+            }
+
             $password_check = Hash::check($request['password'], $user->password);
             if ($password_check){
+                if (!in_array($request['device_name'], $device_names)){
+                    $user_device = new UserDevice;
+                    $user_device->user_id = $user->id;
+                    $user_device->is_tablet = $request['is_tablet'];
+                    $user_device->device_name = $request['device_name'];
+                    $user_device->save();
+                }
                 $loginCase['data'] = new UserResorce($user);
                 $loginCase['message'] = __('Logged in successfully');
                 $loginCase['status_code'] = StatusCodesEnum::DONE;
