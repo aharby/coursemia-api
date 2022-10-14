@@ -44,6 +44,9 @@ class CoursesAdminController extends Controller
         if ($request->has('expire_date')){
             $course->expire_date = $request->expire_date;
         }
+        if ($request->has('speciality_id')){
+            $course->speciality_id = $request->speciality_id;
+        }
         if ($request->has('cover_image')){
             $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
         }

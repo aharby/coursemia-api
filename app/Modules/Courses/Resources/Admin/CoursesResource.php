@@ -25,6 +25,7 @@ class CoursesResource extends JsonResource
             'description_en'=> $this->description_en,
             'description_ar'=> $this->description_ar,
             'speciality'    => $this->speciality->title,
+            'speciality_id' => $this->speciality_id,
             'rate'          => $this->rate,
             'price'         => $this->price,
             'is_active'     => (bool)$this->is_active,
