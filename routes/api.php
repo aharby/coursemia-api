@@ -28,6 +28,7 @@ Route::group(['as' => 'api.'], function () {
     });
 
     require base_path('app/Modules/Countries/Routes/api.php');
+    require base_path('app/Modules/Specialities/Routes/api.php');
     require base_path('app/Modules/GarbageMedia/Routes/api.php');
 });
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

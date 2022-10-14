@@ -39,7 +39,7 @@ class LoginUseCase implements LoginUseCaseInterface
             $device_names = array();
             foreach ($devices as $device){
                 if ($request['is_tablet'] == 0 && $device->is_tablet == 0 && $request['device_name'] != $device->device_name){
-                    $loginCase['message'] = __('You already logged in from a mobile phone, you can only login from tablet.');
+                    $loginCase['message'] = __('You have already logged in from another mobile, account can only logged in from one mobile & one tablet.');
                     return $loginCase;
                 }
                 array_push($device_names, $device->device_name);
