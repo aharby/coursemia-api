@@ -8,6 +8,7 @@ use App\Modules\Category\Resources\API\LectureCategoriesResource;
 use App\Modules\Category\Resources\API\NotesCategoriesResource;
 use App\Modules\Category\Resources\API\QuestionsCategoriesResource;
 use App\Modules\Courses\Models\Category;
+use App\Modules\Courses\Models\CourseUser;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -21,6 +22,11 @@ class CourseDetailsResource extends JsonResource
      */
     public function toArray($request)
     {
+        $is_purchased = false;
+        $user_id = $request->user()->id;
+        $course_user = CourseUser::where(['course_id' => $this->id, 'user_id' => $user_id])->first();
+        if (isset($course_user))
+            $is_purchased = true;
         $lectures = $this->lectures();
         $notes = $this->notes();
         $questions = $this->questions();
@@ -32,6 +38,7 @@ class CourseDetailsResource extends JsonResource
         $images = $this->images()->pluck('image');
         return [
             'id'            => $this->id,
+            'is_purchased'  => $is_purchased,
             'title'         => $this->title,
             'cover_image'   => asset($this->cover_image),
             'images'        => $images,
