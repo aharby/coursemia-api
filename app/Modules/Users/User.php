@@ -35,6 +35,7 @@ use App\Modules\Users\Models\ParentData;
 use App\Modules\Users\Models\Student;
 use App\Modules\Users\Models\StudentTeacher;
 use App\Modules\Users\Models\StudentTeacherStudent;
+use App\Modules\Users\Models\UserDevice;
 use App\Modules\Users\Traits\Invitable;
 use App\Modules\Users\Traits\UserRatingable;
 use App\Modules\VCRSchedules\Models\VCRSchedule;
@@ -83,6 +84,10 @@ class User extends Authenticatable
         'password',
         'country_id',
     ];
+
+    public function devices(){
+        return $this->hasMany(UserDevice::class);
+    }
 
     public function courses(){
         return $this->hasManyThrough(Course::class, CourseUser::class, 'user_id', 'id', 'id', 'course_id');

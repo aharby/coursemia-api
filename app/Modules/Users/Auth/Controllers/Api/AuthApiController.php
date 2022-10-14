@@ -277,6 +277,7 @@ class AuthApiController extends BaseApiController
     public function logout(){
         $user = Auth::user()->token();
         $user->revoke();
+        $user->devices()->where('is_tablet', request()->is_tablet)->delete();
         return customResponse((object)[], __("Logged Out Successfully"),200, StatusCodesEnum::DONE);
     }
 

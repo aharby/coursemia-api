@@ -36,29 +36,28 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase['status_code'] = StatusCodesEnum::FAILED;
         if (isset($user)){
             $devices = UserDevice::where('user_id', $user->id)->get();
-            $device_names = array();
+            if (count($devices) >= 2){
+                $loginCase['message'] = __('Maximum device numbers exceeded');
+                return $loginCase;
+            }
             foreach ($devices as $device){
-                if ($request['is_tablet'] == 0 && $device->is_tablet == 0 && $request['device_name'] != $device->device_name){
+                if ($request['is_tablet'] == 0 && $device->is_tablet == 0){
                     $loginCase['message'] = __('You have already logged in from another mobile, account can only logged in from one mobile & one tablet.');
                     return $loginCase;
                 }
-                array_push($device_names, $device->device_name);
-            }
-
-            if (count($devices) >= 2 && !in_array($request['device_name'], $device_names)){
-                $loginCase['message'] = __('Maximum device numbers exceeded');
-                return $loginCase;
+                if ($request['is_tablet'] == 1 && $device->is_tablet == 1){
+                    $loginCase['message'] = __('You have already logged in from another tablet, account can only logged in from one mobile & one tablet.');
+                    return $loginCase;
+                }
             }
 
             $password_check = Hash::check($request['password'], $user->password);
             if ($password_check){
-                if (!in_array($request['device_name'], $device_names)){
-                    $user_device = new UserDevice;
-                    $user_device->user_id = $user->id;
-                    $user_device->is_tablet = $request['is_tablet'];
-                    $user_device->device_name = $request['device_name'];
-                    $user_device->save();
-                }
+                $user_device = new UserDevice;
+                $user_device->user_id = $user->id;
+                $user_device->is_tablet = $request['is_tablet'];
+                $user_device->device_name = $request['device_name'];
+                $user_device->save();
                 $loginCase['data'] = new UserResorce($user);
                 $loginCase['message'] = __('Logged in successfully');
                 $loginCase['status_code'] = StatusCodesEnum::DONE;
