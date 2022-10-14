@@ -38,7 +38,7 @@ class LoginUseCase implements LoginUseCaseInterface
             $devices = UserDevice::where('user_id', $user->id)->get();
             $device_names = array();
             foreach ($devices as $device){
-                if ($request['is_tablet'] == 0 && $device->is_tablet == 0){
+                if ($request['is_tablet'] == 0 && $device->is_tablet == 0 && $request['device_name'] != $device->device_name){
                     $loginCase['message'] = __('You already logged in from a mobile phone, you can only login from tablet.');
                     return $loginCase;
                 }
