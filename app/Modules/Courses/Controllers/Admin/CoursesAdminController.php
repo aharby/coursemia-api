@@ -53,4 +53,42 @@ class CoursesAdminController extends Controller
         $course->save();
         return customResponse(null, "Updated successfully", 200, StatusCodesEnum::DONE);
     }
+
+    public function destroy($id){
+        Course::where('id', $id)->delete();
+        return customResponse(null, "Deleted successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function store(Request $request){
+        $course = new Course();
+        if ($request->has('is_active')){
+            $course->is_active = $request->is_active;
+        }
+        if ($request->has('title_en')){
+            $course->title_en = $request->title_en;
+        }
+        if ($request->has('title_ar')){
+            $course->title_ar = $request->title_ar;
+        }
+        if ($request->has('description_en')){
+            $course->description_en = $request->description_en;
+        }
+        if ($request->has('description_ar')){
+            $course->description_ar = $request->description_ar;
+        }
+        if ($request->has('price')){
+            $course->price = $request->price;
+        }
+        if ($request->has('expire_date')){
+            $course->expire_date = $request->expire_date;
+        }
+        if ($request->has('speciality_id')){
+            $course->speciality_id = $request->speciality_id;
+        }
+        if ($request->has('cover_image')){
+            $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
+        }
+        $course->save();
+        return customResponse(null, "Updated successfully", 200, StatusCodesEnum::DONE);
+    }
 }
