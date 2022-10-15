@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Modules\Questions\Resources\API;
+namespace App\Modules\Courses\Resources\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
 class QuestionResource extends JsonResource
 {

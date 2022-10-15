@@ -2,7 +2,6 @@
 
 namespace App\Modules\Courses\Models;
 
-use App\Modules\Questions\Models\Question;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Modules\Questions\Resources\API;
+namespace App\Modules\Courses\Resources\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
 class QuestionAnswersResource extends JsonResource
 {
@@ -19,7 +18,7 @@ class QuestionAnswersResource extends JsonResource
             'id'            => $this->id,
             'answer'        => $this->answer,
             'is_correct'    => (boolean)$this->is_correct,
-            'answer_choosed_percentage' => (double)$this->choosen_percentage
+            'answer_choosed_percentage' => (double)$this->chosen_percentage
         ];
     }
 }
