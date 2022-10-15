@@ -54,7 +54,7 @@ class LoginUseCase implements LoginUseCaseInterface
             $password_check = Hash::check($request['password'], $user->password);
             if ($password_check){
                 $user_device = UserDevice::where(['user_id' => $user->id, 'is_tablet' => $request['is_tablet']])->first();
-                if (!isset($user_device)){
+                if (!isset($user_device) && $user->is_verified == 1){
                     $user_device = new UserDevice;
                     $user_device->user_id = $user->id;
                     $user_device->is_tablet = $request['is_tablet'];
