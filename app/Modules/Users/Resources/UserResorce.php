@@ -23,7 +23,7 @@ class UserResorce extends JsonResource
             'phone_number'      => $this->phone,
             'email_address'     => $this->email,
             'country_id'        => $this->country_id,
-            'country_name'      => $this->country->name,
+            'country_name'      => $this->country->translated_title,
             'is_phone_verified' => (bool) $this->is_verified,
             'referral_code'      => $this->refer_code
         ];
