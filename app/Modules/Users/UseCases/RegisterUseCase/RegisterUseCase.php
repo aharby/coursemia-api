@@ -21,7 +21,7 @@ class RegisterUseCase implements RegisterUseCaseInterface
     {
         $request['language'] = config('app.locale');
         $user =  $userRepository->create($request);
-        $this->sendActivationCode($user);
+//        $this->sendActivationCode($user);
         return $user;
     }
 
