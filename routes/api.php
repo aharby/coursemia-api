@@ -13,20 +13,13 @@
 */
 
 
-
 Route::group(['as' => 'api.'], function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         require base_path('app/Modules/Users/Auth/Routes/api.php');
     });
 
-    Route::group(['prefix' => 'home', 'as' => 'home.'], function(){
-        require base_path('app/Modules/HomeScreen/Routes/api.php');
-    });
-
-    Route::group(['prefix' => 'courses', 'as' => 'courses.'], function(){
-        require base_path('app/Modules/Courses/Routes/api.php');
-    });
-
+    require base_path('app/Modules/HomeScreen/Routes/api.php');
+    require base_path('app/Modules/Courses/Routes/api.php');
     require base_path('app/Modules/Countries/Routes/api.php');
     require base_path('app/Modules/Config/Routes/api.php');
     require base_path('app/Modules/Specialities/Routes/api.php');

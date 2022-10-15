@@ -19,4 +19,6 @@ return array(
     'Finished successfully' => 'انتهى بنجاح',
     'You already rated this course' => 'لقد قمت بالفعل بتقييم هذه الدورة',
     'media attached successfully' => 'تم اضافه الوسائط بنجاح',
+    'course questions' => 'الاسئله الخاصه بالكورس'
+
 );

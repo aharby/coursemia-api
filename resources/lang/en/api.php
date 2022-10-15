@@ -18,5 +18,6 @@ return array(
     'Unknown email address' => 'Unknown email address',
     'Finished successfully' => 'Finished successfully',
     'You already rated this course' => 'You already rated this course',
-    'media attached successfully' => 'Media Attached Successfully'
+    'media attached successfully' => 'Media Attached Successfully',
+    'course questions' => 'course questions'
     );
