@@ -27,9 +27,7 @@ class HomeScreenController extends Controller
             "offers" => OffersResource::collection($offers),
             "events" => EventsResource::collection($events),
             "question_of_the_day"   => new QuestionResource($question),
-            "specialities"          => [
-                SpecialitiesResource::collection($specialities),
-            ],
+            "specialities"          => SpecialitiesResource::collection($specialities),
             "courses"   => CoursesResource::collection($courses)
         ], __("Get home content successfully"), 200, StatusCodesEnum::DONE);
     }
