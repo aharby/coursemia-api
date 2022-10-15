@@ -179,7 +179,9 @@ class AuthApiController extends BaseApiController
 
     public function verifyPhone(VerificationRequest $request)
     {
-        $user = tap(User::where('phone', $request->phone_number))->update(['is_verified' => 1]);
+        $user = User::where('phone', $request->phone_number)->first();
+        $user->is_verified = 1;
+        $user->save();
         /* Save user device */
         if (isset($request->device_name)){
             $device = new UserDevice;
