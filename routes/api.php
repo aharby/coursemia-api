@@ -28,6 +28,7 @@ Route::group(['as' => 'api.'], function () {
     });
 
     require base_path('app/Modules/Countries/Routes/api.php');
+    require base_path('app/Modules/Config/Routes/api.php');
     require base_path('app/Modules/Specialities/Routes/api.php');
     require base_path('app/Modules/GarbageMedia/Routes/api.php');
 });
