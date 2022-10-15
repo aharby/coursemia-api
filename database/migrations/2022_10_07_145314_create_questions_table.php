@@ -16,11 +16,8 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('course_id')->index();
-            $table->string('question_en');
-            $table->string('question_ar');
             $table->string('image');
-            $table->text('explanation_text_en')->nullable();
-            $table->text('explanation_text_ar')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->string('explanation_image')->nullable();
             $table->string('explanation_voice')->nullable();
             $table->timestamps();

@@ -16,10 +16,8 @@ class CreateAnswersTable extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('question_id')->index();
-            $table->string('answer_en');
-            $table->string('answer_ar');
             $table->boolean('is_correct');
-            $table->double('choosen_percentage');
+            $table->double('chosen_percentage');
             $table->timestamps();
 
             $table->foreign('question_id')->references('id')

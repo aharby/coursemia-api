@@ -2,11 +2,8 @@
 
 namespace App\Modules\Category\Resources\API;
 
-use App\Modules\Courses\Models\Category;
-use App\Modules\Courses\Models\CourseLecture;
-use App\Modules\Questions\Models\Question;
+use App\Modules\Courses\Models\Question;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
 class QuestionsCategoriesResource extends JsonResource
 {

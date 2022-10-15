@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Courses\Models\Answer;
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\Course;
-use App\Modules\Questions\Models\Answer;
-use App\Modules\Questions\Models\Question;
+use App\Modules\Courses\Models\Question;
 use Illuminate\Database\Seeder;
 
 class QuestionsAndAnswersSeeder extends Seeder
@@ -18,28 +18,32 @@ class QuestionsAndAnswersSeeder extends Seeder
     public function run()
     {
         $courses = Course::get();
-        foreach ($courses as $course){
-            for ($i = 1; $i <= 10; $i++){
+        foreach ($courses as $course) {
+            for ($i = 1; $i <= 10; $i++) {
                 $category = Category::inRandomOrder()->first();
-                $question = new Question;
-                $question->course_id = $course->id;
-                $question->category_id = $category->id;
-                $question->question_en = "English Question number $i";
-                $question->question_ar = "السؤال رقم $i";
-                $question->image = 'uploads/questions/question-1665005192.png';
-                $question->explanation_text_en = "English Explanation for question number $i";
-                $question->explanation_text_ar = "شرح السؤال رقم $i";
-                $question->explanation_image = 'uploads/questions/question-1665005192.png';
-                $question->explanation_voice = 'https://google.com';
-                $question->save();
-                for ($answer = 1; $answer <= 4; $answer++){
-                    $ans = new Answer;
-                    $ans->question_id = $question->id;
-                    $ans->answer_en = "Answer number $answer for question number $i";
-                    $ans->answer_ar = "الاجابة رقم $answer للسؤال رقم $i";
-                    $ans->is_correct = rand(0,1);
-                    $ans->choosen_percentage = rand(1,100);
-                    $ans->save();
+                $question = [
+                    'course_id' => $course->id,
+                    'title:en' => "English Question number $i",
+                    'description:ar' => "السؤال رقم $i",
+                    'description:en' => "English Question number $i",
+                    'title:ar' => "السؤال رقم $i",
+                    'image' => 'questions/question-1665005192.png',
+                    'explanation:en' => "English Explanation for question number $i",
+                    'explanation:ar' => "شرح السؤال رقم $i",
+                    'explanation_image' => 'questions/question-1665005192.png',
+                    'explanation_voice' => 'questions/file_example_WAV_10MG.wav',
+                ];
+                $question = Question::create($question);
+                $randCorrectIndex = rand(1, 4);
+                for ($index = 1; $index <= 4; $index++) {
+                    $answer = [
+                        'question_id' => $question->id,
+                        'answer:en' => "Answer number $index for question number $i",
+                        'answer:ar' => "الاجابة رقم $index للسؤال رقم $i",
+                        'is_correct' => $index == $randCorrectIndex,
+                        'chosen_percentage' => rand(1, 100)
+                    ];
+                    Answer::create($answer);
                 }
             }
         }
