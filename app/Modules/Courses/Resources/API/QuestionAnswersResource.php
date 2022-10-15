@@ -16,7 +16,7 @@ class QuestionAnswersResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'answer'        => $this->translated_title,
+            'answer'        => $this->translated_answer,
             'is_correct'    => (boolean)$this->is_correct,
             'answer_choosed_percentage' => (double)$this->chosen_percentage
         ];
