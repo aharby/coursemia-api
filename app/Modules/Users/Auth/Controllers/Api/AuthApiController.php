@@ -192,6 +192,13 @@ class AuthApiController extends BaseApiController
                 ]);
             if ($verification->valid) {
                 $user = tap(User::where('phone', $request->phone_number))->update(['is_verified' => 1]);
+                /* Save user device */
+                if (isset($request->device_name)){
+                    $device = new UserDevice;
+                    $device->device_name = $request->device_name;
+                    $device->is_tablet = $request->is_tablet;
+                    $device->save();
+                }
                 /* Authenticate user */
                 return customResponse((object)[], 'Phone number verified successfully',200, StatusCodesEnum::DONE);
             }
