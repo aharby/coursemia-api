@@ -16,11 +16,11 @@ class QuestionResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'question'      => $this->question,
+            'question'      => $this->translated_title,
             'image'         => asset($this->image),
             'answers'       => QuestionAnswersResource::collection($this->answers),
             'explanation'   => [
-                'text'  => $this->explanation,
+                'text'  => $this->translated_explanation,
                 'image' => asset($this->explanation_image),
                 'voice' => asset($this->explanation_voice)
             ]
