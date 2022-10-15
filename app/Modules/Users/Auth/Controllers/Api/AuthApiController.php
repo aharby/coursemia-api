@@ -287,7 +287,11 @@ class AuthApiController extends BaseApiController
     public function addDeviceToken(AddDeviceTokenRequest $request){
         try{
             $user_id = $request->user()->id;
-            $device = UserDevice::updateOrCreate(['user_id' => $user_id, 'is_tablet' => $request->is_tablet,'device_token' => $request->device_token]);
+            $device = UserDevice::where(['user_id' => $user_id, 'is_tablet' => $request->is_tablet])->first();
+            if (isset($device)){
+                $device->device_token = $request->device_token;
+                $device->save();
+            }
             return customResponse((object)[], __("Device Token Added Successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);

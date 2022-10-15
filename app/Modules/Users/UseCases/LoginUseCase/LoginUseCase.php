@@ -42,22 +42,24 @@ class LoginUseCase implements LoginUseCaseInterface
             }
             foreach ($devices as $device){
                 if ($request['is_tablet'] == 0 && $device->is_tablet == 0){
-                    $loginCase['message'] = __('You have already logged in from another mobile, account can only logged in from one mobile & one tablet.');
+                    $loginCase['message'] = __('Exceeded number of mobile device.');
                     return $loginCase;
                 }
                 if ($request['is_tablet'] == 1 && $device->is_tablet == 1){
-                    $loginCase['message'] = __('You have already logged in from another tablet, account can only logged in from one mobile & one tablet.');
+                    $loginCase['message'] = __('Exceeded number of tablets.');
                     return $loginCase;
                 }
             }
 
             $password_check = Hash::check($request['password'], $user->password);
             if ($password_check){
-                $user_device = new UserDevice;
-                $user_device->user_id = $user->id;
-                $user_device->is_tablet = $request['is_tablet'];
-                $user_device->device_name = $request['device_name'];
-                $user_device->save();
+                $user_device = UserDevice::where(['user_id' => $user->id, 'is_tablet' => $request['is_tablet']])->first();
+                if (!isset($user_device)){
+                    $user_device->user_id = $user->id;
+                    $user_device->is_tablet = $request['is_tablet'];
+                    $user_device->device_name = $request['device_name'];
+                    $user_device->save();
+                }
                 $loginCase['data'] = new UserResorce($user);
                 $loginCase['message'] = __('Logged in successfully');
                 $loginCase['status_code'] = StatusCodesEnum::DONE;
