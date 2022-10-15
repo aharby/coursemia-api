@@ -184,6 +184,7 @@ class AuthApiController extends BaseApiController
         if (isset($request->device_name)){
             $device = new UserDevice;
             $device->device_name = $request->device_name;
+            $device->user_id = $user->id;
             $device->is_tablet = $request->is_tablet;
             $device->save();
         }
