@@ -54,6 +54,7 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
             Route::post('push-device-token', 'AuthApiController@addDeviceToken');
             Route::post('logout', 'AuthApiController@logout');
             Route::get('delete-my-account', 'AuthApiController@deleteMyAccount');
+            Route::get('my-devices', 'AuthApiController@myDevices');
         });
     });
 });

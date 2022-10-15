@@ -11,6 +11,7 @@ use App\Modules\Users\Auth\Requests\ForgetPasswordRequest;
 use App\Modules\Users\Auth\Requests\LoginRequest;
 use App\Modules\Users\Auth\Requests\VerificationRequest;
 use App\Modules\Users\Models\UserDevice;
+use App\Modules\Users\Resources\DeviceResorce;
 use App\Modules\Users\Resources\UserResorce;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCaseInterface;
@@ -440,6 +441,11 @@ class AuthApiController extends BaseApiController
         $user = Auth::user();
         $user->delete();
         return customResponse((object)[], __("Account Deleted Successfully"),200,StatusCodesEnum::DONE);
+    }
+
+    public function myDevices(){
+        $devices = request()->user()->devices;
+        return customResponse(DeviceResorce::collection($devices), "Done", 200, StatusCodesEnum::DONE);
     }
 
     public function changeLanguage(ChangeLanguageRequest $request)
