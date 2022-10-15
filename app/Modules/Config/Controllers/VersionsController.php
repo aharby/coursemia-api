@@ -16,8 +16,8 @@ class VersionsController extends Controller {
     public function getVersions(){
         $version = VersionConfig::latest()->first();
         return customResponse([
-            "ios_version"   => $version->ios_version ?? 0,
-            "android_version"   => $version->android_version ?? 0
+            "ios_version"   => (integer)$version->ios_version ?? 0,
+            "android_version"   => (integer)$version->android_version ?? 0
         ], "", 200, StatusCodesEnum::DONE);
     }
 
