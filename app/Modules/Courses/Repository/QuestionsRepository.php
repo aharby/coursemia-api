@@ -17,7 +17,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $category_ids = request()->category_ids;
         $number_of_questions = request()->number_of_questions;
         $questions = $this->model->query();
-        if (count($category_ids) > 0){
+        if (isset($category_ids)){
             $questions = $questions->whereIn('category_id', $category_ids);
         }
        return $questions
