@@ -12,7 +12,6 @@ class ListCourseQuestions extends JsonResource
             "id" => $this->id,
             "title" => $this->translated_title,
             "description" => $this->translated_description,
-            "country_code" => $this->country_code,
             "image" => image($this->image, 'large'),
             "explanation_text" => $this->translated_explanation,
             "explanation_image" => image($this->explanation_image, 'large'),

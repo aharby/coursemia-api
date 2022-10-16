@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Courses\Controllers\API\CoursesQuestionsAPIController;
+use \App\Modules\Courses\Controllers\API\CoursesFlashCardsAPIController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -24,6 +25,14 @@ Route::group([
         'prefix' => 'questions', 'as' => 'questions.'
     ], function (){
         Route::get('/{course_id}', [CoursesQuestionsAPIController::class , 'getCourseQuestions']);
+
+    });
+
+    // Flashcards Apis
+    Route::group([
+        'prefix' => 'flashcards', 'as' => 'flashcards.'
+    ], function (){
+        Route::get('/{course_id}', [CoursesFlashCardsAPIController::class , 'getCourseFlashCards']);
 
     });
 

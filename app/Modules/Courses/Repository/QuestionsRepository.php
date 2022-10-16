@@ -14,10 +14,18 @@ class QuestionsRepository implements QuestionsRepositoryInterface
 
     public function getQuestionsByCourseId($courseId)
     {
-       return $this->model->query()
+        $category_ids = request()->category_ids;
+        $number_of_questions = request()->number_of_questions;
+        $questions = $this->model->query();
+        if (count($category_ids) > 0){
+            $questions = $questions->whereIn('category_id', $category_ids);
+        }
+       return $questions
             ->active()
+            ->inRandomOrder()
             ->where('course_id', $courseId)
             ->with(['answers'])
-            ->paginate(env('PAGE_LIMIT', 20));
+            ->take($number_of_questions)
+            ->get();
     }
 }
