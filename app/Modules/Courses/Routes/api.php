@@ -18,9 +18,13 @@ Route::group([
     Route::post('add-course-review', 'CourseReviewsAPIController@addCourseReview');
     Route::post('add-course-review', 'CourseReviewsAPIController@addCourseReview');
 
+    // Submit Exam APIs
+    Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@getCourseFlashCards');
+    // Submit Flashcards APIs
+    Route::post('submit-flashcard', 'ExamQuestionsAndAnswersAPIController@submitFlashCardAnswer');
 
 
-   // Questions Apis
+    // Questions Apis
     Route::group([
         'prefix' => 'questions', 'as' => 'questions.'
     ], function (){

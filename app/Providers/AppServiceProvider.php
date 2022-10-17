@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Modules\Courses\Models\Answer;
+use App\Observers\AnswerObserver;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Answer::observe(AnswerObserver::class);
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
