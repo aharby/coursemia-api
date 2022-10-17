@@ -17,6 +17,7 @@ class SpecialitiesResource extends JsonResource
         return [
             'id'            => $this->id,
             'title'        => $this->translated_title,
+            'image'         => image($this->image, 'large')
         ];
     }
 }
