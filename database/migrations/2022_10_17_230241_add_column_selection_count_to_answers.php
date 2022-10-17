@@ -14,7 +14,7 @@ class AddColumnSelectionCountToAnswers extends Migration
     public function up()
     {
         Schema::table('answers', function (Blueprint $table) {
-            $table->integer('selection_count')->nullable()->after('choosen_percentage');
+            $table->integer('selection_count')->nullable()->after('chosen_percentage');
         });
     }
 
