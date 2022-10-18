@@ -22,7 +22,7 @@ class CoursesCollection extends JsonResource
             'path'              => $this->path(),
             'per_page'          => $this->perPage(),
             'total'             => $this->total(),
-            'courses'           => CoursesResource::collection($this),
+            'content'           => CoursesResource::collection($this),
         ];
     }
 }
