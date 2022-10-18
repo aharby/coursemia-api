@@ -16,6 +16,7 @@ use App\Modules\Users\Resources\UserResorce;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCaseInterface;
 use Dompdf\Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Modules\Users\UserEnums;
@@ -179,6 +180,28 @@ class AuthApiController extends BaseApiController
             throw new CustomErrorException($e->getMessage());
 
         }
+    }
+
+    public function editProfile(Request $request){
+        $user = $request->user();
+        if (isset($request->profile_image)){
+            $user->photo = self::handleProfileImage($request->profile_image, '/uploads/users/');
+        }
+        if (isset($request->full_name)){
+            $user->full_name = $request->full_name;
+        }
+        if (isset($request->email)){
+            $checkEmail = User::where('email', $request->email)
+                ->where('id', '<>', $user->id)
+                ->first();
+            if (!isset($checkEmail)){
+                $user->email = $request->email;
+            }else{
+                return customResponse((object)[], trans('api.Email already taken.'),422, StatusCodesEnum::FAILED);
+            }
+        }
+        $user->save();
+        return customResponse(new UserResorce($user), trans('api.Profile updated successfully'), 200, StatusCodesEnum::DONE);
     }
 
     public function verifyPhone(VerificationRequest $request)

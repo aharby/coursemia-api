@@ -51,6 +51,7 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
         Route::group(['middleware' => 'auth:api'], function (){
             Route::post('change-password', 'AuthApiController@changePassword');
             Route::get('get-profile', 'AuthApiController@getProfile');
+            Route::post('update-profile', 'AuthApiController@editProfile');
             Route::post('push-device-token', 'AuthApiController@addDeviceToken');
             Route::post('logout', 'AuthApiController@logout');
             Route::get('delete-my-account', 'AuthApiController@deleteMyAccount');
