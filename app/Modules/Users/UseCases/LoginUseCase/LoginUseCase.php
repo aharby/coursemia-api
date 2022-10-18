@@ -61,7 +61,9 @@ class LoginUseCase implements LoginUseCaseInterface
                     $user_device->device_name = $request['device_name'];
                     $user_device->save();
                 }
-                $loginCase['data'] = new UserResorce($user);
+                $loginCase['data'] = [];
+                $loginCase['data']['user'] = new UserResorce($user);
+                $loginCase['data']['token'] = $user->createToken('AccessToken')->accessToken;
                 $loginCase['message'] = __('Logged in successfully');
                 $loginCase['status_code'] = StatusCodesEnum::DONE;
 

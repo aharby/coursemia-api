@@ -17,7 +17,6 @@ class UserResorce extends JsonResource
         return [
             'id'                => $this->id,
             'profile_image'     => asset($this->photo),
-            'token'             => $this->createToken('AccessToken')->accessToken,
             'full_name'         => $this->full_name,
             'country_code'      => $this->country_code,
             'phone_number'      => $this->phone,

@@ -168,7 +168,10 @@ class AuthApiController extends BaseApiController
 
             if (!is_null($user)) {
 
-                return customResponse(new UserResorce($user), __("Account created successfully"), 200, StatusCodesEnum::DONE);
+                return customResponse([
+                    'user' => new UserResorce($user),
+                    'token'=> $user->createToken('AccessToken')->accessToken
+                ], __("Account created successfully"), 200, StatusCodesEnum::DONE);
             }
         } catch (\Throwable $e) {
             Log::error($e);
