@@ -204,6 +204,15 @@ class AuthApiController extends BaseApiController
         return customResponse(new UserResorce($user), trans('api.Profile updated successfully'), 200, StatusCodesEnum::DONE);
     }
 
+    public function deleteDevices(){
+        $user = User::where('phone', \request()->phone_number)->first();
+        if (isset($user)){
+            $user->devices()->delete();
+            return customResponse((object)[], trans('api.Devices deleted successfully'), 200, StatusCodesEnum::DONE);
+        }
+        return customResponse((object)[], trans('api.User does not exist.'),422, StatusCodesEnum::FAILED);
+    }
+
     public function verifyPhone(VerificationRequest $request)
     {
         $user = User::where('phone', $request->phone_number)->first();

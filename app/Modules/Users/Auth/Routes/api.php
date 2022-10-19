@@ -42,6 +42,7 @@ Route::any('/no-auth', function(){
 
 Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], function (){
     Route::post('create-account', 'AuthApiController@register');
+    Route::post('delete-devices', 'AuthApiController@deleteDevices');
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
     Route::post('forgot-password', 'AuthApiController@forgetPassword');
     Route::post('reset-password', 'AuthApiController@resetPassword');
