@@ -213,6 +213,12 @@ class AuthApiController extends BaseApiController
         return customResponse((object)[], trans('api.User does not exist.'),422, StatusCodesEnum::FAILED);
     }
 
+    public function deleteMyDevice(Request $request){
+        $user = $request->user();
+        $device_id = $request->header('device_id');
+        $user->devices()->where('device_id', $device_id)->delete();
+    }
+
     public function verifyPhone(VerificationRequest $request)
     {
         $user = User::where('phone', $request->phone_number)->first();
@@ -222,6 +228,8 @@ class AuthApiController extends BaseApiController
         if (isset($request->device_name)){
             $device = new UserDevice;
             $device->device_name = $request->device_name;
+            $device->device_type = request()->header('device_type');
+            $device->device_id = request()->header('device_id');
             $device->user_id = $user->id;
             $device->is_tablet = $request->is_tablet;
             $device->save();
@@ -244,6 +252,9 @@ class AuthApiController extends BaseApiController
                 /* Save user device */
                 if (isset($request->device_name)){
                     $device = new UserDevice;
+                    $device->user_id = $user->id;
+                    $device->device_type = request()->header('device_type');
+                    $device->device_id = request()->header('device_id');
                     $device->device_name = $request->device_name;
                     $device->is_tablet = $request->is_tablet;
                     $device->save();

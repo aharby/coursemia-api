@@ -57,6 +57,8 @@ class LoginUseCase implements LoginUseCaseInterface
                 if (!isset($user_device) && $user->is_verified == 1){
                     $user_device = new UserDevice;
                     $user_device->user_id = $user->id;
+                    $user_device->device_type = request()->header('device_type');
+                    $user_device->device_id = request()->header('device_id');
                     $user_device->is_tablet = $request['is_tablet'];
                     $user_device->device_name = $request['device_name'];
                     $user_device->save();
