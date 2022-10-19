@@ -215,8 +215,23 @@ class AuthApiController extends BaseApiController
 
     public function deleteMyDevice(Request $request){
         $user = $request->user();
-        $device_id = $request->header('device_id');
-        $user->devices()->where('device_id', $device_id)->delete();
+        $device_id = $request->device_id;
+        $device = $user->devices()
+            ->where(function ($query) use ($request, $device_id){
+                $query->where('device_id', $device_id)
+                    ->orWhere('id', $device_id);
+            })
+            ->where('user_id', $user->id)
+            ->first();
+        if (isset($device)){
+            if ($device->device_id != $request->header('device_id')){
+                $device->delete();
+                return customResponse((object)[], trans('api.Device deleted successfully'), 200, StatusCodesEnum::DONE);
+            }else{
+                return customResponse((object)[], trans('api.Can not delete your current device'), 422, StatusCodesEnum::FAILED);
+            }
+        }
+        return customResponse((object)[], trans('api.Device not found'), 422, StatusCodesEnum::FAILED);
     }
 
     public function verifyPhone(VerificationRequest $request)

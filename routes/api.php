@@ -13,7 +13,7 @@
 */
 
 
-Route::group(['as' => 'api.'], function () {
+Route::group(['as' => 'api.', 'middleware' => 'checkDeviceAndToken'], function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         require base_path('app/Modules/Users/Auth/Routes/api.php');
     });

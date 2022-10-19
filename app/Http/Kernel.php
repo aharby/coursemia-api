@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckAuthAndDevice;
 use App\Http\Middleware\CheckUserVerified;
 use App\Modules\Courses\Middleware\CheckCourseAvailabiltyForInstructorMiddleware;
 use Barryvdh\Cors\HandleCors;
@@ -100,7 +101,8 @@ class Kernel extends HttpKernel
         'Locale' => Locale::class,
         'suspended' => CheckSuspense::class,
         'type' => TypeMiddleware::class,
-        'userActive'=>CheckUserVerified::class
+        'userActive'=>CheckUserVerified::class,
+        'checkDeviceAndToken'=>CheckAuthAndDevice::class
     ];
 
     /**
