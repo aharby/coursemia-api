@@ -30,7 +30,7 @@ Route::group([
     Route::group([
         'prefix' => 'questions', 'as' => 'questions.'
     ], function (){
-        Route::get('/{course_id}', [CoursesQuestionsAPIController::class , 'getCourseQuestions']);
+        Route::post('/', [CoursesQuestionsAPIController::class , 'getCourseQuestions']);
 
     });
 
@@ -38,7 +38,7 @@ Route::group([
     Route::group([
         'prefix' => 'flashcards', 'as' => 'flashcards.'
     ], function (){
-        Route::get('/{course_id}', [CoursesFlashCardsAPIController::class , 'getCourseFlashCards']);
+        Route::get('/', [CoursesFlashCardsAPIController::class , 'getCourseFlashCards']);
 
     });
 

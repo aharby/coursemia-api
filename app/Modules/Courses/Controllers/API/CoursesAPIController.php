@@ -55,12 +55,16 @@ class CoursesAPIController extends Controller
 
     public function getCourseLectures(Request $request){
         $v = Validator::make($request->all(), [
-            'course_id' => 'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,id',
         ]);
         if ($v->fails()){
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
-        $lectures = CourseLecture::where('course_id', $request->course_id)->get();
+        $lectures = CourseLecture::query();
+        $lectures->where('course_id', $request->course_id)->get();
+        if (isset($request->category_id)){
+            $lectures->where('category_id', '=', $request->category_id);
+        }
         return customResponse(CourseLectureResource::collection($lectures), __("Done"), 200, StatusCodesEnum::DONE);
     }
 

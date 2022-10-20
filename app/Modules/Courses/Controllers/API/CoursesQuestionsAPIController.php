@@ -28,9 +28,9 @@ class CoursesQuestionsAPIController extends Controller
     {
     }
 
-    public function getCourseQuestions($courseId)
+    public function getCourseQuestions(Request $request)
     {
-        $questions = $this->questionsRepository->getQuestionsByCourseId($courseId);
+        $questions = $this->questionsRepository->getQuestionsByCourseId($request->course_id);
         return customResponse(QuestionResource::collection($questions), trans('api.course questions'), 200, StatusCodesEnum::DONE);
     }
 }

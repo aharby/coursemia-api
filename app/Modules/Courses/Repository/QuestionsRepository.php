@@ -20,6 +20,16 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         if (isset($category_ids)){
             $questions = $questions->whereIn('category_id', $category_ids);
         }
+        // Timed test so we have to get all questions
+        if (request()->exam_type == 2){
+            return $questions
+                ->active()
+                ->inRandomOrder()
+                ->where('course_id', $courseId)
+                ->with(['answers'])
+                ->get();
+        }
+        // Question bank so we have to get certain number of questions
        return $questions
             ->active()
             ->inRandomOrder()

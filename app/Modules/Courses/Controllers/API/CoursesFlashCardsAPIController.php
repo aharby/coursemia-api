@@ -22,11 +22,11 @@ use Illuminate\Support\Facades\Validator;
 
 class CoursesFlashCardsAPIController extends Controller
 {
-    public function getCourseFlashCards($courseId)
+    public function getCourseFlashCards(Request $request)
     {
         $category_id = \request()->category_id;
         $flashs = CourseFlashcard::query();
-        $flashs->where('course_id', $courseId);
+        $flashs->where('course_id', $request->course_id);
         if (isset($category_id)){
             $flashs->where('category_id', $category_id);
         }
