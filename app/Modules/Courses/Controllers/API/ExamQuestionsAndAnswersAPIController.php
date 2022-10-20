@@ -40,7 +40,7 @@ class ExamQuestionsAndAnswersAPIController extends Controller
             $myAnswer->selection_count++;
             $myAnswer->save();
             $userQuestionAnswer = UserQuestionAnswer::create([
-                'user_id' => $request->user()->id,
+                'user_id' => auth('api')->user()->id,
                 'question_id' => $myAnswer->question_id,
                 'answer_id' => $myAnswer->id,
             ]);

@@ -36,7 +36,7 @@ class CourseReviewsAPIController extends Controller
         if ($v->fails()){
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
-        $user = $request->user();
+        $user = auth('api')->user();
         $course = Course::find($request->course_id);
         $check_user_have_the_course = CourseUser::where(['course_id' => $request->course_id, 'user_id' => $user->id])
             ->first();

@@ -16,9 +16,12 @@ class CourseLectureResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user = $request->user();
-        $want_to_learn = WnatedToLearnCourse::where(['course_id' => $request->course_id, 'user_id' => $user->id])
-            ->first();
+        $user = auth('api')->user();
+        $want_to_learn = false;
+        if (isset($user)){
+            $want_to_learn = WnatedToLearnCourse::where(['course_id' => $request->course_id, 'user_id' => $user->id])
+                ->first();
+        }
         return [
             'id'            => $this->id,
             'title'         => $this->title,

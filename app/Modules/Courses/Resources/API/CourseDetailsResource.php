@@ -23,10 +23,13 @@ class CourseDetailsResource extends JsonResource
     public function toArray($request)
     {
         $is_purchased = false;
-        $user_id = $request->user()->id;
-        $course_user = CourseUser::where(['course_id' => $this->id, 'user_id' => $user_id])->first();
-        if (isset($course_user))
-            $is_purchased = true;
+        $user = auth('api')->user();
+        if (isset($user)){
+            $user_id = auth('api')->user()->id;
+            $course_user = CourseUser::where(['course_id' => $this->id, 'user_id' => $user_id])->first();
+            if (isset($course_user))
+                $is_purchased = true;
+        }
         $lectures = $this->lectures();
         $notes = $this->notes();
         $questions = $this->questions();

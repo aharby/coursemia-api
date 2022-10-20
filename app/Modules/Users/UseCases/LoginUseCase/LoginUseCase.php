@@ -78,7 +78,7 @@ class LoginUseCase implements LoginUseCaseInterface
 
     public function profile(UserRepositoryInterface $userRepository) : array
     {
-        $user = request()->user();
+        $user = auth('api')->user();
         $loginCase['data'] = new UserResorce($user);
         $loginCase['message'] = __('Logged in successfully');
         $loginCase['status_code'] = StatusCodesEnum::DONE;

@@ -183,7 +183,7 @@ class AuthApiController extends BaseApiController
     }
 
     public function editProfile(Request $request){
-        $user = $request->user();
+        $user = auth('api')->user();
         if (isset($request->profile_image)){
             $user->photo = self::handleProfileImage($request->profile_image, '/uploads/users/');
         }
@@ -214,7 +214,7 @@ class AuthApiController extends BaseApiController
     }
 
     public function deleteMyDevice(Request $request){
-        $user = $request->user();
+        $user = auth('api')->user();
         $device_id = $request->device_id;
         $device = $user->devices()
             ->where(function ($query) use ($request, $device_id){
@@ -332,7 +332,7 @@ class AuthApiController extends BaseApiController
 
     public function changePassword(ChangePasswordRequest $request){
         try{
-            $user = request()->user();
+            $user = auth('api')->user();
             $password_check = Hash::check($request->old_password, $user->password);
             if ($password_check){
                 $user->password = Hash::make($request->new_password);
@@ -348,7 +348,7 @@ class AuthApiController extends BaseApiController
 
     public function addDeviceToken(AddDeviceTokenRequest $request){
         try{
-            $user_id = $request->user()->id;
+            $user_id = auth('api')->user()->id;
             $device = UserDevice::where(['user_id' => $user_id, 'is_tablet' => $request->is_tablet])->first();
             if (isset($device)){
                 $device->device_token = $request->device_token;
@@ -361,7 +361,7 @@ class AuthApiController extends BaseApiController
     }
 
     public function logout(){
-        $user = request()->user();
+        $user = auth('api')->user();
         $user->devices()->where('is_tablet', request()->is_tablet)->delete();
         $user = Auth::user()->token();
         $user->revoke();
@@ -505,7 +505,7 @@ class AuthApiController extends BaseApiController
     }
 
     public function myDevices(){
-        $devices = request()->user()->devices;
+        $devices = auth('api')->user()->devices;
         return customResponse(DeviceResorce::collection($devices), "Done", 200, StatusCodesEnum::DONE);
     }
 

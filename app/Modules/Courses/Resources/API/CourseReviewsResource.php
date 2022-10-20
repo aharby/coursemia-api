@@ -16,13 +16,15 @@ class CourseReviewsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user = $request->user();
+        $user = auth('api')->user();
         $can_add_rate = false;
-        $course_user_check = CourseUser::where(['user_id' => $user->id, 'course_id' => $this->id])->first();
-        if (isset($course_user_check)){
-            $reviews_check = $this->reviews()->where('user_id', $user->id)->first();
-            if (!isset($reviews_check)){
-                $can_add_rate = true;
+        if (isset($user)){
+            $course_user_check = CourseUser::where(['user_id' => $user->id, 'course_id' => $this->id])->first();
+            if (isset($course_user_check)){
+                $reviews_check = $this->reviews()->where('user_id', $user->id)->first();
+                if (!isset($reviews_check)){
+                    $can_add_rate = true;
+                }
             }
         }
         return [

@@ -16,7 +16,7 @@ class CheckSuspense
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->suspended_at != null) {
+        if (auth('api')->user()->suspended_at != null) {
             Auth::logout();
             return redirect('/auth/login')->withErrors('Your account Suspended, Please Call the Admin.');
         }
