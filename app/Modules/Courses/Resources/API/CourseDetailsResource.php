@@ -41,11 +41,13 @@ class CourseDetailsResource extends JsonResource
         $images = $this->images()->pluck('image');
         return [
             'id'            => $this->id,
+            'is_in_my_cart' => false, //@todo implement is in my cart
             'is_purchased'  => $is_purchased,
             'title'         => $this->title,
             'cover_image'   => asset($this->cover_image),
             'images'        => $images,
             'price'         => (double)$this->price,
+            'price_after_discount'         => (double)$this->price_after_discount,
             'rate'          => (float)$this->rate,
             'description'   => $this->description,
             'reviews_count' => $this->reviews()->count(),

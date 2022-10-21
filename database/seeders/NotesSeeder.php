@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseNote;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class NotesSeeder extends Seeder
 {
@@ -15,14 +16,22 @@ class NotesSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('course_notes')->delete();
         $courses = Course::get();
         foreach ($courses as $course){
-            $note = new CourseNote;
-            $note->category_id = 1;
-            $note->course_id = $course->id;
-            $note->url = 'https://google.com';
-            $note->is_free_content = rand(0,1);
-            $note->save();
+            $index = 0;
+            while ($index < 10 ){
+                $country =[
+                    'course_id' => $course->id,
+                    'category_id'=>1,
+                    'url'=> 'https://google.com',
+                    'is_free_content'=> rand(0,1),
+                    'title:en'=>"note ${index} en",
+                    'title:ar'=>"note ${index} ar"
+                ];
+                CourseNote::create($country);
+                $index++;
+            }
         }
     }
 }
