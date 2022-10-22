@@ -15,7 +15,7 @@ class UserConfigurationsResourceResorce extends JsonResource
      */
     public function toArray($request)
     {
-        $send_notifications = UserDevice::where('device_id', $request->header('device_id'))->first();
+        $send_notifications = UserDevice::where('device_id', $request->header('device-id'))->first();
         return [
             'messages_count'            => rand(1,25), // @todo implement messages count
             'follow_requests_count'     => rand(1,25), // @todo implement follow requests count

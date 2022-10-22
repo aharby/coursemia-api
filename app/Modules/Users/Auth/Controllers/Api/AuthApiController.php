@@ -225,7 +225,7 @@ class AuthApiController extends BaseApiController
             ->where('user_id', $user->id)
             ->first();
         if (isset($device)){
-            if ($device->device_id != $request->header('device_id')){
+            if ($device->device_id != $request->header('device-id')){
                 $device->delete();
                 return customResponse((object)[], trans('api.Device deleted successfully'), 200, StatusCodesEnum::DONE);
             }else{
@@ -244,8 +244,8 @@ class AuthApiController extends BaseApiController
         if (isset($request->device_name)){
             $device = new UserDevice;
             $device->device_name = $request->device_name;
-            $device->device_type = request()->header('device_type');
-            $device->device_id = request()->header('device_id');
+            $device->device_type = request()->header('device-type');
+            $device->device_id = request()->header('device-id');
             $device->user_id = $user->id;
             $device->is_tablet = $request->is_tablet;
             $device->save();
@@ -269,8 +269,8 @@ class AuthApiController extends BaseApiController
                 if (isset($request->device_name)){
                     $device = new UserDevice;
                     $device->user_id = $user->id;
-                    $device->device_type = request()->header('device_type');
-                    $device->device_id = request()->header('device_id');
+                    $device->device_type = request()->header('device-type');
+                    $device->device_id = request()->header('device-id');
                     $device->device_name = $request->device_name;
                     $device->is_tablet = $request->is_tablet;
                     $device->save();
@@ -296,7 +296,7 @@ class AuthApiController extends BaseApiController
             $allow_notifications = 1;
         else
             $allow_notifications = 0;
-        $device = $user->devices()->where('device_id', $request->header('device_id'))->first();
+        $device = $user->devices()->where('device-id', $request->header('device-id'))->first();
         $device->allow_push_notifications = $allow_notifications;
         $device->save();
         return customResponse(new UserConfigurationsResourceResorce($user), trans("api.Done"), 200, StatusCodesEnum::DONE);

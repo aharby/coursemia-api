@@ -19,7 +19,7 @@ class CheckAuthAndDevice
     public function handle(Request $request, Closure $next)
     {
         $token = $request->header('Authorization');
-        $device_id = $request->header('device_id');
+        $device_id = $request->header('device-id');
         $device = UserDevice::where(function ($query) use ($device_id, $request){
             $query->where('id', $device_id)
                 ->orWhere('device_id', $device_id);
