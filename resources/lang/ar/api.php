@@ -2,6 +2,16 @@
 
 return array(
     'oops something went wrong' => 'حدث خطأ ما',
+
+    'Device deleted successfully' => 'تم حذف الجهاز بنجاح',
+    'Can not delete your current device' => 'لا يمكنك حذف جهازك الحالى',
+    'Phone number verified successfully' => 'تم تأكيد رقم الهاتف بنجاح',
+    'Devices deleted successfully' => 'تم حذف جميع الاجهزة بنجاح',
+    'User does not exist.' => 'المستخدم غير موجود',
+    'Profile updated successfully' => 'تم تعديل الملف الشخصي بنجاح',
+    'Email already taken.' => 'البريد الاليكتروني مستخدم بالفعل',
+    'Account created successfully'  => 'تم انشاء الحساب بنجاح',
+
     'Created Successfully' => 'تم الانشاء بنجاح',
     'Updated Successfully' => 'تم التحديث بنجاح',
     'Deleted Successfully' => 'حذف بنجاح',

@@ -1,6 +1,14 @@
 <?php
 
 return array(
+    'Device deleted successfully' => 'Device deleted successfully',
+    'Can not delete your current device' => 'Can not delete your current device',
+    'Phone number verified successfully' => 'Phone number verified successfully',
+    'Devices deleted successfully' => 'Devices deleted successfully',
+    'User does not exist.' => 'User does not exist.',
+    'Profile updated successfully' => 'Profile updated successfully',
+    'Email already taken.' => 'Email already taken.',
+    'Account created successfully'  => 'Account created successfully',
     'oops something went wrong' => 'oops something went wrong',
     'Created Successfully' => 'Created Successfully',
     'Updated Successfully' => 'Updated Successfully',

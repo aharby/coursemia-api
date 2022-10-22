@@ -173,7 +173,7 @@ class AuthApiController extends BaseApiController
                 return customResponse([
                     'user' => new UserResorce($user),
                     'token'=> $user->createToken('AccessToken')->accessToken
-                ], __("Account created successfully"), 200, StatusCodesEnum::DONE);
+                ], trans("Account created successfully"), 200, StatusCodesEnum::DONE);
             }
         } catch (\Throwable $e) {
             Log::error($e);
@@ -251,7 +251,7 @@ class AuthApiController extends BaseApiController
             $device->save();
         }
         /* Authenticate user */
-        return customResponse((object)[], 'Phone number verified successfully',200, StatusCodesEnum::DONE);
+        return customResponse((object)[], trans('Phone number verified successfully'),200, StatusCodesEnum::DONE);
         try{
             $token = getenv("TWILIO_AUTH_TOKEN");
             $twilio_sid = getenv("TWILIO_SID");
