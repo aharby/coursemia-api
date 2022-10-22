@@ -293,7 +293,7 @@ class AuthApiController extends BaseApiController
         $user = auth('api')->user();
         $allow_notifications = $request->allow_notifications;
         $device = $user->devices()->where('device_id', $request->header('device_id'))->first();
-        $device->allow_push_notifications = $allow_notifications;
+        $device->allow_push_notifications = $allow_notifications ? 1 : 0;
         $device->save();
         return customResponse(new UserConfigurationsResourceResorce($user), trans("api.Done"), 200, StatusCodesEnum::DONE);
     }
