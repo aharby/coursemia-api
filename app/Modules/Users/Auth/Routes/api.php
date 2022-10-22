@@ -51,7 +51,7 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::group(['middleware' => 'userActive'], function (){
         Route::group(['middleware' => 'auth:api'], function (){
             Route::post('change-password', 'AuthApiController@changePassword');
-            Route::post('delete-my-device', 'AuthApiController@deleteMyDevice');
+            Route::any('delete-my-device', 'AuthApiController@deleteMyDevice');
             Route::get('get-profile', 'AuthApiController@getProfile');
             Route::post('update-profile', 'AuthApiController@editProfile');
             Route::post('push-device-token', 'AuthApiController@addDeviceToken');
@@ -59,7 +59,7 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
             Route::get('delete-my-account', 'AuthApiController@deleteMyAccount');
             Route::get('my-devices', 'AuthApiController@myDevices');
             Route::get('get-configurations', 'AuthApiController@getUserConfig');
-            Route::post('allow-push-notifications', 'AuthApiController@allowPushNotifications');
+            Route::any('allow-push-notifications', 'AuthApiController@allowPushNotifications');
         });
     });
 });
