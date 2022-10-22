@@ -292,7 +292,7 @@ class AuthApiController extends BaseApiController
     public function allowPushNotifications(Request $request){
         $user = auth('api')->user();
         $allow_notifications = $request->allow_notifications;
-        if ($allow_notifications == false) {
+        if ($allow_notifications == "false") {
             $allow_notifications = 0;
         }
         else {
