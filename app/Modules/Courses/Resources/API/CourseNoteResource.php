@@ -18,7 +18,7 @@ class CourseNoteResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'url'           => $this->url,
+            'url'           => asset($this->url),
             'title'         => $this->translated_title,
             'is_free_content'=> (boolean)$this->is_free_content,
         ];
