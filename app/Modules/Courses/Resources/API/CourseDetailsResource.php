@@ -9,6 +9,7 @@ use App\Modules\Category\Resources\API\NotesCategoriesResource;
 use App\Modules\Category\Resources\API\QuestionsCategoriesResource;
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\CourseUser;
+use App\Modules\Courses\Models\OfferCourse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -39,6 +40,12 @@ class CourseDetailsResource extends JsonResource
         $questions_categories = $questions->pluck('category_id');
         $flashcards_categories = $flashcards->pluck('category_id');
         $images = $this->images()->pluck('image');
+        $offer_courses_check = OfferCourse::where('course_id', $this->id)->first();
+        $price_after_discount = null;
+        if (isset($offer_courses_check)){
+            $value = $offer_courses_check->offer->offer_value;
+            $price_after_discount = $this->price - (($value*$this->price) / 100);
+        }
         return [
             'id'            => $this->id,
             'is_in_my_cart' => false, //@todo implement is in my cart
@@ -47,7 +54,7 @@ class CourseDetailsResource extends JsonResource
             'cover_image'   => asset($this->cover_image),
             'images'        => $images,
             'price'         => (double)$this->price,
-            'price_after_discount'         => (double)$this->price_after_discount,
+            'price_after_discount'         => $price_after_discount,
             'rate'          => (float)$this->rate,
             'description'   => $this->description,
             'reviews_count' => $this->reviews()->count(),

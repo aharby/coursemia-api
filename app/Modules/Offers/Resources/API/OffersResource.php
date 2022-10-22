@@ -3,6 +3,7 @@
 namespace App\Modules\Offers\Resources\API;
 
 use App\Modules\Courses\Resources\API\CourseDetailsResource;
+use App\Modules\Courses\Resources\API\CoursesResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -24,7 +25,7 @@ class OffersResource extends JsonResource
             'offer_value'   => (string)$this->offer_value,
             'offer_type'    => $this->offer_type,
             'extra_info'    => $this->offer_code,
-            'allowed_courses' => CourseDetailsResource::collection($this->courses)
+            'allowed_courses' => CoursesResource::collection($this->courses)
         ];
     }
 }

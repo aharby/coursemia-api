@@ -26,6 +26,7 @@ class CourseLectureResource extends JsonResource
             'id'            => $this->id,
             'title'         => $this->title,
             'url'           => $this->url,
+            'thumbnail'     => $this->video_thumb ? asset($this->video_thumb) : null,
             'description'   => $this->description,
             'want_to_learn' => $want_to_learn ? true : false,
             'is_free_content'=> (boolean)$this->is_free_content,

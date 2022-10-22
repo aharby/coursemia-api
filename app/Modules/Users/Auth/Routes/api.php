@@ -58,6 +58,8 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
             Route::post('logout', 'AuthApiController@logout');
             Route::get('delete-my-account', 'AuthApiController@deleteMyAccount');
             Route::get('my-devices', 'AuthApiController@myDevices');
+            Route::get('get-configurations', 'AuthApiController@getUserConfig');
+            Route::post('allow-push-notifications', 'AuthApiController@allowPushNotifications');
         });
     });
 });

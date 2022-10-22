@@ -24,7 +24,8 @@ class UsersResource extends JsonResource
             'email'         => $this->email,
             'avatar'        => asset($this->photo),
             'role'          => 'editor',
-            'status'        => $this->is_verified ? 'verified' : 'not-verified',
+            'status'        => $this->is_active ? 'active' : 'not active',
+            'verified'      => $this->is_verified ? 'verified' : 'not-verified',
             'country'       => $this->country->translated_title,
             'ability'       => [
                 [

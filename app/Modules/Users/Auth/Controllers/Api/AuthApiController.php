@@ -12,6 +12,7 @@ use App\Modules\Users\Auth\Requests\LoginRequest;
 use App\Modules\Users\Auth\Requests\VerificationRequest;
 use App\Modules\Users\Models\UserDevice;
 use App\Modules\Users\Resources\DeviceResorce;
+use App\Modules\Users\Resources\UserConfigurationsResourceResorce;
 use App\Modules\Users\Resources\UserResorce;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCaseInterface;
@@ -281,6 +282,20 @@ class AuthApiController extends BaseApiController
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
+    }
+
+    public function getUserConfig(){
+        $user = auth('api')->user();
+        return customResponse(new UserConfigurationsResourceResorce($user), trans("api.Done"), 200, StatusCodesEnum::DONE);
+    }
+
+    public function allowPushNotifications(Request $request){
+        $user = auth('api')->user();
+        $allow_notifications = $request->allow_notifications;
+        $device = $user->devices()->where('device_id', $request->header('device_id'))->first();
+        $device->allow_push_notifications = $allow_notifications;
+        $device->save();
+        return customResponse(new UserConfigurationsResourceResorce($user), trans("api.Done"), 200, StatusCodesEnum::DONE);
     }
 
     public function getactivateOtp(UserActivateOtpRequest $request)
