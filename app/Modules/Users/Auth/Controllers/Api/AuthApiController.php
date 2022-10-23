@@ -294,14 +294,16 @@ class AuthApiController extends BaseApiController
         $allow_notifications = $request->allow_notifications;
         if ($allow_notifications == "false") {
             $allow_notifications = 0;
+            $message = trans('api.Push notifications disabled');
         }
         else {
             $allow_notifications = 1;
+            $message = trans('api.Push notifications enabled');
         }
         $device = $user->devices()->where('device_id', $request->header('device-id'))->first();
         $device->allow_push_notifications = $allow_notifications;
         $device->save();
-        return customResponse(new UserConfigurationsResourceResorce($user), trans("api.Done"), 200, StatusCodesEnum::DONE);
+        return customResponse(new UserConfigurationsResourceResorce($user), $message, 200, StatusCodesEnum::DONE);
     }
 
     public function getactivateOtp(UserActivateOtpRequest $request)

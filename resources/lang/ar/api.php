@@ -11,6 +11,8 @@ return array(
     'Profile updated successfully' => 'تم تعديل الملف الشخصي بنجاح',
     'Email already taken.' => 'البريد الاليكتروني مستخدم بالفعل',
     'Account created successfully'  => 'تم انشاء الحساب بنجاح',
+    'Push notifications enabled' => 'تم تفعيل الاشعارات ، سوف يتم استقبال جميع الاشعارات القادمه',
+    'Push notifications disabled' => 'تم الغاء الاشعارات ، سوف يتم تجاهل اي اشعارات قادمه',
 
     'Created Successfully' => 'تم الانشاء بنجاح',
     'Updated Successfully' => 'تم التحديث بنجاح',
