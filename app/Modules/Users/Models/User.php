@@ -3,6 +3,8 @@
 namespace App\Modules\Users\Models;
 
 use App\Modules\Countries\Models\Country;
+use App\Modules\Courses\Models\Course;
+use App\Modules\Courses\Models\CourseUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,5 +53,9 @@ class User extends Authenticatable
 
     public function devices(){
         return $this->hasMany(UserDevice::class);
+    }
+
+    public function courses(){
+        return $this->hasManyThrough(Course::class, CourseUser::class,'user_id', 'id', 'id', 'course_id');
     }
 }

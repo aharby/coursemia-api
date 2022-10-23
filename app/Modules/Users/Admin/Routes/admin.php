@@ -9,4 +9,6 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 
 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
     Route::get('/', [UsersController::class, 'index']);
+    Route::put('/{id}', [UsersController::class , 'update']);
+    Route::get('/{id}', [UsersController::class , 'show']);
 });

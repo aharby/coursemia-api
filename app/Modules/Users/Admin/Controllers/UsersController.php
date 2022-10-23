@@ -24,4 +24,18 @@ class UsersController extends AjaxController
             'users' => UsersResource::collection($users->items())
         ]);
     }
+
+    public function update(Request $request, $id){
+        $user = User::find($id);
+        if ($request->has('is_active')) {
+            $user->is_active = $request->get('is_active');
+        }
+        $user->save();
+        return customResponse('', trans('api.Updated Successfully'), 200,StatusCodesEnum::DONE);
+    }
+
+    public function show($id){
+        $user = User::find($id);
+        return customResponse(new UsersResource($user), trans('api.Updated successfully'), 200, StatusCodesEnum::DONE);
+    }
 }
