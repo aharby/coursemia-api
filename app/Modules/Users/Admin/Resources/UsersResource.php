@@ -28,7 +28,7 @@ class UsersResource extends JsonResource
             'avatar'        => asset($this->photo),
             'role'          => 'editor',
             'is_active'     => (bool)$this->is_active,
-            'devices'       => $this->devices,
+            'devices'       => UserDeviceResource::collection($this->devices),
             'verified'      => $this->is_verified ? 'verified' : 'not-verified',
             'country'       => $this->country->translated_title,
             'ability'       => [

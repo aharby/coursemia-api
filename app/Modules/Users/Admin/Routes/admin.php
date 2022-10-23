@@ -8,7 +8,11 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 });
 
 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+    Route::post('/assign-course-to-user', [UsersController::class , 'assignCourseToUser']);
+    Route::post('/delete-course-from-user', [UsersController::class , 'deleteCourseFromUser']);
+    Route::get('/courses', [UsersController::class , 'getUserCourses']);
     Route::get('/', [UsersController::class, 'index']);
     Route::put('/{id}', [UsersController::class , 'update']);
     Route::get('/{id}', [UsersController::class , 'show']);
+    Route::post('/delete-device/{id}', [UsersController::class , 'deleteDevice']);
 });

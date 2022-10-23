@@ -12,8 +12,11 @@ use Illuminate\Http\Request;
 class CoursesAdminController extends Controller
 {
     public function index(Request $request){
-        $courses = Course::paginate(1000);
-        return customResponse(new CoursesCollection($courses), __("Fetched courses successfully"), 200, StatusCodesEnum::DONE);
+        $courses = Course::paginate(request()->perPage, ['*'], 'page', request()->page);
+        return response()->json([
+            'total' => $courses->total(),
+            'courses' => CoursesResource::collection($courses->items())
+        ]);
     }
 
     public function show($id){
