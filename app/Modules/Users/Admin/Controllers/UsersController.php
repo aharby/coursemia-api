@@ -23,6 +23,8 @@ class UsersController extends AjaxController
 {
     public function index(){
         $search = request()->q;
+        $status = request()->status;
+        $verified = request()->verified;
         $users = User::query();
         if (isset($search)){
             $users = $users->where(function ($query) use ($search){
@@ -30,6 +32,12 @@ class UsersController extends AjaxController
                     ->orWhere('phone', 'LIKE', '%'.$search.'%')
                     ->orWhere('email', 'LIKE', '%'.$search.'%');
             });
+        }
+        if (isset($status)){
+            $users = $users->where('is_active', '=', $status);
+        }
+        if (isset($verified)){
+            $users = $users->where('is_verified', '=', $verified);
         }
         $users = $users->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
