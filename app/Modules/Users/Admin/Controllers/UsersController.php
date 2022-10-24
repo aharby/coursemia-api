@@ -22,7 +22,16 @@ use Illuminate\Support\Facades\Validator;
 class UsersController extends AjaxController
 {
     public function index(){
-        $users = User::paginate(request()->perPage, ['*'], 'page', request()->page);
+        $search = request()->q;
+        $users = User::query();
+        if (isset($search)){
+            $users = $users->where(function ($query) use ($search){
+                $query->where('full_name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('phone', 'LIKE', '%'.$search.'%')
+                    ->orWhere('email', 'LIKE', '%'.$search.'%');
+            });
+        }
+        $users = $users->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $users->total(),
             'users' => UsersResource::collection($users->items())
