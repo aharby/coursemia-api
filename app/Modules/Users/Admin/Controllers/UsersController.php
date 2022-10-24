@@ -29,7 +29,7 @@ class UsersController extends AjaxController
         if (isset($search)){
             $users = $users->where(function ($query) use ($search){
                 $query->where('full_name', 'LIKE', '%'.$search.'%')
-                    ->orWhere('phone', 'LIKE', '%'.$search.'%')
+                    ->orWhereRaw("CONCAT(`country_code`,`phone`) LIKE ?", ['%'.$search.'%'])
                     ->orWhere('email', 'LIKE', '%'.$search.'%');
             });
         }
