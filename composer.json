@@ -40,7 +40,8 @@
         "spatie/laravel-event-sourcing": "^5.0",
         "spatie/laravel-fractal": "^5.5",
         "spatie/laravel-queued-db-cleanup": "^1.1.2",
-        "twilio/sdk": "^6.42"
+        "twilio/sdk": "^6.42",
+        "vimeo/laravel": "^5.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
