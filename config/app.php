@@ -178,6 +178,7 @@ return [
         App\Modules\BaseApp\Providers\NotificationsServiceProvider::class,
 
         Benwilkins\FCM\FcmNotificationServiceProvider::class,
+        Vimeo\Laravel\VimeoServiceProvider::class
 
 
 
@@ -236,6 +237,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Vimeo' => Vimeo\Laravel\Facades\Vimeo::class
 
     ],
 
