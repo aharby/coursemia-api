@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Countries\Repository\CountryRepositoryInterface;
 use App\Modules\Countries\Resources\Admin\ListAdminCountriesIndex;
 use App\Modules\Countries\Resources\Admin\ListAdminCountriesIndexPaginator;
+use App\Modules\Users\Admin\Resources\UsersResource;
 use Illuminate\Http\Request;
 
 class CountriesAdminApiControllers extends Controller
@@ -19,8 +20,10 @@ class CountriesAdminApiControllers extends Controller
     public function index()
     {
         $countries = $this->countryRepository->all();
-        return customResponse(new ListAdminCountriesIndexPaginator($countries), '', 200,1);
-
+        return response()->json([
+            'total' => $countries->total(),
+            'countries' => ListAdminCountriesIndex::collection($countries->items())
+        ]);
     }
 
     public function show($id)
@@ -29,7 +32,7 @@ class CountriesAdminApiControllers extends Controller
         if ($country){
             return customResponse(new ListAdminCountriesIndex($country), '', 200,1);
         };
-        return customResponse('', trans('api.no country found'),  400,2);
+        return customResponse('', trans('api.no country found'),  404,2);
     }
 
     public function store(Request $request)

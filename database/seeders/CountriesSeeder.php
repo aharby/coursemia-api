@@ -17,13 +17,25 @@ class CountriesSeeder extends Seeder
     public function run()
     {
         $index = 0;
-        while ($index < 10 ){
-            $country =[
-                'flag' => 'eg.jpg',
-                'is_active'=>1,
-                'country_code'=> 20,
-                'title:en'=>"country ${index} en",
-                'title:ar'=>"country ${index} ar"
+        $flags = [
+            '1665268849bfeeclcxql.png',
+            '1665269224bdcqwnmfqx.png',
+            '1665270122xezggasmel.png',
+            '1665318858titubyjtgf.png',
+            '1665319970efweevvkth.png',
+            '1665319986pmhfmmgqyz.png',
+            '1665320145qvrbmgpuhc.png',
+            '1665417650htifgjxjwv.png',
+            '1665422803vsrlzcbgcw.png',
+            '1666815291vxrtejprju.jpg',
+        ];
+        while ($index < 100) {
+            $country = [
+                'flag' => 'countries/' . $flags[array_rand($flags)],
+                'is_active' => 1,
+                'country_code' => rand(1, 1000),
+                'title:en' => "country ${index} en",
+                'title:ar' => "country ${index} ar"
             ];
             Country::create($country);
             $index++;
