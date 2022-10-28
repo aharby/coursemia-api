@@ -4,12 +4,14 @@ namespace App\Modules\Courses\Controllers\Admin;
 
 use App\Enums\StatusCodesEnum;
 use App\Http\Controllers\Controller;
+use App\Modules\Courses\Models\Answer;
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseFlashcard;
 use App\Modules\Courses\Models\CourseImage;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\Question;
 use App\Modules\Courses\Resources\Admin\CategoriesResource;
 use App\Modules\Courses\Resources\Admin\CoursesCollection;
 use App\Modules\Courses\Resources\Admin\CoursesResource;
@@ -187,6 +189,34 @@ class CoursesAdminController extends Controller
             $courseImage->save();
         }
         return customResponse((object)[], "Images added successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function storeQuestionsAndAnswers(Request $request){
+        $course_id = $request->course_id;
+        $questions = $request->questions;
+        foreach ($questions as $question){
+            $courseQuestion = new Question;
+            $courseQuestion->course_id = $course_id;
+            $courseQuestion->category_id = $question['category_id'];
+            $courseQuestion->{'title:en'} = $question['title_en'];
+            $courseQuestion->{'title:ar'} = $question['title_ar'];
+            $courseQuestion->image = moveSingleGarbageMediaToPublic($question['image'], 'courses');
+            $courseQuestion->explanation_image = moveSingleGarbageMediaToPublic($question['explanation']['image_path'], 'courses');
+            $courseQuestion->explanation_voice = moveSingleGarbageMediaToPublic($question['explanation']['voice_path'], 'courses');
+            $courseQuestion->is_free_content = $question['is_free_content'];
+            $courseQuestion->save();
+            $answers = $question['answers'];
+            foreach ($answers as $answer){
+                $questionAnswer = new Answer;
+                $questionAnswer->question_id = $courseQuestion->id;
+                $questionAnswer->{'answer:en'} = $answer['answer_en'];
+                $questionAnswer->{'answer:ar'} = $answer['answer_ar'];
+                $questionAnswer->is_correct = $answer['is_correct'];
+                $questionAnswer->chosen_percentage = 0;
+                $questionAnswer->save();
+            }
+        }
+        return customResponse((object)[], "Questions & Answers submitted successfully", 200, StatusCodesEnum::DONE);
     }
 
     public function uploadPdf(Request $request){
