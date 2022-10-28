@@ -7,6 +7,7 @@ namespace App\Modules\Countries\Repository;
 use App\Modules\Countries\Models\Country;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class CountryRepository implements CountryRepositoryInterface
 {
@@ -24,8 +25,10 @@ class CountryRepository implements CountryRepositoryInterface
         if ($isActive) {
             $query->active();
         }
-        return $query->orderBy('id', 'DESC')
-            ->paginate(env('PAGE_LIMIT', 20));
+         return $query
+            ->filter()
+            ->sorter()
+            ->paginate(request()->perPage, ['*'], 'page', request()->page);
     }
 
     public function find(int $id): Country|null
