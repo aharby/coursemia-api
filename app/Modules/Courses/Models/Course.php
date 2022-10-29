@@ -67,7 +67,9 @@ class Course extends Model
             $sortByDir = request()->get('sortDesc') == 'true' ? "desc" : "asc";
             switch (request()->get('sortBy')) {
                 case 'title_en':
-                    $quer->orderByTranslation('title', $sortByDir);
+                case 'title_ar':
+//                    $quer->orderByTranslation('title', $sortByDir);
+                    $quer->orderBy(request()->get('sortBy'), $sortByDir);
                     break;
                 case 'lectures_count':
                     $quer->withCount('lectures')->orderBy('lectures_count', $sortByDir);
