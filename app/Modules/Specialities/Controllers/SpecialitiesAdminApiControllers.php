@@ -21,7 +21,10 @@ class SpecialitiesAdminApiControllers extends Controller
     public function index()
     {
         $specialities = $this->specialitiesRepository->all();
-        return customResponse(new ListAdminSpecialitiesIndexPaginator($specialities), '', 200,1);
+        return response()->json([
+            'total' => $specialities->total(),
+            'specialities' => ListAdminSpecialitiesIndex::collection($specialities->items())
+        ]);
     }
 
     public function all(){
