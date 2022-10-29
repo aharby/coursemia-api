@@ -505,4 +505,21 @@ class User extends Authenticatable
     public function vcrSchedule(){
         return $this->hasMany(VCRSchedule::class,'instructor_id');
     }
+
+    public function ScopeSorter($query)
+    {
+        $query->when(request()->has('sortBy'), function ($quer) {
+            $sortByDir = request()->get('sortDesc') == 'true' ? "desc" : "asc";
+            switch (request()->get('sortBy')) {
+                case 'user':
+                    $quer->orderBy('full_name', $sortByDir);
+                    break;
+                case 'email':
+                    $quer->orderBy('email', $sortByDir);
+                    break;
+                default:
+                    $quer->orderBy('id', $sortByDir);
+            }
+        });
+    }
 }

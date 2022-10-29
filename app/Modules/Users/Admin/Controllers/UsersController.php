@@ -39,6 +39,7 @@ class UsersController extends AjaxController
         if (isset($verified)){
             $users = $users->where('is_verified', '=', $verified);
         }
+        $users = $users->sorter();
         $users = $users->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $users->total(),

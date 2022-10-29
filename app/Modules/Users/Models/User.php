@@ -58,4 +58,21 @@ class User extends Authenticatable
     public function courses(){
         return $this->hasManyThrough(Course::class, CourseUser::class,'user_id', 'id', 'id', 'course_id');
     }
+
+    public function ScopeSorter($query)
+    {
+        $query->when(request()->has('sortBy'), function ($quer) {
+            $sortByDir = request()->get('sortDesc') == 'true' ? "desc" : "asc";
+            switch (request()->get('sortBy')) {
+                case 'user':
+                    $quer->orderBy('full_name', $sortByDir);
+                    break;
+                case 'email':
+                    $quer->orderBy('email', $sortByDir);
+                    break;
+                default:
+                    $quer->orderBy('id', $sortByDir);
+            }
+        });
+    }
 }

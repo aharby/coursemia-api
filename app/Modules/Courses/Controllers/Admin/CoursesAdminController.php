@@ -27,6 +27,7 @@ class CoursesAdminController extends Controller
         if (isset($request->speciality)){
             $courses = $courses->where('speciality_id', $request->speciality);
         }
+        $courses = $courses->sorter();
         $courses = $courses->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $courses->total(),

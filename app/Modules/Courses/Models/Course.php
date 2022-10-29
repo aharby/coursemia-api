@@ -60,4 +60,30 @@ class Course extends Model
             return array_sum($rates) / count($rates);
         return 0;
     }
+
+    public function ScopeSorter($query)
+    {
+        $query->when(request()->has('sortBy'), function ($quer) {
+            $sortByDir = request()->get('sortDesc') == 'true' ? "desc" : "asc";
+            switch (request()->get('sortBy')) {
+                case 'title_en':
+                    $quer->orderByTranslation('title', $sortByDir);
+                    break;
+                case 'lectures_count':
+                    $quer->withCount('lectures')->orderBy('lectures_count', $sortByDir);
+                    break;
+                case 'notes_count':
+                    $quer->withCount('notes')->orderBy('notes_count', $sortByDir);
+                    break;
+                case 'questions_count':
+                    $quer->withCount('questions')->orderBy('questions_count', $sortByDir);
+                    break;
+                case 'price':
+                    $quer->orderBy('price', $sortByDir);
+                    break;
+                default:
+                    $quer->orderBy('id', $sortByDir);
+            }
+        });
+    }
 }

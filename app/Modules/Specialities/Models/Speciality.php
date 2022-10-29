@@ -45,7 +45,7 @@ class Speciality extends Model
     public function ScopeSorter($query)
     {
         $query->when(request()->has('sortBy'), function ($quer) {
-            $sortByDir = request()->get('sortDesc') ? "desc" : "asc";
+            $sortByDir = request()->get('sortDesc') == 'true' ? "desc" : "asc";
             switch (request()->get('sortBy')) {
                 case 'title_en':
                 case 'title_ar':
