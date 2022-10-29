@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'User is suspended, please contact customer service.' => 'User is suspended, please contact customer service.',
     'Push notifications enabled' => 'Push notifications enabled, now you will be able to receive notifications',
     'Push notifications disabled' => 'Push notifications disabled, now you will not be able to receive notifications',
     'Device deleted successfully' => 'Device deleted successfully',

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\CheckAuthAndDevice;
+use App\Http\Middleware\CheckUserActive;
 use App\Http\Middleware\CheckUserVerified;
 use App\Modules\Courses\Middleware\CheckCourseAvailabiltyForInstructorMiddleware;
 use Barryvdh\Cors\HandleCors;
@@ -102,6 +103,7 @@ class Kernel extends HttpKernel
         'suspended' => CheckSuspense::class,
         'type' => TypeMiddleware::class,
         'userActive'=>CheckUserVerified::class,
+        'userSuspended' => CheckUserActive::class,
         'checkDeviceAndToken'=>CheckAuthAndDevice::class
     ];
 

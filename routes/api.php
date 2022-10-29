@@ -28,7 +28,7 @@
 //        $countryModel->save();
 //    }
 //});
-Route::group(['as' => 'api.', 'middleware' => 'checkDeviceAndToken'], function () {
+Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspended']], function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         require base_path('app/Modules/Users/Auth/Routes/api.php');
     });

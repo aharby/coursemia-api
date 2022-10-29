@@ -2,7 +2,7 @@
 
 return array(
     'oops something went wrong' => 'حدث خطأ ما',
-
+    'User is suspended, please contact customer service.' => 'تم ايقاف حسابك برجاء التواصلمع الدعم الفني',
     'Device deleted successfully' => 'تم حذف الجهاز بنجاح',
     'Can not delete your current device' => 'لا يمكنك حذف جهازك الحالى',
     'Phone number verified successfully' => 'تم تأكيد رقم الهاتف بنجاح',
