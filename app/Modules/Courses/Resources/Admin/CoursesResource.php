@@ -25,6 +25,11 @@ class CoursesResource extends JsonResource
                 ->first();
             $bought_on = Carbon::parse($course_user->created_at)->format('M d,Y');
         }
+        if (isset($this->expire_date)){
+            $expire = Carbon::parse($this->expire_date)->format('Y-m-d');
+        }else{
+            $expire = $this->expire_duration;
+        }
         return [
             'id'            => $this->id,
             'title_en'      => $this->title_en,
@@ -38,7 +43,7 @@ class CoursesResource extends JsonResource
             'price'         => $this->price,
             'is_active'     => (bool)$this->is_active,
             'status'        => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,
-            'expire_date'   => Carbon::parse($this->expire_date)->format('Y-m-d'),
+            'expire_date'   => $expire,
             'bought_on'     => $bought_on,
             'lectures_count'=> $this->lectures()->count(),
             'notes_count'   => $this->notes()->count(),

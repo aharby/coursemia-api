@@ -699,6 +699,13 @@ if (!function_exists('moveSingleGarbageMedia')) {
     }
 }
 
+if (!function_exists('countries')){
+    function countries(){
+        $countries = \Illuminate\Support\Facades\Http::get('https://restcountries.com/v3.1/all');
+        return $countries;
+    }
+}
+
 if (!function_exists('moveSingleGarbageMediaToPublic')) {
     function moveSingleGarbageMediaToPublic($id, string $storagePath = null)
     {

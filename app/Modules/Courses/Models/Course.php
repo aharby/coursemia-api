@@ -53,4 +53,11 @@ class Course extends Model
     public function reviews(){
         return $this->hasMany(CourseReview::class);
     }
+
+    public function getRateAttribute(){
+        $rates = CourseReview::where('course_id', $this->attributes['id'])->pluck('rate')->toArray();
+        if (count($rates) > 0)
+            return array_sum($rates) / count($rates);
+        return 0;
+    }
 }

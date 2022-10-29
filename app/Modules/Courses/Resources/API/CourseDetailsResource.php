@@ -10,6 +10,7 @@ use App\Modules\Category\Resources\API\QuestionsCategoriesResource;
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\CourseUser;
 use App\Modules\Courses\Models\OfferCourse;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -46,6 +47,11 @@ class CourseDetailsResource extends JsonResource
             $value = $offer_courses_check->offer->offer_value;
             $price_after_discount = $this->price - (($value*$this->price) / 100);
         }
+        if (isset($this->expire_date)){
+            $expire = Carbon::parse($this->expire_date)->format('Y-m-d');
+        }else{
+            $expire = $this->expire_duration;
+        }
         return [
             'id'            => $this->id,
             'is_in_my_cart' => false, //@todo implement is in my cart
@@ -58,7 +64,7 @@ class CourseDetailsResource extends JsonResource
             'rate'          => (float)$this->rate,
             'description'   => $this->description,
             'reviews_count' => $this->reviews()->count(),
-            'expiration_date' => $this->expire_date,
+            'expiration_date' => $expire,
             'lectures_count'=> $lectures->count(),
             'notes_count'   => $notes->count(),
             'questions_count'=> $questions->count(),

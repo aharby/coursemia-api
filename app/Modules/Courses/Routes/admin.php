@@ -32,3 +32,7 @@ Route::group(['prefix' => 'lectures', 'as' => 'lectures.'], function (){
 Route::group(['prefix' => 'course-images', 'as' => 'course-images.'], function (){
     Route::post('/', [CoursesAdminController::class, 'storeCourseImages']);
 });
+
+    Route::group(['prefix' => 'questions-and-answers', 'as' => 'questions-and-answers.'], function (){
+    Route::post('/', [CoursesAdminController::class, 'storeQuestionsAndAnswers']);
+});
