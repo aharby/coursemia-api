@@ -2,7 +2,9 @@
 
 namespace App\Modules\Specialities\Controllers;
 
+use App\Enums\StatusCodesEnum;
 use App\Http\Controllers\Controller;
+use App\Modules\Specialities\Models\Speciality;
 use App\Modules\Specialities\Repository\SpecialitiesRepositoryInterface;
 use App\Modules\Specialities\Resources\Admin\ListAdminSpecialitiesIndex;
 use App\Modules\Specialities\Resources\Admin\ListAdminSpecialitiesIndexPaginator;
@@ -20,6 +22,10 @@ class SpecialitiesAdminApiControllers extends Controller
     {
         $specialities = $this->specialitiesRepository->all();
         return customResponse(new ListAdminSpecialitiesIndexPaginator($specialities), '', 200,1);
+    }
+
+    public function all(){
+        return customResponse(ListAdminSpecialitiesIndex::collection(Speciality::get()), '', 200, StatusCodesEnum::DONE);
     }
 
     public function show($id)
