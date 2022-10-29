@@ -15,7 +15,7 @@
 Route::get('country', function(){
     $countries = countries();
     $countries = json_decode($countries);
-    \App\Modules\Countries\Models\Country::orderBy('id', 'DESC')->delete();
+//    \App\Modules\Countries\Models\Country::orderBy('id', 'DESC')->delete();
     foreach ($countries as $country){
         $countryModel = new \App\Modules\Countries\Models\Country;
         $root = $country->idd->root ?? 0;
