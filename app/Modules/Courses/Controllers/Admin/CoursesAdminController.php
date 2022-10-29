@@ -93,8 +93,11 @@ class CoursesAdminController extends Controller
         if ($request->has('price')){
             $course->price = $request->price;
         }
-        if ($request->has('expire_date')){
+        if ($request->has('expire_date') && isset($request->expire_date)){
             $course->expire_date = $request->expire_date;
+        }
+        if ($request->has('expire_duration') && isset($request->expire_duration)){
+            $course->expire_duration = $request->expire_duration;
         }
         if ($request->has('speciality_id')){
             $course->speciality_id = $request->speciality_id;
