@@ -15,12 +15,19 @@ class SpecialitiesSeeder extends Seeder
     public function run()
     {
         $index = 0;
-        while ($index < 10) {
-            $speciality =[
-                'image' => "1665320145qvrbmgpuhc.png",
-                'is_active'=>1,
-                'title:en'=>"speciality ${index} en",
-                'title:ar'=>"speciality ${index} ar"
+        $images = [
+            '1665320145qvrbmgpuhc.png',
+            '1665422398sqcyikytdr.png',
+            '1665422466xtdlvieyej.png',
+            '1665422552temowpnrxt.png',
+            '1665423169dtajncunlo.jpg',
+        ];
+        while ($index < 100) {
+            $speciality = [
+                'image' => 'specialities/' . $images[array_rand($images)],
+                'is_active' => 1,
+                'title:en' => "speciality ${index} en",
+                'title:ar' => "speciality ${index} ar"
             ];
             Speciality::create($speciality);
             $index++;

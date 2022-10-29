@@ -21,8 +21,10 @@ class SpecialitiesRepository implements SpecialitiesRepositoryInterface
         if ($isActive) {
             $query->active();
         }
-        return $query->orderBy('id', 'DESC')
-            ->paginate(env('PAGE_LIMIT', 20));
+        return $query
+            ->filter()
+            ->sorter()
+            ->paginate(request()->perPage, ['*'], 'page', request()->page);
     }
 
     public function find(int $id): Speciality|null
