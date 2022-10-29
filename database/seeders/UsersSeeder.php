@@ -18,7 +18,7 @@ class UsersSeeder extends Seeder
     public function run()
     {
         DB::table('users')->delete();
-        $country = Country::find(1);
+        $country = Country::where('country_code', '+20')->first();
         for ($i = 0; $i < 10; $i++){
             $user = User::first();
             if (!isset($user)){

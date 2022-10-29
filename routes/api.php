@@ -12,7 +12,22 @@
 |
 */
 
-
+Route::get('country', function(){
+    $countries = countries();
+    $countries = json_decode($countries);
+    \App\Modules\Countries\Models\Country::orderBy('id', 'DESC')->delete();
+    foreach ($countries as $country){
+        $countryModel = new \App\Modules\Countries\Models\Country;
+        $root = $country->idd->root ?? 0;
+        $suffix = $country->idd->suffixes[0] ?? 0;
+        $countryModel->{'title:en'} = $country->name->common;
+        $countryModel->{'title:ar'} = $country->translations->ara->common;
+        $countryModel->country_code = $root.''.$suffix;
+        $countryModel->flag = $country->flags->png;
+        $countryModel->is_active = 1;
+        $countryModel->save();
+    }
+});
 Route::group(['as' => 'api.', 'middleware' => 'checkDeviceAndToken'], function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         require base_path('app/Modules/Users/Auth/Routes/api.php');
