@@ -23,7 +23,11 @@ use Vimeo\Laravel\Facades\Vimeo;
 class CoursesAdminController extends Controller
 {
     public function index(Request $request){
-        $courses = Course::paginate(request()->perPage, ['*'], 'page', request()->page);
+        $courses = Course::query();
+        if (isset($request->speciality)){
+            $courses = $courses->where('speciality_id', $request->speciality);
+        }
+        $courses = $courses->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $courses->total(),
             'courses' => CoursesResource::collection($courses->items())
