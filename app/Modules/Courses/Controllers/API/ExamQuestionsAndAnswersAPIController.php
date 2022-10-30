@@ -10,6 +10,7 @@ use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseFlashcard;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\FlashCardAnswer;
 use App\Modules\Courses\Models\Question;
 use App\Modules\Courses\Models\UserQuestionAnswer;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
@@ -58,13 +59,40 @@ class ExamQuestionsAndAnswersAPIController extends Controller
         $answers = $request->answers;
         $correctAnswers = 0;
         $count = sizeof($answers);
+        $user = auth('api')->user();
         foreach ($answers as $answer){
-            $myAnswer = CourseFlashcard::find($answer['flashcard_id']);
-            if ($myAnswer->answer == $answer['answer']){
-                $correctAnswers++;
+            $myAnswer = FlashCardAnswer::where(['course_flashcard_id' => $answer['id'], 'user_id' => $user->id])
+                ->first();
+            if (isset($myAnswer)){
+                if ($myAnswer->answer == true){
+                    continue;
+                }
+                else{
+                    if ($answer['answer'] == true){
+                        $myAnswer->answer = 1;
+                        $myAnswer->save();
+                        $correctAnswers++;
+                    }
+                }
+            }else{
+                if ($answer['answer'] == true){
+                    $correctAnswers++;
+                    $myFlashCardAnswer = new FlashCardAnswer;
+                    $myFlashCardAnswer->course_flashcard_id = $answer['id'];
+                    $myFlashCardAnswer->user_id = $user->id;
+                    $myFlashCardAnswer->answer = 1;
+                    $myFlashCardAnswer->save();
+                }else{
+                    $myFlashCardAnswer = new FlashCardAnswer;
+                    $myFlashCardAnswer->course_flashcard_id = $answer['id'];
+                    $myFlashCardAnswer->user_id = $user->id;
+                    $myFlashCardAnswer->answer = 0;
+                    $myFlashCardAnswer->save();
+                }
             }
         }
-        $percentage = ($correctAnswers / $count)*100;
-        return customResponse(round($percentage,1), trans('api.submit flashcard'), 200, StatusCodesEnum::DONE);
+        return customResponse([
+            'earned_points' => $correctAnswers
+        ], trans('api.submit flashcard'), 200, StatusCodesEnum::DONE);
     }
 }

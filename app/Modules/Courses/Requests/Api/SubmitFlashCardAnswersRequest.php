@@ -31,7 +31,7 @@ class SubmitFlashCardAnswersRequest extends FormRequest
             'course_id'             => 'required|exists:courses,id',
             'category_id'           => 'required|exists:categories,id',
             'answers'               => 'required|array',
-            'answers.*.flashcard_id'=> 'required|exists:course_flashcards,id',
+            'answers.*.id'          => 'required|exists:course_flashcards,id',
             'answers.*.answer'      => 'required',
         ];
     }
