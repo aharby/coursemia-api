@@ -19,7 +19,7 @@ class ValueTextCategoriesResource extends JsonResource
     {
         return [
             'value'             => $this->id,
-            'text'              => $this->title_en,
+            'label'              => $this->title_en,
         ];
     }
 }
