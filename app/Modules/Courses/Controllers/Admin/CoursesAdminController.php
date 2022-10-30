@@ -141,7 +141,6 @@ class CoursesAdminController extends Controller
             $flashCard->back_en = $card['back_en'];
             $flashCard->back_ar = $card['back_ar'];
             $flashCard->category_id = $card['category_id'];
-            $flashCard->answer = $card['answer'];
             $flashCard->is_free_content = $card['is_free_content'];
             $flashCard->save();
         }

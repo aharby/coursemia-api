@@ -26,7 +26,6 @@ class FlashcardsSeeder extends Seeder
             $flash->front_ar = "الوجه الأمامي";
             $flash->back_en = "Back english";
             $flash->back_ar = "الوجه الخلفي";
-            $flash->answer = rand(0,1);
             $flash->save();
         }
     }
