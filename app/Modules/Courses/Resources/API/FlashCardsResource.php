@@ -18,7 +18,6 @@ class FlashCardsResource extends JsonResource
             'id'            => $this->id,
             'front'         => $this->front,
             'back'          => $this->back,
-            'answer'        => (boolean)$this->answer
         ];
     }
 }
