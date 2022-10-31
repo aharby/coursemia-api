@@ -27,6 +27,9 @@ class CoursesAdminController extends Controller
         if (isset($request->speciality)){
             $courses = $courses->where('speciality_id', $request->speciality);
         }
+        if (isset($request->status)){
+            $courses = $courses->where('is_active', $request->status);
+        }
         $courses = $courses->sorter();
         $courses = $courses->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
@@ -243,5 +246,10 @@ class CoursesAdminController extends Controller
     public function getCourseCategories(){
         $categories = Category::where('course_id', \request()->course_id)->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function delete($id){
+        Course::where('id', $id)->delete();
+        return customResponse((object)[], "Course deleted successfully", 200, StatusCodesEnum::DONE);
     }
 }

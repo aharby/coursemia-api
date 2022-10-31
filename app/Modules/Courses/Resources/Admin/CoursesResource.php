@@ -30,6 +30,11 @@ class CoursesResource extends JsonResource
         }else{
             $expire = $this->expire_duration;
         }
+        if (isset($this->price_after_discount)){
+            $price_after = $this->price_after_discount;
+        }else{
+            $price_after = $this->price;
+        }
         return [
             'id'            => $this->id,
             'title_en'      => $this->title_en,
@@ -41,6 +46,7 @@ class CoursesResource extends JsonResource
             'speciality_id' => $this->speciality_id,
             'rate'          => $this->rate,
             'price'         => $this->price,
+            'price_after_discount'         => $this->price_after_discount,
             'is_active'     => (bool)$this->is_active,
             'status'        => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,
             'expire_date'   => $expire,
