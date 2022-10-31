@@ -61,6 +61,10 @@ class Course extends Model
         return 0;
     }
 
+    public function ScopeActive($query){
+        return $query->where('is_active', 1);
+    }
+
     public function ScopeSorter($query)
     {
         $query->when(request()->has('sortBy'), function ($quer) {

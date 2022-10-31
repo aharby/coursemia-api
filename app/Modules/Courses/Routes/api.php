@@ -17,8 +17,6 @@ Route::group([
 
         // Submit Exam APIs
         Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@getCourseFlashCards');
-        // Submit Flashcards APIs
-        Route::post('submit-flashcard', 'ExamQuestionsAndAnswersAPIController@submitFlashCardAnswer');
 
     });
     Route::post('get-courses', 'CoursesAPIController@courses');
@@ -41,5 +39,7 @@ Route::group([
         Route::get('/', [CoursesFlashCardsAPIController::class , 'getCourseFlashCards']);
 
     });
+    // Submit Flashcards APIs
+    Route::post('submit-flashcard', 'ExamQuestionsAndAnswersAPIController@submitFlashCardAnswer');
 
 });

@@ -60,34 +60,42 @@ class ExamQuestionsAndAnswersAPIController extends Controller
         $correctAnswers = 0;
         $count = sizeof($answers);
         $user = auth('api')->user();
-        foreach ($answers as $answer){
-            $myAnswer = FlashCardAnswer::where(['course_flashcard_id' => $answer['id'], 'user_id' => $user->id])
-                ->first();
-            if (isset($myAnswer)){
-                if ($myAnswer->answer == true){
-                    continue;
-                }
-                else{
+        if (isset($user)){
+            foreach ($answers as $answer){
+                $myAnswer = FlashCardAnswer::where(['course_flashcard_id' => $answer['id'], 'user_id' => $user->id])
+                    ->first();
+                if (isset($myAnswer)){
+                    if ($myAnswer->answer == true){
+                        continue;
+                    }
+                    else{
+                        if ($answer['answer'] == true){
+                            $myAnswer->answer = 1;
+                            $myAnswer->save();
+                            $correctAnswers++;
+                        }
+                    }
+                }else{
                     if ($answer['answer'] == true){
-                        $myAnswer->answer = 1;
-                        $myAnswer->save();
                         $correctAnswers++;
+                        $myFlashCardAnswer = new FlashCardAnswer;
+                        $myFlashCardAnswer->course_flashcard_id = $answer['id'];
+                        $myFlashCardAnswer->user_id = $user->id;
+                        $myFlashCardAnswer->answer = 1;
+                        $myFlashCardAnswer->save();
+                    }else{
+                        $myFlashCardAnswer = new FlashCardAnswer;
+                        $myFlashCardAnswer->course_flashcard_id = $answer['id'];
+                        $myFlashCardAnswer->user_id = $user->id;
+                        $myFlashCardAnswer->answer = 0;
+                        $myFlashCardAnswer->save();
                     }
                 }
-            }else{
+            }
+        }else{
+            foreach ($answers as $answer){
                 if ($answer['answer'] == true){
                     $correctAnswers++;
-                    $myFlashCardAnswer = new FlashCardAnswer;
-                    $myFlashCardAnswer->course_flashcard_id = $answer['id'];
-                    $myFlashCardAnswer->user_id = $user->id;
-                    $myFlashCardAnswer->answer = 1;
-                    $myFlashCardAnswer->save();
-                }else{
-                    $myFlashCardAnswer = new FlashCardAnswer;
-                    $myFlashCardAnswer->course_flashcard_id = $answer['id'];
-                    $myFlashCardAnswer->user_id = $user->id;
-                    $myFlashCardAnswer->answer = 0;
-                    $myFlashCardAnswer->save();
                 }
             }
         }

@@ -13,7 +13,8 @@ class SpecialitiesApiControllers
 
     public function index()
     {
-        $specialities = Speciality::get();
+        $specialities = Speciality::query()->active();
+        $specialities = $specialities->get();
         return customResponse(ListAPISpecialities::collection($specialities), __('Done'), 200, StatusCodesEnum::DONE);
     }
 }

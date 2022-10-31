@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 class CoursesAPIController extends Controller
 {
     public function courses(Request $request){
-        $courses = Course::query();
+        $courses = Course::query()->active();
         if (isset($request->query_text)){
             $courses->where(function ($query) use ($request){
                 $query->where('title_ar', 'LIKE', '%'.$request->query_text.'%')

@@ -24,13 +24,17 @@ class CoursesFlashCardsAPIController extends Controller
 {
     public function getCourseFlashCards(Request $request)
     {
+        $user = auth('api')->user();
         $category_id = \request()->category_id;
         $flashs = CourseFlashcard::query();
         $flashs->where('course_id', $request->course_id);
         if (isset($category_id)){
             $flashs->where('category_id', $category_id);
         }
-        $flash_cards = $flashs->get();
+        if (isset($user))
+            $flash_cards = $flashs->get();
+        else
+            $flash_cards = $flashs->where('is_free_content', '=', 1)->get();
         return customResponse(FlashCardsResource::collection($flash_cards), trans('api.course flashcards'), 200, StatusCodesEnum::DONE);
     }
 }

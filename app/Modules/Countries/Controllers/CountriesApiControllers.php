@@ -18,7 +18,8 @@ class CountriesApiControllers
 
     public function index()
     {
-        $countries = Country::get();
+        $countries = Country::query()->active();
+        $countries = $countries->get();
         return customResponse(ListCountriesIndex::collection($countries), __('Done'), 200, StatusCodesEnum::DONE);
     }
 }
