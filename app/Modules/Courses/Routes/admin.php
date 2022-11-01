@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Modules\Courses\Controllers\Admin\CoursesAdminController;
+use \App\Modules\Courses\Controllers\Admin\LecturesAdminController;
 
 Route::group(['prefix' => 'courses', 'as' => 'courses.'], function () {
     Route::get('/', [CoursesAdminController::class, 'index']);
@@ -25,6 +26,7 @@ Route::group(['prefix' => 'notes', 'as' => 'notes.'], function (){
 });
 
 Route::group(['prefix' => 'lectures', 'as' => 'lectures.'], function (){
+    Route::get('/', [LecturesAdminController::class, 'index']);
     Route::post('/', [CoursesAdminController::class, 'storeCourseLectures']);
     Route::post('/upload-video', [CoursesAdminController::class, 'uploadToVimeo']);
 });

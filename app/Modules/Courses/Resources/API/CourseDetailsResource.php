@@ -44,8 +44,9 @@ class CourseDetailsResource extends JsonResource
         $offer_courses_check = OfferCourse::where('course_id', $this->id)->first();
         $price_after_discount = null;
         if (isset($offer_courses_check)){
-            $value = $offer_courses_check->offer->offer_value;
-            $price_after_discount = $this->price - (($value*$this->price) / 100);
+//            $value = $offer_courses_check->offer->offer_value;
+//            $price_after_discount = $this->price - (($value*$this->price) / 100);
+            $price_after_discount = $this->price_after_discount;
         }
         if (isset($this->expire_date)){
             $expire = Carbon::parse($this->expire_date)->format('Y-m-d');

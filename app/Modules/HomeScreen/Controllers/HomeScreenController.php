@@ -21,7 +21,7 @@ class HomeScreenController extends Controller
         $offers = Offer::get();
         $events = Event::get();
         $questions = Question::inRandomOrder()->take(5)->get();
-        $courses = Course::inRandomOrder()->take(5)->get();
+        $courses = Course::inRandomOrder()->active()->take(5)->get();
         $specialities = Speciality::inRandomOrder()->take(5)->get();
         return customResponse([
             "offers" => OffersResource::collection($offers),
