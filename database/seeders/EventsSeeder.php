@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Countries\Models\Country;
 use App\Modules\Events\Models\Event;
 use Illuminate\Database\Seeder;
 
@@ -14,13 +15,29 @@ class EventsSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 1 ; $i++){
-            $event = new Event;
-            $event->title_ar = "عنوان $i";
-            $event->title_en = "Title $i";
-            $event->image = "/uploads/events/event-1664893285.png";
-            $event->event_url = "https://google.com";
-            $event->save();
+        $index = 0;
+        $images = [
+            '1665268849bfeeclcxql.png',
+            '1665269224bdcqwnmfqx.png',
+            '1665270122xezggasmel.png',
+            '1665318858titubyjtgf.png',
+            '1665319970efweevvkth.png',
+            '1665319986pmhfmmgqyz.png',
+            '1665320145qvrbmgpuhc.png',
+            '1665417650htifgjxjwv.png',
+            '1665422803vsrlzcbgcw.png',
+            '1666815291vxrtejprju.jpg',
+        ];
+        while ($index < 100) {
+            $event = [
+                'image' => 'events/' . $images[array_rand($images)],
+                'is_active' => 1,
+                'event_url' => "https://google.com",
+                'title:en' => "event title ${index} en",
+                'title:ar' => "event title ${index} ar"
+            ];
+            Event::create($event);
+            $index++;
         }
     }
 }

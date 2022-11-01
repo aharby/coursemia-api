@@ -6,6 +6,8 @@ use App\Modules\Countries\Repository\CountryRepository;
 use App\Modules\Countries\Repository\CountryRepositoryInterface;
 use App\Modules\Courses\Repository\QuestionsRepository;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
+use App\Modules\Events\Repository\EventRepository;
+use App\Modules\Events\Repository\EventRepositoryInterface;
 use App\Modules\Specialities\Repository\SpecialitiesRepository;
 use App\Modules\Specialities\Repository\SpecialitiesRepositoryInterface;
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepository;
@@ -109,5 +111,10 @@ class RepositoriesServiceProviders extends ServiceProvider
             QuestionsRepositoryInterface::class,
             QuestionsRepository::class
         );
-}
+
+        $this->app->bind(
+            EventRepositoryInterface::class,
+            EventRepository::class
+        );
+    }
 }

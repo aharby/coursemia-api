@@ -46,4 +46,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     require base_path('app/Modules/Specialities/Routes/admin.php');
     require base_path('app/Modules/Users/Admin/Routes/admin.php');
     require base_path('app/Modules/Courses/Routes/admin.php');
+    require base_path('app/Modules/Events/Routes/admin.php');
 });

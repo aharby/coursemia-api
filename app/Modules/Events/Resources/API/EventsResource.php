@@ -10,16 +10,16 @@ class EventsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'title'         => $this->{'title_'.App::getLocale()},
-            'image'         => asset($this->image),
-            'extra_info'    => $this->event_url,
+            'id' => $this->id,
+            'title' => $this->translate(App::getLocale())->title,
+            'image' => asset($this->image),
+            'extra_info' => $this->event_url,
         ];
     }
 }
