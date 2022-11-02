@@ -61,7 +61,7 @@ class CourseDetailsResource extends JsonResource
             'cover_image'   => asset($this->cover_image),
             'images'        => $images,
             'price'         => (double)$this->price,
-            'price_after_discount'         => $price_after_discount,
+            'price_after_discount'         => (double)$price_after_discount,
             'rate'          => (float)$this->rate,
             'description'   => $this->description,
             'reviews_count' => $this->reviews()->count(),
