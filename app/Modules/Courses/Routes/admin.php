@@ -12,6 +12,9 @@ Route::group(['prefix' => 'courses', 'as' => 'courses.'], function () {
     Route::delete('/{id}', [CoursesAdminController::class , 'destroy']);
 });
 
+Route::group(['prefix' => 'all-courses', 'as' => 'all-courses.'], function () {
+    Route::get('/', [CoursesAdminController::class, 'allCourses']);
+});
 Route::group(['prefix' => 'categories', 'as' => 'categories.'], function (){
     Route::get('/', [CoursesAdminController::class, 'getCourseCategories']);
 });
@@ -27,8 +30,15 @@ Route::group(['prefix' => 'notes', 'as' => 'notes.'], function (){
 
 Route::group(['prefix' => 'lectures', 'as' => 'lectures.'], function (){
     Route::get('/', [LecturesAdminController::class, 'index']);
+    Route::get('/{id}', [LecturesAdminController::class, 'show']);
+    Route::put('/{id}', [LecturesAdminController::class, 'update']);
+    Route::delete('/{id}', [LecturesAdminController::class, 'delete']);
     Route::post('/', [CoursesAdminController::class, 'storeCourseLectures']);
     Route::post('/upload-video', [CoursesAdminController::class, 'uploadToVimeo']);
+});
+
+Route::group(['prefix' => 'course-lectures', 'as' => 'course-lectures.'], function (){
+    Route::post('/', [LecturesAdminController::class, 'store']);
 });
 
 Route::group(['prefix' => 'course-images', 'as' => 'course-images.'], function (){

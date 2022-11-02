@@ -15,7 +15,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
     public function getQuestionsByCourseId($courseId)
     {
         $category_ids = request()->category_ids;
-        $number_of_questions = request()->number_of_questions;
+        $number_of_questions = request()->exam_content;
         $questions = $this->model->query();
         if (isset($category_ids)){
             $questions = $questions->whereIn('category_id', $category_ids);

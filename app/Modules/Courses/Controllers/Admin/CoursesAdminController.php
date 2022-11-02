@@ -22,6 +22,10 @@ use Vimeo\Laravel\Facades\Vimeo;
 
 class CoursesAdminController extends Controller
 {
+    public function allCourses(){
+        $courses = Course::get();
+        return customResponse(CoursesResource::collection($courses), "Done", 200, StatusCodesEnum::DONE);
+    }
     public function index(Request $request){
         $courses = Course::query();
         if (isset($request->speciality)){

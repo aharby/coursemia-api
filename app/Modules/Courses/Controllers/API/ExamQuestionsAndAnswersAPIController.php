@@ -99,8 +99,6 @@ class ExamQuestionsAndAnswersAPIController extends Controller
                 }
             }
         }
-        return customResponse([
-            'earned_points' => $correctAnswers
-        ], trans('api.submit flashcard'), 200, StatusCodesEnum::DONE);
+        return customResponse($correctAnswers, trans('api.submit flashcard'), 200, StatusCodesEnum::DONE);
     }
 }

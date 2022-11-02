@@ -4,6 +4,8 @@ namespace App\Modules\BaseApp\Providers;
 
 use App\Modules\Countries\Repository\CountryRepository;
 use App\Modules\Countries\Repository\CountryRepositoryInterface;
+use App\Modules\Courses\Repository\LectureRepository;
+use App\Modules\Courses\Repository\LectureRepositoryInterface;
 use App\Modules\Courses\Repository\QuestionsRepository;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
 use App\Modules\Events\Repository\EventRepository;
@@ -115,6 +117,10 @@ class RepositoriesServiceProviders extends ServiceProvider
         $this->app->bind(
             EventRepositoryInterface::class,
             EventRepository::class
+        );
+        $this->app->bind(
+            LectureRepositoryInterface::class,
+            LectureRepository::class
         );
     }
 }
