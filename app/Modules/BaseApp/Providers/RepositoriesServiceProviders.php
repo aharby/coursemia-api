@@ -6,6 +6,8 @@ use App\Modules\Countries\Repository\CountryRepository;
 use App\Modules\Countries\Repository\CountryRepositoryInterface;
 use App\Modules\Courses\Repository\LectureRepository;
 use App\Modules\Courses\Repository\LectureRepositoryInterface;
+use App\Modules\Courses\Repository\NoteRepository;
+use App\Modules\Courses\Repository\NoteRepositoryInterface;
 use App\Modules\Courses\Repository\QuestionsRepository;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
 use App\Modules\Events\Repository\EventRepository;
@@ -121,6 +123,10 @@ class RepositoriesServiceProviders extends ServiceProvider
         $this->app->bind(
             LectureRepositoryInterface::class,
             LectureRepository::class
+        );
+        $this->app->bind(
+            NoteRepositoryInterface::class,
+            NoteRepository::class
         );
     }
 }
