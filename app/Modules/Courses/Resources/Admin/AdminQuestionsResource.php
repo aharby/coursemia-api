@@ -27,6 +27,7 @@ class AdminQuestionsResource extends JsonResource
             'description_ar'=> $this->translate('ar')->description,
             'explanation_en'=> $this->translate('en')->explanation,
             'explanation_ar'=> $this->translate('ar')->explanation,
+            'explanation_image'=> asset($this->explanation_image),
             'course_id'     => $this->course_id,
             'category_id'   => $this->category_id,
             'category'      => $this->category->title_en,

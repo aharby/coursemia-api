@@ -42,36 +42,36 @@ class QuestionsAdminController extends Controller
     }
 
     public function update(Request $request, $id){
-        $data = [];
-        if ($request->has('is_active')) {
-            $data['is_active'] = $request->get('is_active');
+        $question = Question::find($id);
+        $question->course_id = $request->course_id;
+        $question->category_id = $request->category_id;
+        if (isset($request->title_en))
+            $question->{'title:en'} = $request->title_en;
+        if ($request->title_ar){
+            $question->{'title:ar'} = $request->title_ar;
         }
-        if ($request->has('is_free_content')) {
-            $data['is_free_content'] = $request->get('is_free_content');
+        if (isset($request->explanation_en))
+            $question->{'explanation:en'} = $request->explanation_en;
+        if ($request->explanation_ar){
+            $question->{'explanation:ar'} = $request->explanation_ar;
         }
-        if ($request->has('title_en')) {
-            $data['title:en'] = $request->get('title_en');
-        }
-        if ($request->has('title_ar')) {
-            $data['title:ar'] = $request->get('title_ar');
-        }
-        if ($request->has('category_id')) {
-            $data['category_id'] = $request->get('category_id');
-        }
-        if ($request->has('course_id')) {
-            $data['course_id'] = $request->get('course_id');
-        }
-        if ($request->has('url')) {
-            $data['url'] = $request->get('url');
-        }
-        if ($this->noteRepository->update($id, $data)) {
+        if (isset($request->image_id) && $request->image_id != 'undefined')
+            $question->image = moveSingleGarbageMediaToPublic($request->image_id, 'courses');
+        if (isset($request->explanation_image_id) && $request->explanation_image_id != 'undefined')
+            $question->explanation_image = moveSingleGarbageMediaToPublic($request->explanation_image_id, 'courses');
+        if (isset($request->explanation_voice) && $request->explanation_voice != 'undefined')
+            $question->explanation_voice = $request->explanation_voice;
+        $question->is_free_content = $request->is_free_content;
+        $question->is_active = $request->is_active;
+
+        if ($question->save()) {
             return customResponse('', trans('api.Updated Successfully'), 200, 1);
         }
         return customResponse('', trans('api.oops something went wrong'), 400, 2);
     }
 
     public function destroy($id){
-        CourseNote::where('id', $id)->delete();
+        Question::where('id', $id)->delete();
         return customResponse(null, "Deleted successfully", 200, StatusCodesEnum::DONE);
     }
 
@@ -83,17 +83,17 @@ class QuestionsAdminController extends Controller
         if ($request->questionData['title_ar']){
             $question->{'title:ar'} = $request->questionData['title_ar'];
         }
-        $question->{'description:en'} = $request->questionData['description_en'];
-        if ($request->questionData['description_ar']){
-            $question->{'description:ar'} = $request->questionData['description_ar'];
-        }
-        $question->{'explanation:en'} = $request->questionData['explanation_en'];
+        if (isset($request->questionData['explanation_en']) && $request->questionData['explanation_en'] != 'undefined')
+            $question->{'explanation:en'} = $request->questionData['explanation_en'];
         if ($request->questionData['explanation_ar']){
             $question->{'explanation:ar'} = $request->questionData['explanation_ar'];
         }
-        $question->image = moveSingleGarbageMediaToPublic($request->questionData['image'], 'courses');;
-        $question->explanation_image = moveSingleGarbageMediaToPublic($request->questionData['explanation_image'], 'courses');;
-        $question->explanation_voice = $request->questionData['explanation_voice'];
+        if (isset($request->questionData['image']) && $request->questionData['image'] != 'undefined')
+            $question->image = moveSingleGarbageMediaToPublic($request->questionData['image'], 'courses');;
+        if (isset($request->questionData['explanation_image']) && $request->questionData['explanation_image'] != 'undefined')
+            $question->explanation_image = moveSingleGarbageMediaToPublic($request->questionData['explanation_image'], 'courses');
+        if (isset($request->questionData['voice_url']) && $request->questionData['voice_url'] != 'undefined')
+            $question->explanation_voice = $request->questionData['voice_url'];
         $question->is_free_content = $request->questionData['is_free_content'];
         $question->save();
         return customResponse(new AdminQuestionsResource($question), "Question added successfully", 200, StatusCodesEnum::DONE);
