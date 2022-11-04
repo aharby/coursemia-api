@@ -42,7 +42,10 @@ class OffersRepository implements OffersRepositoryInterface
     public function update(int $id, array $attributes): bool
     {
 
-        return $this->model->find($id)->update($attributes);
+        $model = $this->model->find($id);
+        $courses = request()->selected_courses;
+        $model->offerCourses()->sync($courses);
+        return $model->update($attributes);
     }
 
     public function delete(int $id): bool

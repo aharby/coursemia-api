@@ -16,6 +16,7 @@ class ListAdminOffersIndex extends JsonResource
             "title_ar" => $this->translate('ar')->title,
             "image" => image($this->image, 'large'),
             "is_active" => (bool)$this->is_active,
+            "selected_courses"   => OfferCoursesAdminResource::collection($this->courses),
             "expiration_date" => (string)$this->expiration_date,
             "offer_value" => (string)$this->offer_value,
             "offer_type" => OffersEnum::getOfferType($this->offer_type),
