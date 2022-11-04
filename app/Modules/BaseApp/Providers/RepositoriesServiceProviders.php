@@ -12,6 +12,8 @@ use App\Modules\Courses\Repository\QuestionsRepository;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
 use App\Modules\Events\Repository\EventRepository;
 use App\Modules\Events\Repository\EventRepositoryInterface;
+use App\Modules\Offers\Repository\OffersRepository;
+use App\Modules\Offers\Repository\OffersRepositoryInterface;
 use App\Modules\Specialities\Repository\SpecialitiesRepository;
 use App\Modules\Specialities\Repository\SpecialitiesRepositoryInterface;
 use App\Modules\StaticPages\Repository\DistinguishedStudentsRepository;
@@ -127,6 +129,10 @@ class RepositoriesServiceProviders extends ServiceProvider
         $this->app->bind(
             NoteRepositoryInterface::class,
             NoteRepository::class
+        );
+        $this->app->bind(
+            OffersRepositoryInterface::class,
+            OffersRepository::class
         );
     }
 }

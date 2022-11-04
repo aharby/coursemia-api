@@ -5,8 +5,6 @@ namespace App\Modules\Countries\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Countries\Repository\CountryRepositoryInterface;
 use App\Modules\Countries\Resources\Admin\ListAdminCountriesIndex;
-use App\Modules\Countries\Resources\Admin\ListAdminCountriesIndexPaginator;
-use App\Modules\Users\Admin\Resources\UsersResource;
 use Illuminate\Http\Request;
 
 class CountriesAdminApiControllers extends Controller
