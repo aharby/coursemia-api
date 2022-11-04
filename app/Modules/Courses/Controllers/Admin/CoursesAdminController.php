@@ -217,7 +217,10 @@ class CoursesAdminController extends Controller
             $courseQuestion->category_id = $question['category_id'];
             $courseQuestion->{'title:en'} = $question['title_en'];
             $courseQuestion->{'title:ar'} = $question['title_ar'];
-            $courseQuestion->image = moveSingleGarbageMediaToPublic($question['image'], 'courses');
+            $courseQuestion->{'explanation:en'} = $question['explanation']['explanation_en'];
+            $courseQuestion->{'explanation:ar'} = $question['explanation']['explanation_ar'];
+            if (isset($question['image']))
+                $courseQuestion->image = moveSingleGarbageMediaToPublic($question['image'], 'courses');
             $courseQuestion->explanation_image = moveSingleGarbageMediaToPublic($question['explanation']['image_path'], 'courses');
             $courseQuestion->explanation_voice = moveSingleGarbageMediaToPublic($question['explanation']['voice_path'], 'courses');
             $courseQuestion->is_free_content = $question['is_free_content'];

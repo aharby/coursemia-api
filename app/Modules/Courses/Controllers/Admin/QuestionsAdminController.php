@@ -7,13 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\Question;
 use App\Modules\Courses\Repository\LectureRepositoryInterface;
 use App\Modules\Courses\Repository\NoteRepositoryInterface;
 use App\Modules\Courses\Resources\Admin\LecturesResource;
 use App\Modules\Courses\Resources\API\AdminCourseNoteResource;
+use App\Modules\Courses\Resources\API\AdminQuestionsResource;
 use Illuminate\Http\Request;
 
-class NotesAdminController extends Controller
+class QuestionsAdminController extends Controller
 {
     public function __construct(
         public NoteRepositoryInterface $noteRepository
@@ -21,22 +23,22 @@ class NotesAdminController extends Controller
     {
     }
     public function index(Request $request){
-        $notes = CourseNote::query();
+        $questions = Question::query();
         if (isset($request->course)){
-            $notes = $notes->where('course_id', $request->course);
+            $questions = $questions->where('course_id', $request->course);
         }
 
-        $notes = $notes->filter()->sorter();
-        $notes = $notes->paginate(request()->perPage, ['*'], 'page', request()->page);
+        $questions = $questions->filter()->sorter();
+        $questions = $questions->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
-            'total' => $notes->total(),
-            'notes' => AdminCourseNoteResource::collection($notes->items())
+            'total' => $questions->total(),
+            'questions' => AdminQuestionsResource::collection($questions->items())
         ]);
     }
 
     public function show($id){
-        $lecture = CourseNote::find($id);
-        return customResponse(new AdminCourseNoteResource($lecture), "Done", 200, StatusCodesEnum::DONE);
+        $question = Question::find($id);
+        return customResponse(new AdminQuestionsResource($question), "Done", 200, StatusCodesEnum::DONE);
     }
 
     public function update(Request $request, $id){
@@ -74,20 +76,27 @@ class NotesAdminController extends Controller
     }
 
     public function store(Request $request){
-        $note = new CourseNote();
-//        if ($request->has('is_active')){
-//            $note->is_active = $request->is_active;
-//        }
-        $note->course_id = $request->noteData['course_id'];
-        $note->category_id = $request->noteData['category_id'];
-        $note->url = $request->noteData['path'];
-        $note->{'title:en'} = $request->noteData['title_en'];
-        if ($request->noteData['title_ar']){
-            $note->{'title:ar'} = $request->noteData['title_ar'];
+        $question = new Question();
+        $question->course_id = $request->questionData['course_id'];
+        $question->category_id = $request->questionData['category_id'];
+        $question->{'title:en'} = $request->questionData['title_en'];
+        if ($request->questionData['title_ar']){
+            $question->{'title:ar'} = $request->questionData['title_ar'];
         }
-        $note->is_free_content = $request->noteData['is_free_content'];
-        $note->save();
-        return customResponse(new AdminCourseNoteResource($note), "Note added successfully", 200, StatusCodesEnum::DONE);
+        $question->{'description:en'} = $request->questionData['description_en'];
+        if ($request->questionData['description_ar']){
+            $question->{'description:ar'} = $request->questionData['description_ar'];
+        }
+        $question->{'explanation:en'} = $request->questionData['explanation_en'];
+        if ($request->questionData['explanation_ar']){
+            $question->{'explanation:ar'} = $request->questionData['explanation_ar'];
+        }
+        $question->image = moveSingleGarbageMediaToPublic($request->questionData['image'], 'courses');;
+        $question->explanation_image = moveSingleGarbageMediaToPublic($request->questionData['explanation_image'], 'courses');;
+        $question->explanation_voice = $request->questionData['explanation_voice'];
+        $question->is_free_content = $request->questionData['is_free_content'];
+        $question->save();
+        return customResponse(new AdminQuestionsResource($question), "Question added successfully", 200, StatusCodesEnum::DONE);
     }
 
 }

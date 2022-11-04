@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Modules\Courses\Controllers\Admin\NotesAdminController;
 use App\Modules\Courses\Controllers\Admin\CoursesAdminController;
 use \App\Modules\Courses\Controllers\Admin\LecturesAdminController;
+use \App\Modules\Courses\Controllers\Admin\QuestionsAdminController;
 
 Route::group(['prefix' => 'courses', 'as' => 'courses.'], function () {
     Route::get('/', [CoursesAdminController::class, 'index']);
@@ -31,6 +32,15 @@ Route::group(['prefix' => 'notes', 'as' => 'notes.'], function (){
     Route::delete('/{id}', [NotesAdminController::class, 'destroy']);
     Route::post('/', [CoursesAdminController::class, 'storeCourseNotes']);
     Route::post('/upload-pdf', [CoursesAdminController::class, 'uploadPdf']);
+});
+
+Route::group(['prefix' => 'questions', 'as' => 'questions.'], function (){
+    Route::get('/', [QuestionsAdminController::class, 'index']);
+    Route::put('/{id}', [QuestionsAdminController::class, 'update']);
+    Route::get('/{id}', [QuestionsAdminController::class, 'show']);
+    Route::delete('/{id}', [QuestionsAdminController::class, 'destroy']);
+    Route::post('/', [QuestionsAdminController::class, 'store']);
+    Route::post('/upload-pdf', [QuestionsAdminController::class, 'uploadPdf']);
 });
 
 Route::group(['prefix' => 'lectures', 'as' => 'lectures.'], function (){
