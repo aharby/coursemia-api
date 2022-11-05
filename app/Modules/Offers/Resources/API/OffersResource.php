@@ -11,10 +11,14 @@ class OffersResource extends JsonResource
 {
     public function toArray($request)
     {
+        $image = null;
+        if (isset($this->image)){
+            $image = image($this->image, 'large');
+        }
         return [
             'id'            => $this->id,
             'title'         => $this->translated_title,
-            'image'         => asset($this->image),
+            'image'         => $image,
             'expiration_date' => $this->expiration_date,
             'offer_value'   => (string)$this->offer_value,
             'offer_type'    => $this->offer_type,

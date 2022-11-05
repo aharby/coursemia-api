@@ -4,6 +4,7 @@ namespace App\Modules\Courses\Resources\API;
 
 use App\Modules\BaseApp\Enums\BaseEnum;
 use App\Modules\Courses\Models\WnatedToLearnCourse;
+use App\Modules\Courses\Resources\Admin\AdminAnswersResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -28,6 +29,7 @@ class AdminQuestionsResource extends JsonResource
             'explanation_en'=> $this->translate('en')->explanation,
             'explanation_ar'=> $this->translate('ar')->explanation,
             'explanation_image'=> asset($this->explanation_image),
+            'answers'       => AdminAnswersResource::collection($this->answers),
             'course_id'     => $this->course_id,
             'category_id'   => $this->category_id,
             'category'      => $this->category->title_en,

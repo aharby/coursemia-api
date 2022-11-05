@@ -4,6 +4,7 @@ namespace App\Modules\Courses\Controllers\Admin;
 
 use App\Enums\StatusCodesEnum;
 use App\Http\Controllers\Controller;
+use App\Modules\Courses\Models\Answer;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
@@ -65,6 +66,15 @@ class QuestionsAdminController extends Controller
         $question->is_active = $request->is_active;
 
         if ($question->save()) {
+            foreach ($request->answers as $questionAnswer){
+                $answer = Answer::find($questionAnswer['id']);
+                $answer->{'answer:en'} = $questionAnswer['answer_en'];
+                $answer->{'answer:ar'} = $questionAnswer['answer_ar'];
+                $answer->is_correct = $questionAnswer['is_correct'];
+                $answer->question_id = $question->id;
+                $answer->chosen_percentage = 0;
+                $answer->save();
+            }
             return customResponse('', trans('api.Updated Successfully'), 200, 1);
         }
         return customResponse('', trans('api.oops something went wrong'), 400, 2);
@@ -96,6 +106,15 @@ class QuestionsAdminController extends Controller
             $question->explanation_voice = $request->questionData['voice_url'];
         $question->is_free_content = $request->questionData['is_free_content'];
         $question->save();
+        foreach ($request->questionData['answers'] as $questionAnswer){
+            $answer = new Answer;
+            $answer->{'answer:en'} = $questionAnswer['answer_en'];
+            $answer->{'answer:ar'} = $questionAnswer['answer_ar'];
+            $answer->is_correct = $questionAnswer['is_correct'];
+            $answer->question_id = $question->id;
+            $answer->chosen_percentage = 0;
+            $answer->save();
+        }
         return customResponse(new AdminQuestionsResource($question), "Question added successfully", 200, StatusCodesEnum::DONE);
     }
 

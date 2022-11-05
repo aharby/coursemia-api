@@ -15,10 +15,14 @@ class EventsResource extends JsonResource
      */
     public function toArray($request)
     {
+        $image = null;
+        if (isset($this->image)){
+            $image = image($this->image, 'large');
+        }
         return [
             'id' => $this->id,
             'title' => $this->translate(App::getLocale())->title,
-            'image' => asset($this->image),
+            'image' => $image,
             'extra_info' => $this->event_url,
         ];
     }
