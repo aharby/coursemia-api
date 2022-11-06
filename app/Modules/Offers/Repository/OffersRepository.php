@@ -44,7 +44,9 @@ class OffersRepository implements OffersRepositoryInterface
 
         $model = $this->model->find($id);
         $courses = request()->selected_courses;
-        $model->offerCourses()->sync($courses);
+        if (sizeof($courses) > 0){
+            $model->offerCourses()->sync($courses);
+        }
         return $model->update($attributes);
     }
 
