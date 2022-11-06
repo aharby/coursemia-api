@@ -22,6 +22,9 @@ class LecturesAdminController extends Controller
         if (isset($request->course)){
             $lectures = $lectures->where('course_id', $request->course);
         }
+        if (isset($request->category)){
+            $lectures = $lectures->where('category_id', $request->category);
+        }
 
         $lectures = $lectures->sorter();
         $lectures = $lectures->paginate(request()->perPage, ['*'], 'page', request()->page);

@@ -25,6 +25,9 @@ class NotesAdminController extends Controller
         if (isset($request->course)){
             $notes = $notes->where('course_id', $request->course);
         }
+        if (isset($request->category)){
+            $notes = $notes->where('category_id', $request->category);
+        }
 
         $notes = $notes->filter()->sorter();
         $notes = $notes->paginate(request()->perPage, ['*'], 'page', request()->page);
