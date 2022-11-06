@@ -49,6 +49,9 @@ class CoursesAdminController extends Controller
 
     public function update(Request $request, $id){
         $course = Course::find($id);
+        if ($request->price_after_discount >= $request->price){
+            return customResponse(null, "Price after discount can't be greater than or equal price", 422, StatusCodesEnum::FAILED);
+        }
         if ($request->has('is_active')){
             $course->is_active = $request->is_active;
         }
@@ -67,14 +70,20 @@ class CoursesAdminController extends Controller
         if ($request->has('price')){
             $course->price = $request->price;
         }
+        if ($request->has('price_after_discount')){
+            $course->price_after_discount = $request->price_after_discount;
+        }
         if ($request->has('expire_date')){
             $course->expire_date = $request->expire_date;
+        }
+        if ($request->has('expire_duration')){
+            $course->expire_duration = $request->expire_duration;
         }
         if ($request->has('speciality_id')){
             $course->speciality_id = $request->speciality_id;
         }
-        if ($request->has('cover_image')){
-            $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
+        if ($request->has('image')){
+            $course->cover_image = moveSingleGarbageMediaToPublic($request->get('image'), 'courses');
         }
         $course->save();
         return customResponse(null, "Updated successfully", 200, StatusCodesEnum::DONE);
