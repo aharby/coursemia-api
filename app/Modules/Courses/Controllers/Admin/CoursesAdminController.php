@@ -98,6 +98,9 @@ class CoursesAdminController extends Controller
 
     public function store(Request $request){
         $course = new Course();
+        if (isset($request->price_after_discount) && $request->price_after_discount >= $request->price){
+            return customResponse(null, "Price after discount can't be greater than or equal price", 422, StatusCodesEnum::FAILED);
+        }
         if ($request->has('is_active')){
             $course->is_active = $request->is_active;
         }
@@ -213,7 +216,7 @@ class CoursesAdminController extends Controller
         foreach ($images as $image){
             $courseImage = new CourseImage;
             $courseImage->course_id = $course_id;
-            $courseImage->image = moveSingleGarbageMediaToPublic($image['image'], 'courses');
+            $courseImage->image = moveSingleGarbageMediaToPublic($image, 'courses');
             $courseImage->save();
         }
         return customResponse((object)[], "Images added successfully", 200, StatusCodesEnum::DONE);
