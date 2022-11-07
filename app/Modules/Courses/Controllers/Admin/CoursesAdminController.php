@@ -11,7 +11,9 @@ use App\Modules\Courses\Models\CourseFlashcard;
 use App\Modules\Courses\Models\CourseImage;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\CourseReview;
 use App\Modules\Courses\Models\Question;
+use App\Modules\Courses\Resources\Admin\AdminUserCourseReviewResource;
 use App\Modules\Courses\Resources\Admin\CategoriesResource;
 use App\Modules\Courses\Resources\Admin\CoursesCollection;
 use App\Modules\Courses\Resources\Admin\CoursesResource;
@@ -262,6 +264,20 @@ class CoursesAdminController extends Controller
     public function getCourseCategories(){
         $categories = Category::where('course_id', \request()->course_id)->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function getCourseReviews($id){
+        $reviews = CourseReview::where('course_id', $id)
+            ->paginate(request()->perPage, ['*'], 'page', request()->page);
+        return response()->json([
+            'total' => $reviews->total(),
+            'reviews' => AdminUserCourseReviewResource::collection($reviews->items())
+        ]);
+    }
+
+    public function deleteCourseReview($id){
+        CourseReview::where('id', $id)->delete();
+        return customResponse((object)[], "Review deleted successfully", 200, StatusCodesEnum::DONE);
     }
 
     public function delete($id){

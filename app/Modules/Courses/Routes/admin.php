@@ -14,6 +14,11 @@ Route::group(['prefix' => 'courses', 'as' => 'courses.'], function () {
     Route::delete('/{id}', [CoursesAdminController::class , 'destroy']);
 });
 
+Route::group(['prefix' => 'course-reviews', 'as' => 'course-reviews.'], function () {
+    Route::get('/{id}', [CoursesAdminController::class, 'getCourseReviews']);
+    Route::delete('/{id}', [CoursesAdminController::class , 'deleteCourseReview']);
+});
+
 Route::group(['prefix' => 'all-courses', 'as' => 'all-courses.'], function () {
     Route::get('/', [CoursesAdminController::class, 'allCourses']);
 });
