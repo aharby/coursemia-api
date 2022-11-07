@@ -90,9 +90,7 @@ class QuestionsAdminController extends Controller
         $question->course_id = $request->questionData['course_id'];
         $question->category_id = $request->questionData['category_id'];
         $question->{'title:en'} = $request->questionData['title_en'];
-        if ($request->questionData['title_ar']){
-            $question->{'title:ar'} = $request->questionData['title_ar'];
-        }
+        $question->{'title:ar'} = $request->questionData['title_ar'];
         if (isset($request->questionData['explanation_en']) && $request->questionData['explanation_en'] != 'undefined')
             $question->{'explanation:en'} = $request->questionData['explanation_en'];
         if ($request->questionData['explanation_ar']){

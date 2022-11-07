@@ -244,7 +244,11 @@ class CoursesAdminController extends Controller
                 $questionAnswer = new Answer;
                 $questionAnswer->question_id = $courseQuestion->id;
                 $questionAnswer->{'answer:en'} = $answer['answer_en'];
-                $questionAnswer->{'answer:ar'} = $answer['answer_ar'];
+                if (isset($answer['answer_ar'])){
+                    $questionAnswer->{'answer:ar'} = $answer['answer_ar'];
+                }else{
+                    $questionAnswer->{'answer:ar'} = null;
+                }
                 $questionAnswer->is_correct = $answer['is_correct'];
                 $questionAnswer->chosen_percentage = 0;
                 $questionAnswer->save();
