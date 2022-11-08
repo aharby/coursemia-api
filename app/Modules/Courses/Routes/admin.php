@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use \App\Modules\Courses\Controllers\Admin\NotesAdminController;
+use \App\Modules\Courses\Controllers\Admin\CourseFlashCardAdminController;
 use App\Modules\Courses\Controllers\Admin\CoursesAdminController;
 use \App\Modules\Courses\Controllers\Admin\LecturesAdminController;
 
@@ -25,10 +25,10 @@ Route::group(['prefix' => 'flashcards', 'as' => 'flashcards.'], function (){
 });
 
 Route::group(['prefix' => 'notes', 'as' => 'notes.'], function (){
-    Route::get('/', [NotesAdminController::class, 'index']);
-    Route::put('/{id}', [NotesAdminController::class, 'update']);
-    Route::get('/{id}', [NotesAdminController::class, 'show']);
-    Route::delete('/{id}', [NotesAdminController::class, 'destroy']);
+    Route::get('/', [CourseFlashCardAdminController::class, 'index']);
+    Route::put('/{id}', [CourseFlashCardAdminController::class, 'update']);
+    Route::get('/{id}', [CourseFlashCardAdminController::class, 'show']);
+    Route::delete('/{id}', [CourseFlashCardAdminController::class, 'destroy']);
     Route::post('/', [CoursesAdminController::class, 'storeCourseNotes']);
     Route::post('/upload-pdf', [CoursesAdminController::class, 'uploadPdf']);
 });
@@ -46,7 +46,7 @@ Route::group(['prefix' => 'course-lectures', 'as' => 'course-lectures.'], functi
     Route::post('/', [LecturesAdminController::class, 'store']);
 });
 Route::group(['prefix' => 'course-notes', 'as' => 'course-notes.'], function (){
-    Route::post('/', [NotesAdminController::class, 'store']);
+    Route::post('/', [CourseFlashCardAdminController::class, 'store']);
 });
 
 Route::group(['prefix' => 'course-images', 'as' => 'course-images.'], function (){

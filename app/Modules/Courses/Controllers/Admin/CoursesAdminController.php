@@ -22,16 +22,19 @@ use Vimeo\Laravel\Facades\Vimeo;
 
 class CoursesAdminController extends Controller
 {
-    public function allCourses(){
+    public function allCourses()
+    {
         $courses = Course::get();
         return customResponse(CoursesResource::collection($courses), "Done", 200, StatusCodesEnum::DONE);
     }
-    public function index(Request $request){
+
+    public function index(Request $request)
+    {
         $courses = Course::query();
-        if (isset($request->speciality)){
+        if (isset($request->speciality)) {
             $courses = $courses->where('speciality_id', $request->speciality);
         }
-        if (isset($request->status)){
+        if (isset($request->status)) {
             $courses = $courses->where('is_active', $request->status);
         }
         $courses = $courses->sorter();
@@ -42,91 +45,96 @@ class CoursesAdminController extends Controller
         ]);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $course = Course::find($id);
         return customResponse(new CoursesResource($course), "Done", 200, StatusCodesEnum::DONE);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $course = Course::find($id);
-        if ($request->has('is_active')){
+        if ($request->has('is_active')) {
             $course->is_active = $request->is_active;
         }
-        if ($request->has('title_en')){
+        if ($request->has('title_en')) {
             $course->title_en = $request->title_en;
         }
-        if ($request->has('title_ar')){
+        if ($request->has('title_ar')) {
             $course->title_ar = $request->title_ar;
         }
-        if ($request->has('description_en')){
+        if ($request->has('description_en')) {
             $course->description_en = $request->description_en;
         }
-        if ($request->has('description_ar')){
+        if ($request->has('description_ar')) {
             $course->description_ar = $request->description_ar;
         }
-        if ($request->has('price')){
+        if ($request->has('price')) {
             $course->price = $request->price;
         }
-        if ($request->has('expire_date')){
+        if ($request->has('expire_date')) {
             $course->expire_date = $request->expire_date;
         }
-        if ($request->has('speciality_id')){
+        if ($request->has('speciality_id')) {
             $course->speciality_id = $request->speciality_id;
         }
-        if ($request->has('cover_image')){
+        if ($request->has('cover_image')) {
             $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
         }
         $course->save();
         return customResponse(null, "Updated successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         Course::where('id', $id)->delete();
         return customResponse(null, "Deleted successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $course = new Course();
-        if ($request->has('is_active')){
+        if ($request->has('is_active')) {
             $course->is_active = $request->is_active;
         }
-        if ($request->has('title_en')){
+        if ($request->has('title_en')) {
             $course->title_en = $request->title_en;
         }
-        if ($request->has('title_ar')){
+        if ($request->has('title_ar')) {
             $course->title_ar = $request->title_ar;
         }
-        if ($request->has('description_en')){
+        if ($request->has('description_en')) {
             $course->description_en = $request->description_en;
         }
-        if ($request->has('description_ar')){
+        if ($request->has('description_ar')) {
             $course->description_ar = $request->description_ar;
         }
-        if ($request->has('price')){
+        if ($request->has('price')) {
             $course->price = $request->price;
         }
-        if ($request->has('price_after_discount')){
+        if ($request->has('price_after_discount')) {
             $course->price_after_discount = $request->price_after_discount;
         }
-        if ($request->has('expire_date') && isset($request->expire_date)){
+        if ($request->has('expire_date') && isset($request->expire_date)) {
             $course->expire_date = $request->expire_date;
         }
-        if ($request->has('expire_duration') && isset($request->expire_duration)){
+        if ($request->has('expire_duration') && isset($request->expire_duration)) {
             $course->expire_duration = $request->expire_duration;
         }
-        if ($request->has('speciality_id')){
+        if ($request->has('speciality_id')) {
             $course->speciality_id = $request->speciality_id;
         }
-        if ($request->has('cover_image')){
+        if ($request->has('cover_image')) {
             $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
         }
         $course->save();
         return customResponse(new CoursesResource($course), "Course added successfully, you can continue adding course data or add them later", 200, StatusCodesEnum::DONE);
     }
 
-    public function storeCourseCategories(Request $request){
+    public function storeCourseCategories(Request $request)
+    {
         $categories = $request->categories;
-        foreach ($categories as $category){
+        foreach ($categories as $category) {
             $course_category = new Category;
             $course_category->title_en = $category['title_en'];
             $course_category->title_ar = $category['title_ar'];
@@ -137,27 +145,32 @@ class CoursesAdminController extends Controller
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function storeCourseFlashCards(Request $request){
+    public function storeCourseFlashCards(Request $request)
+    {
         $course_id = $request->course_id;
         $cards = $request->cards;
-        foreach ($cards as $card){
-            $flashCard = new CourseFlashcard;
-            $flashCard->course_id = $course_id;
-            $flashCard->front_en = $card['front_en'];
-            $flashCard->front_ar = $card['front_ar'];
-            $flashCard->back_en = $card['back_en'];
-            $flashCard->back_ar = $card['back_ar'];
-            $flashCard->category_id = $card['category_id'];
-            $flashCard->is_free_content = $card['is_free_content'];
-            $flashCard->save();
+        $flashCards = [];
+        foreach ($cards as $card) {
+            $flashCard = [
+                'course_id' => $course_id,
+                'front:en' => $card['front_en'],
+                'front:ar' => $card['front_ar'],
+                'back:en' => $card['back_en'],
+                'back:ar' => $card['back_ar'],
+                'category_id' => $card['category_id'],
+                'is_free_content' => $card['is_free_content']
+            ];
+            array_push($flashCards , $flashCard);
         }
+        CourseFlashcard::insert($flashCards);
         return customResponse((object)[], "Flashcards added successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function storeCourseNotes(Request $request){
+    public function storeCourseNotes(Request $request)
+    {
         $course_id = $request->course_id;
         $notes = $request->notes;
-        foreach ($notes as $note){
+        foreach ($notes as $note) {
             $courseNote = new CourseNote;
             $courseNote->{'title:en'} = $note['title_en'];
             $courseNote->{'title:ar'} = $note['title_ar'];
@@ -170,10 +183,11 @@ class CoursesAdminController extends Controller
         return customResponse((object)[], "Notes added successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function storeCourseLectures(Request $request){
+    public function storeCourseLectures(Request $request)
+    {
         $course_id = $request->course_id;
         $lectures = $request->lectures;
-        foreach ($lectures as $lecture){
+        foreach ($lectures as $lecture) {
             $courseLecture = new CourseLecture;
             $courseLecture->course_id = $course_id;
             $courseLecture->category_id = $lecture['category_id'];
@@ -189,17 +203,19 @@ class CoursesAdminController extends Controller
         return customResponse((object)[], "Notes added successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function uploadToVimeo(Request $request){
+    public function uploadToVimeo(Request $request)
+    {
         $uri = Vimeo::upload($request->file);
         return response()->json([
-            'url' => 'https://player.vimeo.com'.str_replace('videos', 'video', $uri)
+            'url' => 'https://player.vimeo.com' . str_replace('videos', 'video', $uri)
         ]);
     }
 
-    public function storeCourseImages(Request $request){
+    public function storeCourseImages(Request $request)
+    {
         $course_id = $request->course_id;
         $images = $request->images;
-        foreach ($images as $image){
+        foreach ($images as $image) {
             $courseImage = new CourseImage;
             $courseImage->course_id = $course_id;
             $courseImage->image = moveSingleGarbageMediaToPublic($image['image'], 'courses');
@@ -208,10 +224,11 @@ class CoursesAdminController extends Controller
         return customResponse((object)[], "Images added successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function storeQuestionsAndAnswers(Request $request){
+    public function storeQuestionsAndAnswers(Request $request)
+    {
         $course_id = $request->course_id;
         $questions = $request->questions;
-        foreach ($questions as $question){
+        foreach ($questions as $question) {
             $courseQuestion = new Question;
             $courseQuestion->course_id = $course_id;
             $courseQuestion->category_id = $question['category_id'];
@@ -223,7 +240,7 @@ class CoursesAdminController extends Controller
             $courseQuestion->is_free_content = $question['is_free_content'];
             $courseQuestion->save();
             $answers = $question['answers'];
-            foreach ($answers as $answer){
+            foreach ($answers as $answer) {
                 $questionAnswer = new Answer;
                 $questionAnswer->question_id = $courseQuestion->id;
                 $questionAnswer->{'answer:en'} = $answer['answer_en'];
@@ -236,23 +253,26 @@ class CoursesAdminController extends Controller
         return customResponse((object)[], "Questions & Answers submitted successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function uploadPdf(Request $request){
+    public function uploadPdf(Request $request)
+    {
         $pdf = $request->file;
         $fileExtension = $pdf->getClientOriginalExtension();
-        $fileName = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $pdf->getClientOriginalName()), '-')). '.'. $fileExtension;
+        $fileName = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $pdf->getClientOriginalName()), '-')) . '.' . $fileExtension;
         $location = 'public/uploads/documents';
         $path = $pdf->storeAs(
             $location, $fileName
         );
-        return response()->json(['path' => 'storage'.'/'.$path]);
+        return response()->json(['path' => 'storage' . '/' . $path]);
     }
 
-    public function getCourseCategories(){
+    public function getCourseCategories()
+    {
         $categories = Category::where('course_id', \request()->course_id)->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         Course::where('id', $id)->delete();
         return customResponse((object)[], "Course deleted successfully", 200, StatusCodesEnum::DONE);
     }

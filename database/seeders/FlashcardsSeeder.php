@@ -16,17 +16,21 @@ class FlashcardsSeeder extends Seeder
      */
     public function run()
     {
-        $courses = Course::get();
-        foreach ($courses as $course){
-            $category = Category::inRandomOrder()->first();
-            $flash = new CourseFlashcard();
-            $flash->course_id = $course->id;
-            $flash->category_id = $category->id;
-            $flash->front_en = "Front english";
-            $flash->front_ar = "الوجه الأمامي";
-            $flash->back_en = "Back english";
-            $flash->back_ar = "الوجه الخلفي";
-            $flash->save();
+        $data = [];
+        $courses = Course::all();
+        $categories = Category::pluck('id');
+        foreach ($courses as $course) {
+            $flash =
+                [
+                    'course_id' => $course->id,
+                    'category_id' => $categories->random(),
+                    'front:en' => "Front english",
+                    'front:ar' => "الوجه الأمامي",
+                    'back:en' => "Back english",
+                    'back:ar' => "الوجه الخلفي",
+                ];
+            array_push($data, $flash);
         }
+        CourseFlashcard::insert($data);
     }
 }

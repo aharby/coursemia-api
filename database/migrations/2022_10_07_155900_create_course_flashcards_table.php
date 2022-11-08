@@ -16,13 +16,12 @@ class CreateCourseFlashcardsTable extends Migration
         Schema::create('course_flashcards', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('course_id')->index();
-            $table->string('front_en');
-            $table->string('front_ar');
-            $table->string('back_en');
-            $table->string('back_ar');
-            $table->boolean('answer');
+            $table->unsignedBigInteger('category_id')->nullable()->index();
+            $table->boolean('is_free_content')->default(1)->index();
             $table->timestamps();
 
+            $table->foreign('category_id')->references('id')->on('categories')
+                ->onDelete('cascade');
             $table->foreign('course_id')->references('id')->on('courses')
                 ->onDelete('cascade');
         });
