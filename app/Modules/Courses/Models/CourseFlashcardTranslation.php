@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseFlashcardTranslation extends Model
 {
+    protected $table = 'course_flashcards_translations';
     public $timestamps = false;
     protected $fillable = [
         'front',

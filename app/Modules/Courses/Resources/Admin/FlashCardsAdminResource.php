@@ -29,6 +29,7 @@ class FlashCardsAdminResource extends JsonResource
             "category_id" => $this->category_id,
             "category" => $this->category->title,
             "is_active" => (bool)$this->is_active,
+            "is_free_content" => $this->is_free_content,
             "status" => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,
         ];
     }

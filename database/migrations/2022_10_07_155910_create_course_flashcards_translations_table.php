@@ -20,7 +20,7 @@ class CreateCourseFlashcardsTranslationsTable extends Migration
 
             $table->string('locale')->index();
 
-            $table->unique(['course_flashcards_id', 'locale']);
+//            $table->unique(['course_flashcards_id', 'locale']);
 
             $table->bigInteger('course_flashcards_id')->unsigned();
             $table->foreign('course_flashcards_id')->references('id')->on('course_flashcards')->onDelete('cascade');

@@ -4,6 +4,8 @@ namespace App\Modules\BaseApp\Providers;
 
 use App\Modules\Countries\Repository\CountryRepository;
 use App\Modules\Countries\Repository\CountryRepositoryInterface;
+use App\Modules\Courses\Repository\FlashCardRepository;
+use App\Modules\Courses\Repository\FlashCardRepositoryInterface;
 use App\Modules\Courses\Repository\LectureRepository;
 use App\Modules\Courses\Repository\LectureRepositoryInterface;
 use App\Modules\Courses\Repository\NoteRepository;
@@ -51,6 +53,10 @@ class RepositoriesServiceProviders extends ServiceProvider
         $this->app->bind(
             UserRepositoryInterface::class,
             UserRepository::class
+        );
+        $this->app->bind(
+            FlashCardRepositoryInterface::class,
+            FlashCardRepository::class
         );
         $this->app->bind(
             ActivateUserUseCaseInterface::class,

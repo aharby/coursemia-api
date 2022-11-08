@@ -30,13 +30,12 @@ Route::group(['prefix' => 'flashcards', 'as' => 'flashcards.'], function (){
     Route::post('/', [CoursesAdminController::class, 'storeCourseFlashCards']);
 });
 
-Route::group(['prefix' => 'notes', 'as' => 'notes.'], function (){
+Route::group(['prefix' => 'flash-cards', 'as' => 'flash-cards.'], function (){
     Route::get('/', [CourseFlashCardAdminController::class, 'index']);
+    Route::post('/', [CourseFlashCardAdminController::class, 'store']);
     Route::put('/{id}', [CourseFlashCardAdminController::class, 'update']);
     Route::get('/{id}', [CourseFlashCardAdminController::class, 'show']);
     Route::delete('/{id}', [CourseFlashCardAdminController::class, 'destroy']);
-    Route::post('/', [CoursesAdminController::class, 'storeCourseNotes']);
-    Route::post('/upload-pdf', [CoursesAdminController::class, 'uploadPdf']);
 });
 
 Route::group(['prefix' => 'questions', 'as' => 'questions.'], function (){

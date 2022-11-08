@@ -45,26 +45,15 @@ class CourseFlashcard extends Model
             }
         )
             ->when(
-                request()->has('offer_type'),
+                request()->has('course'),
                 function ($quer) {
-                    $quer->where(
-                        function ($q) {
-                            $q->where('offer_type', request()->get('offer_type'));
-                        }
-                    );
+                    $quer->where('course_id', '=', request()->course);
                 }
             )
             ->when(
-                request()->get('searchKey') != '',
-                function ($query) {
-                    $query->where(
-                        function ($q) {
-                            $q->orWhereTranslationLike('title', '%' . request()->get('searchKey') . '%');
-                            $q->orWhere('expiration_date', 'like', '%' . request()->get('searchKey') . '%');
-                            $q->orWhere('offer_value', 'like', '%' . request()->get('searchKey') . '%');
-                            $q->orWhere('offer_code', 'like', '%' . request()->get('searchKey') . '%');
-                        }
-                    );
+                request()->has('category'),
+                function ($quer) {
+                    $quer->where('category_id', '=', request()->category);
                 }
             );
     }
@@ -76,21 +65,13 @@ class CourseFlashcard extends Model
             function ($quer) {
                 $sortByDir = request()->get('sortDesc') == 'true' ? "desc" : "asc";
                 switch (request()->get('sortBy')) {
-                    case 'title_en':
-                    case 'title_ar':
-                        $quer->orderByTranslation('title', $sortByDir);
+                    case 'front_en':
+                    case 'front_ar':
+                        $quer->orderByTranslation('front', $sortByDir);
                         break;
-                    case 'expiration_date':
-                        $quer->orderBy('expiration_date', $sortByDir);
-                        break;
-                    case 'offer_value':
-                        $quer->orderBy('offer_value', $sortByDir);
-                        break;
-                    case 'offer_type':
-                        $quer->orderBy('offer_type', $sortByDir);
-                        break;
-                    case 'offer_code':
-                        $quer->orderBy('offer_code', $sortByDir);
+                    case 'back_en':
+                    case 'back_ar':
+                        $quer->orderByTranslation('back', $sortByDir);
                         break;
                     default:
                         $quer->orderBy('id', $sortByDir);
