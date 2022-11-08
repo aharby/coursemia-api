@@ -25,8 +25,11 @@ class NotesAdminController extends Controller
         if (isset($request->course)){
             $notes = $notes->where('course_id', $request->course);
         }
+        if (isset($request->category)){
+            $notes = $notes->where('category_id', $request->category);
+        }
 
-        $notes = $notes->sorter();
+        $notes = $notes->filter()->sorter();
         $notes = $notes->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $notes->total(),
@@ -82,9 +85,7 @@ class NotesAdminController extends Controller
         $note->category_id = $request->noteData['category_id'];
         $note->url = $request->noteData['path'];
         $note->{'title:en'} = $request->noteData['title_en'];
-        if ($request->noteData['title_ar']){
-            $note->{'title:ar'} = $request->noteData['title_ar'];
-        }
+        $note->{'title:ar'} = $request->noteData['title_ar'];
         $note->is_free_content = $request->noteData['is_free_content'];
         $note->save();
         return customResponse(new AdminCourseNoteResource($note), "Note added successfully", 200, StatusCodesEnum::DONE);

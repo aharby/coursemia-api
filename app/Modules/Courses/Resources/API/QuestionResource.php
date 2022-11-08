@@ -14,15 +14,32 @@ class QuestionResource extends JsonResource
      */
     public function toArray($request)
     {
+        $image = null;
+        $explanation = null;
+        $explanation_image = null;
+        $explanation_voice = null;
+        if (isset($this->image)){
+            $image = asset($this->image);
+        }
+        if (isset($this->translated_explanation)){
+            $explanation = $this->translated_explanation;
+        }
+        if (isset($this->explanation_voice)){
+            $explanation_voice = asset($this->explanation_voice);
+        }
+        if (isset($this->explanation_image)){
+            $explanation_image = asset($this->explanation_image);
+        }
         return [
             'id'            => $this->id,
             'question'      => $this->translated_title,
-            'image'         => asset($this->image),
+            'image'         => $image,
+            'is_free_content' => (boolean)$this->is_free_content,
             'answers'       => QuestionAnswersResource::collection($this->answers),
             'explanation'   => [
-                'text'  => $this->translated_explanation,
-                'image' => asset($this->explanation_image),
-                'voice' => asset($this->explanation_voice)
+                'text'  => $explanation,
+                'image' => $explanation_image,
+                'voice' => $explanation_voice
             ]
         ];
     }

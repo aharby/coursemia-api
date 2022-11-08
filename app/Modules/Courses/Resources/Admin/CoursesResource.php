@@ -50,6 +50,7 @@ class CoursesResource extends JsonResource
             'is_active'     => (bool)$this->is_active,
             'status'        => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,
             'expire_date'   => $expire,
+            'expire_duration'   => $this->expire_duration,
             'bought_on'     => $bought_on,
             'lectures_count'=> $this->lectures()->count(),
             'notes_count'   => $this->notes()->count(),

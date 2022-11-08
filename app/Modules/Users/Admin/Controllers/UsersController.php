@@ -65,11 +65,13 @@ class UsersController extends AjaxController
 
     public function assignCourseToUser(Request $request){
         $user_id = $request->user_id;
-        $course_id = $request->course_id;
-        $user_course = new CourseUser;
-        $user_course->user_id = $user_id;
-        $user_course->course_id = $course_id;
-        $user_course->save();
+        $course_ids = $request->course_ids;
+        foreach ($course_ids as $id){
+            $user_course = new CourseUser;
+            $user_course->user_id = $user_id;
+            $user_course->course_id = $id;
+            $user_course->save();
+        }
         return response()->json("done");
     }
 

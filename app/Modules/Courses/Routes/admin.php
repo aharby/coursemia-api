@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Modules\Courses\Controllers\Admin\CourseFlashCardAdminController;
 use App\Modules\Courses\Controllers\Admin\CoursesAdminController;
 use \App\Modules\Courses\Controllers\Admin\LecturesAdminController;
+use \App\Modules\Courses\Controllers\Admin\QuestionsAdminController;
 
 Route::group(['prefix' => 'courses', 'as' => 'courses.'], function () {
     Route::get('/', [CoursesAdminController::class, 'index']);
@@ -11,6 +12,11 @@ Route::group(['prefix' => 'courses', 'as' => 'courses.'], function () {
     Route::get('/{id}', [CoursesAdminController::class , 'show']);
     Route::put('/{id}', [CoursesAdminController::class , 'update']);
     Route::delete('/{id}', [CoursesAdminController::class , 'destroy']);
+});
+
+Route::group(['prefix' => 'course-reviews', 'as' => 'course-reviews.'], function () {
+    Route::get('/{id}', [CoursesAdminController::class, 'getCourseReviews']);
+    Route::delete('/{id}', [CoursesAdminController::class , 'deleteCourseReview']);
 });
 
 Route::group(['prefix' => 'all-courses', 'as' => 'all-courses.'], function () {
@@ -31,6 +37,15 @@ Route::group(['prefix' => 'notes', 'as' => 'notes.'], function (){
     Route::delete('/{id}', [CourseFlashCardAdminController::class, 'destroy']);
     Route::post('/', [CoursesAdminController::class, 'storeCourseNotes']);
     Route::post('/upload-pdf', [CoursesAdminController::class, 'uploadPdf']);
+});
+
+Route::group(['prefix' => 'questions', 'as' => 'questions.'], function (){
+    Route::get('/', [QuestionsAdminController::class, 'index']);
+    Route::put('/{id}', [QuestionsAdminController::class, 'update']);
+    Route::get('/{id}', [QuestionsAdminController::class, 'show']);
+    Route::delete('/{id}', [QuestionsAdminController::class, 'destroy']);
+    Route::post('/', [QuestionsAdminController::class, 'store']);
+    Route::post('/upload-pdf', [QuestionsAdminController::class, 'uploadPdf']);
 });
 
 Route::group(['prefix' => 'lectures', 'as' => 'lectures.'], function (){

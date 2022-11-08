@@ -42,9 +42,9 @@ class CourseNote extends Model
                 $q->where('is_active', request()->boolean('is_active'));
             });
         })
-            ->when(request()->get('searchKey') != '', function ($query) {
+            ->when(request()->get('q') != '', function ($query) {
                 $query->where(function ($q) {
-                    $q->orWhereTranslationLike('title', '%' . request()->get('searchKey') . '%');
+                    $q->orWhereTranslationLike('title', '%' . request()->get('q') . '%');
                 });
             });
     }

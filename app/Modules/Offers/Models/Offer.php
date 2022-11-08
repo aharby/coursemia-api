@@ -110,4 +110,8 @@ class Offer extends Model
     {
         return $this->hasManyThrough(Course::class, OfferCourse::class, 'offer_id', 'id', 'id', 'course_id');
     }
+
+    public function offerCourses(){
+        return $this->belongsToMany(Course::class, 'offer_courses');
+    }
 }

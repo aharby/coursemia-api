@@ -11,7 +11,9 @@ use App\Modules\Courses\Models\CourseFlashcard;
 use App\Modules\Courses\Models\CourseImage;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\CourseReview;
 use App\Modules\Courses\Models\Question;
+use App\Modules\Courses\Resources\Admin\AdminUserCourseReviewResource;
 use App\Modules\Courses\Resources\Admin\CategoriesResource;
 use App\Modules\Courses\Resources\Admin\CoursesCollection;
 use App\Modules\Courses\Resources\Admin\CoursesResource;
@@ -54,7 +56,10 @@ class CoursesAdminController extends Controller
     public function update(Request $request, $id)
     {
         $course = Course::find($id);
-        if ($request->has('is_active')) {
+        if ($request->price_after_discount >= $request->price){
+            return customResponse(null, "Price after discount can't be greater than or equal price", 422, StatusCodesEnum::FAILED);
+        }
+        if ($request->has('is_active')){
             $course->is_active = $request->is_active;
         }
         if ($request->has('title_en')) {
@@ -72,14 +77,20 @@ class CoursesAdminController extends Controller
         if ($request->has('price')) {
             $course->price = $request->price;
         }
-        if ($request->has('expire_date')) {
+        if ($request->has('price_after_discount')){
+            $course->price_after_discount = $request->price_after_discount;
+        }
+        if ($request->has('expire_date')){
             $course->expire_date = $request->expire_date;
         }
-        if ($request->has('speciality_id')) {
+        if ($request->has('expire_duration')){
+            $course->expire_duration = $request->expire_duration;
+        }
+        if ($request->has('speciality_id')){
             $course->speciality_id = $request->speciality_id;
         }
-        if ($request->has('cover_image')) {
-            $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
+        if ($request->has('image')){
+            $course->cover_image = moveSingleGarbageMediaToPublic($request->get('image'), 'courses');
         }
         $course->save();
         return customResponse(null, "Updated successfully", 200, StatusCodesEnum::DONE);
@@ -94,7 +105,10 @@ class CoursesAdminController extends Controller
     public function store(Request $request)
     {
         $course = new Course();
-        if ($request->has('is_active')) {
+        if (isset($request->price_after_discount) && $request->price_after_discount >= $request->price){
+            return customResponse(null, "Price after discount can't be greater than or equal price", 422, StatusCodesEnum::FAILED);
+        }
+        if ($request->has('is_active')){
             $course->is_active = $request->is_active;
         }
         if ($request->has('title_en')) {
@@ -218,7 +232,7 @@ class CoursesAdminController extends Controller
         foreach ($images as $image) {
             $courseImage = new CourseImage;
             $courseImage->course_id = $course_id;
-            $courseImage->image = moveSingleGarbageMediaToPublic($image['image'], 'courses');
+            $courseImage->image = moveSingleGarbageMediaToPublic($image, 'courses');
             $courseImage->save();
         }
         return customResponse((object)[], "Images added successfully", 200, StatusCodesEnum::DONE);
@@ -234,7 +248,10 @@ class CoursesAdminController extends Controller
             $courseQuestion->category_id = $question['category_id'];
             $courseQuestion->{'title:en'} = $question['title_en'];
             $courseQuestion->{'title:ar'} = $question['title_ar'];
-            $courseQuestion->image = moveSingleGarbageMediaToPublic($question['image'], 'courses');
+            $courseQuestion->{'explanation:en'} = $question['explanation']['explanation_en'];
+            $courseQuestion->{'explanation:ar'} = $question['explanation']['explanation_ar'];
+            if (isset($question['image']))
+                $courseQuestion->image = moveSingleGarbageMediaToPublic($question['image'], 'courses');
             $courseQuestion->explanation_image = moveSingleGarbageMediaToPublic($question['explanation']['image_path'], 'courses');
             $courseQuestion->explanation_voice = moveSingleGarbageMediaToPublic($question['explanation']['voice_path'], 'courses');
             $courseQuestion->is_free_content = $question['is_free_content'];
@@ -244,7 +261,11 @@ class CoursesAdminController extends Controller
                 $questionAnswer = new Answer;
                 $questionAnswer->question_id = $courseQuestion->id;
                 $questionAnswer->{'answer:en'} = $answer['answer_en'];
-                $questionAnswer->{'answer:ar'} = $answer['answer_ar'];
+                if (isset($answer['answer_ar'])){
+                    $questionAnswer->{'answer:ar'} = $answer['answer_ar'];
+                }else{
+                    $questionAnswer->{'answer:ar'} = null;
+                }
                 $questionAnswer->is_correct = $answer['is_correct'];
                 $questionAnswer->chosen_percentage = 0;
                 $questionAnswer->save();
@@ -271,8 +292,21 @@ class CoursesAdminController extends Controller
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
     }
 
-    public function delete($id)
-    {
+    public function getCourseReviews($id){
+        $reviews = CourseReview::where('course_id', $id)
+            ->paginate(request()->perPage, ['*'], 'page', request()->page);
+        return response()->json([
+            'total' => $reviews->total(),
+            'reviews' => AdminUserCourseReviewResource::collection($reviews->items())
+        ]);
+    }
+
+    public function deleteCourseReview($id){
+        CourseReview::where('id', $id)->delete();
+        return customResponse((object)[], "Review deleted successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function delete($id){
         Course::where('id', $id)->delete();
         return customResponse((object)[], "Course deleted successfully", 200, StatusCodesEnum::DONE);
     }

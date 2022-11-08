@@ -3,6 +3,7 @@
 namespace App\Modules\Offers\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Courses\Models\OfferCourse;
 use App\Modules\Offers\Repository\OffersRepositoryInterface;
 use App\Modules\Offers\Resources\Admin\ListAdminOffersIndex;
 use Illuminate\Http\Request;
@@ -62,7 +63,10 @@ class OffersAdminApiControllers extends Controller
         if ($request->has('image')) {
             $data['image'] = moveSingleGarbageMedia($request->get('image'), 'specialities');
         }
-        if ($this->offersRepository->create($data)) {
+        $offer = $this->offersRepository->create($data);
+        if ($offer) {
+            $courses = $request->selected_courses;
+            $offer->offerCourses()->sync($courses);
             return customResponse('', trans('api.Created Successfully'), 200, 1);
         }
         return customResponse('', trans('api.oops something went wrong'), 400, 2);
