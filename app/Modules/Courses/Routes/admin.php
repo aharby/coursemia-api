@@ -61,7 +61,7 @@ Route::group(['prefix' => 'course-lectures', 'as' => 'course-lectures.'], functi
     Route::post('/', [LecturesAdminController::class, 'store']);
 });
 Route::group(['prefix' => 'course-notes', 'as' => 'course-notes.'], function (){
-    Route::post('/', [CourseFlashCardAdminController::class, 'store']);
+    Route::post('/', [CoursesAdminController::class, 'storeCourseNotes']);
 });
 
 Route::group(['prefix' => 'notes', 'as' => 'notes.'], function (){

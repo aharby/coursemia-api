@@ -165,18 +165,16 @@ class CoursesAdminController extends Controller
         $cards = $request->cards;
         $flashCards = [];
         foreach ($cards as $card) {
-            $flashCard = [
-                'course_id' => $course_id,
-                'front:en' => $card['front_en'],
-                'front:ar' => $card['front_ar'],
-                'back:en' => $card['back_en'],
-                'back:ar' => $card['back_ar'],
-                'category_id' => $card['category_id'],
-                'is_free_content' => $card['is_free_content']
-            ];
-            array_push($flashCards , $flashCard);
+            $flash = new CourseFlashcard;
+            $flash->course_id = $course_id;
+            $flash->category_id = $card['category_id'];
+            $flash->is_free_content = $card['is_free_content'];
+            $flash->{'back:en'} = $card['back_en'];
+            $flash->{'back:ar'} = $card['back_ar'];
+            $flash->{'front:en'} = $card['front_en'];
+            $flash->{'front:ar'} = $card['front_ar'];
+            $flash->save();
         }
-        CourseFlashcard::insert($flashCards);
         return customResponse((object)[], "Flashcards added successfully", 200, StatusCodesEnum::DONE);
     }
 
