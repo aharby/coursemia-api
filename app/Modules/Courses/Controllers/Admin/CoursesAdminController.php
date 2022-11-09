@@ -291,8 +291,22 @@ class CoursesAdminController extends Controller
     }
 
     public function getCourseReviews($id){
-        $reviews = CourseReview::where('course_id', $id)
-            ->paginate(request()->perPage, ['*'], 'page', request()->page);
+        $sortBy = \request()->sortBy;
+        $sortDesc = \request()->sortDesc;
+        if ($sortDesc == 'true'){
+            $sortDir = 'DESC';
+        }else{
+            $sortDir = 'ASC';
+        }
+        $reviews = CourseReview::query();
+        $reviews = $reviews->where('course_id', $id);
+        if (isset($sortBy) && $sortBy == 'rate'){
+            $reviews = $reviews->orderBy('rate', $sortDir);
+        }
+        if (isset($sortBy) && $sortBy == 'date'){
+            $reviews = $reviews->orderBy('created_at', $sortDir);
+        }
+        $reviews = $reviews->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $reviews->total(),
             'reviews' => AdminUserCourseReviewResource::collection($reviews->items())

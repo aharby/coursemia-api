@@ -21,6 +21,7 @@ class AdminUserCourseReviewResource extends JsonResource
             'id'        => $this->id,
             'rate'      => $this->rate,
             'owner_name'=> $this->user->full_name,
+            'owner_image'=> asset($this->user->photo),
             'comment'   => $this->comment,
             'created_at'=> Carbon::parse($this->created_at)->format('Y-m-d h:i:s')
         ];
