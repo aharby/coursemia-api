@@ -24,6 +24,8 @@ Route::group([
     Route::get('get-course-reviews', 'CourseReviewsAPIController@reviews');
     Route::get('get-course-lectures', 'CoursesAPIController@getCourseLectures');
     Route::get('get-course-notes', 'CoursesAPIController@getCourseNotes');
+    Route::post('submit-host-course-request', 'CoursesAPIController@submitHostCourseRequest');
+
     // Questions Apis
     Route::group([
         'prefix' => 'questions', 'as' => 'questions.'

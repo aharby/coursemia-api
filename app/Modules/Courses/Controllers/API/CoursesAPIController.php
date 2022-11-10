@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Repository\HostCourseRequestRepositoryInterface;
+use App\Modules\Courses\Requests\Api\SubmitHostCourseRequestRequest;
 use App\Modules\Courses\Resources\API\CourseDetailsResource;
 use App\Modules\Courses\Resources\API\CourseLectureResource;
 use App\Modules\Courses\Resources\API\CourseNoteResource;
@@ -17,69 +19,87 @@ use Illuminate\Support\Facades\Validator;
 
 class CoursesAPIController extends Controller
 {
-    public function courses(Request $request){
+    public function __construct(public HostCourseRequestRepositoryInterface $hostCourseRequestRepository)
+    {
+    }
+
+    public function courses(Request $request)
+    {
         $courses = Course::query()->active();
-        if (isset($request->query_text)){
-            $courses->where(function ($query) use ($request){
-                $query->where('title_ar', 'LIKE', '%'.$request->query_text.'%')
-                    ->orWhere('title_en', 'LIKE', '%'.$request->query_text.'%')
-                    ->orWhere('description_en', 'LIKE', '%'.$request->query_text.'%')
-                    ->orWhere('description_ar', 'LIKE', '%'.$request->query_text.'%');
+        if (isset($request->query_text)) {
+            $courses->where(function ($query) use ($request) {
+                $query->where('title_ar', 'LIKE', '%' . $request->query_text . '%')
+                    ->orWhere('title_en', 'LIKE', '%' . $request->query_text . '%')
+                    ->orWhere('description_en', 'LIKE', '%' . $request->query_text . '%')
+                    ->orWhere('description_ar', 'LIKE', '%' . $request->query_text . '%');
             });
         }
-        if (isset($request->sort_by)){
+        if (isset($request->sort_by)) {
             // Sort by most popular
             if ($request->sort_by == 1) {
                 $courses->orderBy('rate', 'DESC');
-            }elseif ($request->sort_by == 2) {
+            } elseif ($request->sort_by == 2) {
                 $courses->orderBy('created_at', 'DESC');
             }
         }
-        if (isset($request->speciality_ids)){
+        if (isset($request->speciality_ids)) {
             $courses->whereIn('speciality_id', $request->speciality_ids);
         }
         $courses = $courses->paginate($request->page_size, ['*'], 'page', $request->page_number);
         return customResponse(new CoursesCollection($courses), __("Fetched courses successfully"), 200, StatusCodesEnum::DONE);
     }
 
-    public function myCourses(){
+    public function myCourses()
+    {
         $user = auth('api')->user();
         $courses = $user->courses;
         return customResponse(CoursesResource::collection($courses), __("Fetched courses successfully"), 200, StatusCodesEnum::DONE);
     }
 
-    public function getCourseById(){
+    public function getCourseById()
+    {
         $course = Course::find(request()->course_id);
         return customResponse(new CourseDetailsResource($course), __("Get course details successfully"), 200, StatusCodesEnum::DONE);
     }
 
-    public function getCourseLectures(Request $request){
+    public function getCourseLectures(Request $request)
+    {
         $v = Validator::make($request->all(), [
             'course_id' => 'required|exists:courses,id',
         ]);
-        if ($v->fails()){
+        if ($v->fails()) {
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
         $lectures = CourseLecture::query();
-        if (isset($request->category_id)){
+        if (isset($request->category_id)) {
             $lectures = $lectures->where('category_id', '=', $request->category_id);
         }
         $lectures = $lectures->where('course_id', $request->course_id)->get();
         return customResponse(CourseLectureResource::collection($lectures), __("Done"), 200, StatusCodesEnum::DONE);
     }
 
-    public function getCourseNotes(Request $request){
+    public function getCourseNotes(Request $request)
+    {
         $v = Validator::make($request->all(), [
             'course_id' => 'required|exists:courses,id'
         ]);
-        if ($v->fails()){
+        if ($v->fails()) {
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
         $notes = CourseNote::where('course_id', $request->course_id);
-        if (isset($request->category_id)){
+        if (isset($request->category_id)) {
             $notes = $notes->where('category_id', $request->category_id);
         }
         $notes = $notes->get();
         return customResponse(CourseNoteResource::collection($notes), __("Done"), 200, StatusCodesEnum::DONE);
+    }
+
+    public function submitHostCourseRequest(SubmitHostCourseRequestRequest $request)
+    {
+        if ($this->hostCourseRequestRepository->create($request->all())) {
+            return customResponse('', trans('api.Created Successfully'), 200, 1);
+        }
+        return customResponse('', trans('api.oops something went wrong'), 400, 2);
+
     }
 }
