@@ -96,6 +96,9 @@ class OffersAdminApiControllers extends Controller
         if ($request->has('offer_code')) {
             $data['offer_code'] = $request->get('offer_code');
         }
+        if ($request->has('expiration_date')) {
+            $data['expiration_date'] = $request->get('expiration_date');
+        }
         if ($this->offersRepository->update($id, $data)) {
             return customResponse('', trans('api.Updated Successfully'), 200, 1);
         }

@@ -42,7 +42,7 @@ class CoursesAPIController extends Controller
                 $courses->orderBy('created_at', 'DESC');
             }
         }
-        if (isset($request->speciality_ids)) {
+        if (isset($request->speciality_ids) && count($request->speciality_ids) > 0){
             $courses->whereIn('speciality_id', $request->speciality_ids);
         }
         $courses = $courses->paginate($request->page_size, ['*'], 'page', $request->page_number);

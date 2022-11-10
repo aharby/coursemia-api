@@ -250,7 +250,7 @@ class CoursesAdminController extends Controller
             $courseQuestion->{'explanation:ar'} = $question['explanation']['explanation_ar'];
             if (isset($question['image']))
                 $courseQuestion->image = moveSingleGarbageMediaToPublic($question['image'], 'courses');
-            $courseQuestion->explanation_image = moveSingleGarbageMediaToPublic($question['explanation']['image_path'], 'courses');
+            $courseQuestion->explanation_image = moveSingleGarbageMediaToPublic($question['explanation']['image'], 'courses');
             $courseQuestion->explanation_voice = moveSingleGarbageMediaToPublic($question['explanation']['voice_path'], 'courses');
             $courseQuestion->is_free_content = $question['is_free_content'];
             $courseQuestion->save();
