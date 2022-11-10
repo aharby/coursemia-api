@@ -68,7 +68,7 @@ class LecturesAdminController extends Controller
         if ($request->has('url')) {
             $data['url'] = $request->get('url');
         }
-        if ($request->has('image')) {
+        if ($request->has('image') && is_int($request->image)) {
             $data['video_thumb'] = moveSingleGarbageMediaToPublic($request->get('image'), 'lectures');
         }
         if ($this->lectureRepository->update($id, $data)) {
