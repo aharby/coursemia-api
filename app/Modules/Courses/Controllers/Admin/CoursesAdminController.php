@@ -300,6 +300,7 @@ class CoursesAdminController extends Controller
             $sortDir = 'ASC';
         }
         $categories = Category::query();
+        $categories = $categories->filter();
         $categories = $categories->where('course_id', $id);
         if (isset($sortBy) && $sortBy == 'title_en'){
             $categories = $categories->orderBy('title_en', $sortDir);
@@ -338,6 +339,7 @@ class CoursesAdminController extends Controller
             $sortDir = 'ASC';
         }
         $reviews = CourseReview::query();
+        $reviews = $reviews->filter();
         $reviews = $reviews->where('course_id', $id);
         if (isset($sortBy) && $sortBy == 'rate'){
             $reviews = $reviews->orderBy('rate', $sortDir);

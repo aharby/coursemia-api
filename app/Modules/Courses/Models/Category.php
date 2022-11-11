@@ -17,4 +17,14 @@ class Category extends Model
     public function getHaveFreeContentAttribute(){
         $lectures = CourseLecture::where(['category_id' => $this->id, 'is_free_content' => 1])->first();
     }
+
+    public function ScopeFilter($query)
+    {
+        $query->when(request()->has('q'), function ($quer) {
+            $quer->where(function ($query) {
+                $query->where('title_en', 'LIKE', '%'.request()->q.'%')
+                    ->orWhere('title_ar', 'LIKE', '%'.request()->q.'%');
+            });
+        });
+    }
 }

@@ -13,4 +13,13 @@ class CourseReview extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function ScopeFilter($query)
+    {
+        $query->when(request()->has('q'), function ($quer) {
+            $quer->whereHas('user', function ($q) {
+                $q->where('full_name', 'LIKE', '%'.request()->q.'%');
+            });
+        });
+    }
 }
