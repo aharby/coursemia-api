@@ -13,6 +13,7 @@ use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
 use App\Modules\Courses\Models\CourseReview;
 use App\Modules\Courses\Models\Question;
+use App\Modules\Courses\Resources\Admin\AdminCategoriesResource;
 use App\Modules\Courses\Resources\Admin\AdminUserCourseReviewResource;
 use App\Modules\Courses\Resources\Admin\CategoriesResource;
 use App\Modules\Courses\Resources\Admin\CoursesCollection;
@@ -288,6 +289,44 @@ class CoursesAdminController extends Controller
     {
         $categories = Category::where('course_id', \request()->course_id)->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function getCourseCategoriesList($id){
+        $sortBy = \request()->sortBy;
+        $sortDesc = \request()->sortDesc;
+        if ($sortDesc == 'true'){
+            $sortDir = 'DESC';
+        }else{
+            $sortDir = 'ASC';
+        }
+        $categories = Category::query();
+        $categories = $categories->where('course_id', $id);
+        if (isset($sortBy) && $sortBy == 'title_en'){
+            $categories = $categories->orderBy('title_en', $sortDir);
+        }
+        $categories = $categories->paginate(request()->perPage, ['*'], 'page', request()->page);
+        return response()->json([
+            'total' => $categories->total(),
+            'categories' => AdminCategoriesResource::collection($categories->items())
+        ]);
+    }
+
+    public function showCategory($id){
+        $category = Category::where('id', $id)->first();
+        return customResponse(new AdminCategoriesResource($category), "Category deleted successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function updateCategory($id){
+        $category = Category::where('id', $id)->first();
+        $category->title_ar = \request()->title_ar;
+        $category->title_en = \request()->title_en;
+        $category->save();
+        return customResponse(new AdminCategoriesResource($category), "Category updated successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function deleteCourseCategory($id){
+        Category::where('id', $id)->delete();
+        return customResponse((object)[], "Category deleted successfully", 200, StatusCodesEnum::DONE);
     }
 
     public function getCourseReviews($id){

@@ -27,6 +27,13 @@ Route::group(['prefix' => 'all-courses', 'as' => 'all-courses.'], function () {
 });
 Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
     Route::get('/', [CoursesAdminController::class, 'getCourseCategories']);
+    Route::delete('/{id}', [CoursesAdminController::class, 'deleteCourseCategory']);
+    Route::get('/{id}', [CoursesAdminController::class, 'showCategory']);
+    Route::put('/{id}', [CoursesAdminController::class, 'updateCategory']);
+});
+
+Route::group(['prefix' => 'course-categories', 'as' => 'course-categories.'], function () {
+    Route::get('/{id}', [CoursesAdminController::class, 'getCourseCategoriesList']);
 });
 
 Route::group(['prefix' => 'flashcards', 'as' => 'flashcards.'], function () {
