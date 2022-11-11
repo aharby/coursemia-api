@@ -23,11 +23,8 @@ class QuestionsAdminController extends Controller
     )
     {
     }
-    public function index(Request $request){
+    public function index(){
         $questions = Question::query();
-        if (isset($request->course)){
-            $questions = $questions->where('course_id', $request->course);
-        }
 
         $questions = $questions->filter()->sorter();
         $questions = $questions->paginate(request()->perPage, ['*'], 'page', request()->page);

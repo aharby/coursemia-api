@@ -300,7 +300,7 @@ class CoursesAdminController extends Controller
             $sortDir = 'ASC';
         }
         $categories = Category::query();
-        $categories = $categories->filter();
+        $categories = $categories->filter()->sorter();
         $categories = $categories->where('course_id', $id);
         if (isset($sortBy) && $sortBy == 'title_en'){
             $categories = $categories->orderBy('title_en', $sortDir);
@@ -323,6 +323,15 @@ class CoursesAdminController extends Controller
         $category->title_en = \request()->title_en;
         $category->save();
         return customResponse(new AdminCategoriesResource($category), "Category updated successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function addCategory($id){
+        $category = new Category;
+        $category->course_id = $id;
+        $category->title_ar = \request()->title_ar;
+        $category->title_en = \request()->title_en;
+        $category->save();
+        return customResponse(new AdminCategoriesResource($category), "Category added successfully", 200, StatusCodesEnum::DONE);
     }
 
     public function deleteCourseCategory($id){

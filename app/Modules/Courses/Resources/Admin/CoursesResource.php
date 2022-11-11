@@ -54,6 +54,7 @@ class CoursesResource extends JsonResource
             'bought_on'     => $bought_on,
             'lectures_count'=> $this->lectures()->count(),
             'notes_count'   => $this->notes()->count(),
+            'flashcards_count'   => $this->flashCards()->count(),
             'questions_count'=> $this->questions()->count(),
             'flash_cards_count'=> $this->flashCards()->count()
         ];

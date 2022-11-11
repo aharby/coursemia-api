@@ -70,6 +70,16 @@ class Question extends Model
                 $query->where(function ($q) {
                     $q->orWhereTranslationLike('title', '%' . request()->get('q') . '%');
                 });
+            })
+            ->when(request()->get('course') != '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('course_id', request()->course);
+                });
+            })
+        ->when(request()->get('category') != '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('category_id', request()->category);
+                });
             });
     }
 

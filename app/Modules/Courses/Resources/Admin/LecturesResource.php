@@ -18,6 +18,11 @@ class LecturesResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (file_exists($this->video_thumb)){
+            $image = asset($this->video_thumb);
+        }else{
+            $image = 'https://via.placeholder.com/500';
+        }
         return [
             'id'            => $this->id,
             'title_en'      => $this->title_en,
@@ -25,7 +30,7 @@ class LecturesResource extends JsonResource
             'url'           => $this->url,
             'course_id'     => $this->course_id,
             'category_id'   => $this->category_id,
-            'image'         => asset($this->video_thumb),
+            'image'         => $image,
             'description_en'=> $this->description_en,
             'description_ar'=> $this->description_ar,
             'category'      => $this->category->title_en,

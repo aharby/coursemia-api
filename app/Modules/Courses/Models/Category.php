@@ -27,4 +27,20 @@ class Category extends Model
             });
         });
     }
+
+    public function ScopeSorter($query){
+        $query->when(request()->has('sortBy'), function ($quer) {
+            $sortByDir = request()->get('sortDesc') == 'true' ? "desc" : "asc";
+            switch (request()->get('sortBy')) {
+                case 'title_en':
+                    $quer->orderBy('title_en', $sortByDir);
+                    break;
+                case 'title_ar':
+                    $quer->orderBy('title_ar', $sortByDir);
+                    break;
+                default:
+                    $quer->orderBy('id', $sortByDir);
+            }
+        });
+    }
 }

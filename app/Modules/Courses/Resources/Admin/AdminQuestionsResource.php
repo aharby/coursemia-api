@@ -18,9 +18,14 @@ class AdminQuestionsResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (file_exists($this->image)){
+            $image = asset($this->image);
+        }else{
+            $image = 'https://via.placeholder.com/500';
+        }
         return [
             'id'            => $this->id,
-            'image'         => asset($this->image),
+            'image'         => $image,
             'url'           => asset($this->url),
             'title_en'      => $this->translate('en')->title,
             'title_ar'      => $this->translate('ar')->title,

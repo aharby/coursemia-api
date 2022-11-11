@@ -30,6 +30,7 @@ Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
     Route::delete('/{id}', [CoursesAdminController::class, 'deleteCourseCategory']);
     Route::get('/{id}', [CoursesAdminController::class, 'showCategory']);
     Route::put('/{id}', [CoursesAdminController::class, 'updateCategory']);
+    Route::post('/{id}', [CoursesAdminController::class, 'addCategory']);
 });
 
 Route::group(['prefix' => 'course-categories', 'as' => 'course-categories.'], function () {
