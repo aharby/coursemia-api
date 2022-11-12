@@ -141,28 +141,30 @@ function insertDefaultConfigs()
     ];
     ///////////////// Android Version
     $rows[] = [
-        'field_type' => 'text',
+        'field_type' => 'number',
         'field_class' => '',
-        'type' => 'Basic Information',
+        'type' => 'Android Version',
         'field' => 'android_version',
         'label:en' => 'Android Version',
         'label:ar' => 'رقم فيرجن الاندرويد',
-        'value:en' => '1.0.0.0',
-        'value:ar' => '1.0.0.0',
+        'value:en' => '1.1',
+        'value:ar' => '1.1',
         'created_by' => 2,
     ];
     ///////////////// IOS Version
     $rows[] = [
-        'field_type' => 'text',
+        'field_type' => 'number',
         'field_class' => '',
-        'type' => 'Basic Information',
+        'type' => 'iOS Version',
         'field' => 'ios_version',
-        'label:en' => 'IOS Version',
-        'label:ar' => 'رقم فيرجن الIOS',
-        'value:en' => '1.0.0.0',
-        'value:ar' => '1.0.0.0',
+        'label:en' => 'iOS Version',
+        'label:ar' => 'رقم فيرجن الآيفون',
+        'value:en' => '1.1',
+        'value:ar' => '1.1',
         'created_by' => 2,
     ];
+
+
     foreach ($rows as $row) {
         Config::create($row);
     }
