@@ -1,6 +1,8 @@
 <?php
 
 ////////////// Default Data
+use App\Modules\Config\Config;
+
 function insertDefaultTokens()
 {
     $rows = [
@@ -12,9 +14,7 @@ function insertDefaultTokens()
 
 function insertDefaultConfigs()
 {
-    \Cache::forget('configs');
-    @copy(public_path() . '/img/logo.png', storage_path() . '/app/public/uploads/small/logo.png');
-    @copy(public_path() . '/img/logo.png', storage_path() . '/app/public/uploads/large/logo.png');
+    $factory = \Faker\Factory::create();
     $rows = [];
     //////////// $appName
     $appName = env('APP_NAME');
@@ -23,24 +23,14 @@ function insertDefaultConfigs()
         'field_class' => '',
         'type' => 'Basic Information',
         'field' => 'application_name',
-        'label:en' => 'Ta3lom',
-        'label:ar' => 'تعلم',
-        'value' => $appName,
+        'label:en' => 'Application Name',
+        'label:ar' => 'اسم التطبيق',
+        'value:en' => $appName,
+        'value:ar' => $appName,
         'created_by' => 2,
     ];
     $rows[] = $row;
 
-    ///////////////// Logo
-    $rows[] = [
-        'field_type' => 'file',
-        'field_class' => 'custom-file-input',
-        'type' => 'Basic Information',
-        'field' => 'logo',
-        'label:en' => 'Logo',
-        'label:ar' => 'Logo',
-        'value' => 'logo.png',
-        'created_by' => 2,
-    ];
     ///////////////// Email
     $rows[] = [
         'field_type' => 'text',
@@ -48,8 +38,9 @@ function insertDefaultConfigs()
         'type' => 'Contact Information',
         'field' => 'email',
         'label:en' => 'Email',
-        'label:ar' => 'Email',
-        'value' => env('CONTACT_EMAIL', 'info@ta3lom.com'),
+        'label:ar' => 'بريد الكترونى',
+        'value:en' => env('CONTACT_EMAIL', 'mail@gamil.com'),
+        'value:ar' => env('CONTACT_EMAIL', 'mail@gamil.com'),
         'created_by' => 2,
     ];
     ///////////////// Phone
@@ -58,20 +49,10 @@ function insertDefaultConfigs()
         'field_class' => '',
         'type' => 'Contact Information',
         'field' => 'phone',
-        'label:en' => 'تيلفون',
-        'label:ar' => 'Phone',
-        'value' => '12345678',
-        'created_by' => 2,
-    ];
-    ///////////////// Mobile
-    $rows[] = [
-        'field_type' => 'text',
-        'field_class' => '',
-        'type' => 'Contact Information',
-        'field' => 'mobile',
-        'label:en' => 'Mobile',
-        'label:ar' => 'Mobile',
-        'value' => '12345678',
+        'label:en' => 'Phone',
+        'label:ar' => 'تيلفون',
+        'value:en' => '12345678',
+        'value:ar' => '12345678',
         'created_by' => 2,
     ];
     ///////////////// Facebook
@@ -81,8 +62,9 @@ function insertDefaultConfigs()
         'type' => 'Contact Information',
         'field' => 'facebook_url',
         'label:en' => 'Facebook',
-        'label:ar' => 'Facebook',
-        'value' => 'www.facebook.com',
+        'label:ar' => 'رابط الفيسبوك',
+        'value:en' => 'www.facebook.com',
+        'value:ar' => 'www.facebook.com',
         'created_by' => 2,
     ];
     ///////////////// Twitter
@@ -92,8 +74,9 @@ function insertDefaultConfigs()
         'type' => 'Contact Information',
         'field' => 'twitter_url',
         'label:en' => 'Twitter',
-        'label:ar' => 'Twitter',
-        'value' => 'www.twitter.com',
+        'label:ar' => 'رابط تويتر',
+        'value:en' => 'www.twitter.com',
+        'value:ar' => 'www.twitter.com',
         'created_by' => 2,
     ];
     ///////////////// YouTube
@@ -103,8 +86,9 @@ function insertDefaultConfigs()
         'type' => 'Contact Information',
         'field' => 'youtube_url',
         'label:en' => 'YouTube',
-        'label:ar' => 'YouTube',
-        'value' => 'www.youtube.com',
+        'label:ar' => 'رابط قناه اليوتيوب',
+        'value:en' => 'www.youtube.com',
+        'value:ar' => 'www.youtube.com',
         'created_by' => 2,
     ];
     ///////////////// LinkedIn
@@ -115,54 +99,71 @@ function insertDefaultConfigs()
         'field' => 'linkedin_url',
         'label:en' => 'LinkedIn',
         'label:ar' => 'LinkedIn',
-        'value' => 'www.linkedin.com',
+        'value:en' => 'www.linkedin.com',
+        'value:ar' => 'www.linkedin.com',
         'created_by' => 2,
     ];
-    ///////////////// longitude
+    ///////////////// telegram
     $rows[] = [
         'field_type' => 'text',
         'field_class' => '',
         'type' => 'Contact Information',
-        'field' => 'longitude',
-        'label:en' => 'Location (longitude)',
-        'label:ar' => 'الموقع (longitude)',
-        'value' => '31.324104799999986',
+        'field' => 'telegram_url',
+        'label:en' => 'Telegram',
+        'label:ar' => 'تيليجرام',
+        'value:en' => 'www.telegram.com',
+        'value:ar' => 'www.telegram.com',
         'created_by' => 2,
     ];
-    ///////////////// latitude
+    ///////////////// Instagram
     $rows[] = [
         'field_type' => 'text',
         'field_class' => '',
         'type' => 'Contact Information',
-        'field' => 'latitude',
-        'label:en' => 'Location (latitude)',
-        'label:ar' => 'الموقع (latitude)',
-        'value' => '30.0685382',
+        'field' => 'instagram_url',
+        'label:en' => 'Instagram',
+        'label:ar' => 'انستجرام',
+        'value:en' => 'www.Instagram.com',
+        'value:ar' => 'www.Instagram.com',
         'created_by' => 2,
     ];
-
-
+    ///// About Us Text
+    $rows[] = [
+        'field_type' => 'text_editor',
+        'field_class' => '',
+        'type' => 'Contact Information',
+        'field' => 'about_us_text',
+        'label:en' => 'About Us Text',
+        'label:ar' => 'نص صفحه عنا',
+        'value:en' => $factory->realText(500),
+        'value:ar' => $factory->realText(500),
+        'created_by' => 2,
+    ];
+    ///////////////// Android Version
+    $rows[] = [
+        'field_type' => 'text',
+        'field_class' => '',
+        'type' => 'Basic Information',
+        'field' => 'android_version',
+        'label:en' => 'Android Version',
+        'label:ar' => 'رقم فيرجن الاندرويد',
+        'value:en' => '1.0.0.0',
+        'value:ar' => '1.0.0.0',
+        'created_by' => 2,
+    ];
+    ///////////////// IOS Version
+    $rows[] = [
+        'field_type' => 'text',
+        'field_class' => '',
+        'type' => 'Basic Information',
+        'field' => 'ios_version',
+        'label:en' => 'IOS Version',
+        'label:ar' => 'رقم فيرجن الIOS',
+        'value:en' => '1.0.0.0',
+        'value:ar' => '1.0.0.0',
+        'created_by' => 2,
+    ];
     foreach ($rows as $row) {
-        \App\Modules\Config\Config::create($row);
+        Config::create($row);
     }
 }
-
-//function insertDefaultOptions()
-//{
-//    $rows = [];
-//    $rows[] = [
-//        'title:en' => 'Academic Year',
-//        'title:ar' => 'Academic Year',
-//        'is_active' => 0,
-//        'type' => 'academic_year',
-//    ];
-//    $rows[] = [
-//        'title:en' => 'educational term',
-//        'title:ar' => 'educational term',
-//        'is_active' => 0,
-//        'type' => 'educational_term',
-//    ];
-//    foreach ($rows as $row) {
-//        \App\Modules\Options\Option::create($row);
-//    }
-//}
