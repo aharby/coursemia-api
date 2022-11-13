@@ -21,7 +21,7 @@ class AdminQuestionsResource extends JsonResource
         if (file_exists($this->image)){
             $image = asset($this->image);
         }else{
-            $image = 'https://via.placeholder.com/500';
+            $image = asset('placeholder.png');
         }
         return [
             'id'            => $this->id,

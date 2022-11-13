@@ -2039,7 +2039,7 @@ if (!function_exists('resolveSubscribableName')) {
             if ($alt) {
                 return $alt;
             }
-            return "https://via.placeholder.com/500";
+            return asset('placeholder.png');
         }
     }
     if (!function_exists('deleteImagePath')) {

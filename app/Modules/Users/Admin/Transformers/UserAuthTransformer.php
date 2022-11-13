@@ -36,8 +36,8 @@ class UserAuthTransformer extends TransformerAbstract
             ];
         } else {
             $transfromedData['profile_picture'] = [
-                'small' => 'https://via.placeholder.com/500x500',
-                'large' => 'https://via.placeholder.com/500x500',
+                'small' => asset('placeholder.png'),
+                'large' => asset('placeholder.png'),
             ];
         }
 
