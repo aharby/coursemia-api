@@ -21,6 +21,7 @@ class AdminCategoriesResource extends JsonResource
             'id'                 => $this->id,
             'title_en'           => $this->title_en,
             'title_ar'           => $this->title_ar,
+            'subs'               => AdminCategoriesResource::collection($this->subs)
         ];
     }
 }

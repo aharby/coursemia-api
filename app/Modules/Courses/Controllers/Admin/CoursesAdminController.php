@@ -155,6 +155,14 @@ class CoursesAdminController extends Controller
             $course_category->title_ar = $category['title_ar'];
             $course_category->course_id = $request->course_id;
             $course_category->save();
+            foreach ($category['subs'] as $sub){
+                $subCategory = new Category;
+                $subCategory->title_en = $sub['title_en'];
+                $subCategory->title_ar = $sub['title_ar'];
+                $subCategory->parent_id = $course_category->id;
+                $subCategory->course_id = $course_category->course_id;
+                $subCategory->save();
+            }
         }
         $categories = Category::where('course_id', $request->course_id)->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
@@ -252,7 +260,7 @@ class CoursesAdminController extends Controller
             if (isset($question['image']))
                 $courseQuestion->image = moveSingleGarbageMediaToPublic($question['image'], 'courses');
             $courseQuestion->explanation_image = moveSingleGarbageMediaToPublic($question['explanation']['image'], 'courses');
-            $courseQuestion->explanation_voice = moveSingleGarbageMediaToPublic($question['explanation']['voice_path'], 'courses');
+            $courseQuestion->explanation_voice = $question['explanation']['voice_path'];
             $courseQuestion->is_free_content = $question['is_free_content'];
             $courseQuestion->save();
             $answers = $question['answers'];
@@ -276,8 +284,11 @@ class CoursesAdminController extends Controller
     public function uploadPdf(Request $request)
     {
         $pdf = $request->file;
-        $fileExtension = $pdf->getClientOriginalExtension();
-        $fileName = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $pdf->getClientOriginalName()), '-')) . '.' . $fileExtension;
+        $fileExtension = trim($pdf->getClientOriginalExtension());
+        if (!isset($fileExtension) || $fileExtension == '' || $fileExtension == '      '){
+            $fileExtension = 'mp3';
+        }
+        $fileName = strtolower(Str::random(10).trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $pdf->getClientOriginalName()), '-')) . '.' . $fileExtension;
         $location = 'public/uploads/documents';
         $path = $pdf->storeAs(
             $location, $fileName
@@ -322,6 +333,26 @@ class CoursesAdminController extends Controller
         $category->title_ar = \request()->title_ar;
         $category->title_en = \request()->title_en;
         $category->save();
+        $subs = \request()->subs;
+        $subCats = [];
+        foreach ($subs as $sub){
+            if (isset($sub['id'])){
+                $subCat = Category::find($sub['id']);
+                $subCat->title_en = $sub['title_en'];
+                $subCat->title_ar = $sub['title_ar'];
+                $subCat->save();
+                array_push($subCats, $sub['id']);
+            }else{
+                $subCat = new Category;
+                $subCat->title_en = $sub['title_en'];
+                $subCat->title_ar = $sub['title_ar'];
+                $subCat->course_id = $category->course_id;
+                $subCat->parent_id = $id;
+                $subCat->save();
+                array_push($subCats, $subCat->id);
+            }
+        }
+        Category::where('parent_id', $id)->whereNotIn('id', $subCats)->delete();
         return customResponse(new AdminCategoriesResource($category), "Category updated successfully", 200, StatusCodesEnum::DONE);
     }
 

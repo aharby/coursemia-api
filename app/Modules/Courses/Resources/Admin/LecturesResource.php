@@ -21,7 +21,7 @@ class LecturesResource extends JsonResource
         if (file_exists($this->video_thumb)){
             $image = asset($this->video_thumb);
         }else{
-            $image = asset('placeholder.png');
+            $image = asset('no-image.jpg');
         }
         return [
             'id'            => $this->id,

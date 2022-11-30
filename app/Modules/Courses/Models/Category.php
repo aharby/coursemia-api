@@ -18,6 +18,10 @@ class Category extends Model
         $lectures = CourseLecture::where(['category_id' => $this->id, 'is_free_content' => 1])->first();
     }
 
+    public function subs(){
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
     public function ScopeFilter($query)
     {
         $query->when(request()->has('q'), function ($quer) {

@@ -16,11 +16,17 @@ class CourseNoteResource extends JsonResource
      */
     public function toArray($request)
     {
+        $checkUrl = substr($this->url, 0, 4);
+        if ($checkUrl == 'https' || $checkUrl == 'http'){
+            $url = $this->url;
+        }else{
+            $url = asset($this->url);
+        }
         return [
-            'id'            => $this->id,
-            'url'           => asset($this->url),
-            'title'         => $this->translated_title,
-            'is_free_content'=> (boolean)$this->is_free_content,
+            'id'                => $this->id,
+            'url'               => $url,
+            'title'             => $this->translated_title,
+            'is_free_content'   => (boolean)$this->is_free_content,
         ];
     }
 }
