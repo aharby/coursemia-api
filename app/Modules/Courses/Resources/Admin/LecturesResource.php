@@ -18,9 +18,9 @@ class LecturesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $extensions = ['png,jpg,jpeg'];
+        $extensions = ['png','jpg','jpeg'];
         $checkImage = substr($this->video_thumb,strpos($this->video_thumb, '.')+1);
-        if (file_exists($this->video_thumb)){
+        if (in_array($checkImage, $extensions)){
             $image = asset($this->video_thumb);
         }else{
             $image = asset('no-image.jpg');
