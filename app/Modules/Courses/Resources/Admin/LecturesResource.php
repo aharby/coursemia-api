@@ -20,7 +20,7 @@ class LecturesResource extends JsonResource
     {
         $extensions = ['png,jpg,jpeg'];
         $checkImage = substr($this->video_thumb,strpos($this->video_thumb, '.')+1);
-        if (in_array($checkImage, $extensions)){
+        if (file_exists($this->video_thumb)){
             $image = asset($this->video_thumb);
         }else{
             $image = asset('no-image.jpg');
