@@ -86,6 +86,15 @@ Route::group(['prefix' => 'notes', 'as' => 'notes.'], function () {
 Route::group(['prefix' => 'course-images', 'as' => 'course-images.'], function () {
     Route::post('/', [CoursesAdminController::class, 'storeCourseImages']);
 });
+Route::group(['prefix' => 'single-course-images', 'as' => 'single-course-images.'], function () {
+    Route::post('/', [CoursesAdminController::class, 'storeSingleCourseImages']);
+});
+Route::group(['prefix' => 'delete-course-image', 'as' => 'delete-course-image.'], function () {
+    Route::post('/', [CoursesAdminController::class, 'deleteCourseImage']);
+});
+Route::group(['prefix' => 'get-course-images', 'as' => 'get-course-images.'], function () {
+    Route::get('/', [CoursesAdminController::class, 'getCourseImages']);
+});
 
 Route::group(['prefix' => 'questions-and-answers', 'as' => 'questions-and-answers.'], function () {
     Route::post('/', [CoursesAdminController::class, 'storeQuestionsAndAnswers']);

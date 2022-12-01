@@ -18,6 +18,7 @@ use App\Modules\Courses\Resources\Admin\AdminUserCourseReviewResource;
 use App\Modules\Courses\Resources\Admin\CategoriesResource;
 use App\Modules\Courses\Resources\Admin\CoursesCollection;
 use App\Modules\Courses\Resources\Admin\CoursesResource;
+use App\Modules\Courses\Resources\Admin\ImagesResource;
 use App\Modules\Courses\Resources\Admin\ValueTextCategoriesResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -29,6 +30,11 @@ class CoursesAdminController extends Controller
     {
         $courses = Course::get();
         return customResponse(CoursesResource::collection($courses), "Done", 200, StatusCodesEnum::DONE);
+    }
+
+    public function getCourseImages(){
+        $images = CourseImage::where('course_id', \request()->course_id)->get();
+        return customResponse(ImagesResource::collection($images), '', 200, StatusCodesEnum::DONE);
     }
 
     public function index(Request $request)
@@ -240,6 +246,26 @@ class CoursesAdminController extends Controller
             $courseImage = new CourseImage;
             $courseImage->course_id = $course_id;
             $courseImage->image = moveSingleGarbageMediaToPublic($image, 'courses');
+            $courseImage->save();
+        }
+        return customResponse((object)[], "Images added successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function deleteCourseImage(Request $request){
+        $image = CourseImage::where('course_id', $request->course_id)->skip($request->image)->first();
+        $image->delete();
+        return customResponse([], '', 200, StatusCodesEnum::DONE);
+    }
+
+    public function storeSingleCourseImages(Request $request)
+    {
+        $course_id = $request->course_id;
+        $images = $request->images;
+//        CourseImage::where('course_id', $course_id)->delete();
+        foreach ($images as $image) {
+            $courseImage = new CourseImage;
+            $courseImage->course_id = $course_id;
+            $courseImage->image = moveSingleGarbageMediaToPublic($image['id'], 'courses');
             $courseImage->save();
         }
         return customResponse((object)[], "Images added successfully", 200, StatusCodesEnum::DONE);
