@@ -18,10 +18,18 @@ class AdminQuestionsResource extends JsonResource
      */
     public function toArray($request)
     {
-        if (file_exists($this->image)){
+        $extensions = ['png','jpg','jpeg'];
+        $checkImage = substr($this->image,strpos($this->image, '.')+1);
+        $checkExplanationImage = substr($this->explanation_image,strpos($this->explanation_image, '.')+1);
+        if (in_array($checkImage, $extensions)){
             $image = asset($this->image);
         }else{
-            $image = asset('placeholder.png');
+            $image = asset('no-image.jpg');
+        }
+        if (in_array($checkExplanationImage, $extensions)){
+            $explanationImage = asset($this->explanation_image);
+        }else{
+            $explanationImage = asset('no-image.jpg');
         }
         return [
             'id'            => $this->id,
@@ -33,7 +41,7 @@ class AdminQuestionsResource extends JsonResource
             'description_ar'=> $this->translate('ar')->description,
             'explanation_en'=> $this->translate('en')->explanation,
             'explanation_ar'=> $this->translate('ar')->explanation,
-            'explanation_image'=> asset($this->explanation_image),
+            'explanation_image'=> $explanationImage,
             'answers'       => AdminAnswersResource::collection($this->answers),
             'course_id'     => $this->course_id,
             'category_id'   => $this->category_id,
