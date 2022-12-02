@@ -32,6 +32,9 @@ Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
     Route::put('/{id}', [CoursesAdminController::class, 'updateCategory']);
     Route::post('/{id}', [CoursesAdminController::class, 'addCategory']);
 });
+Route::group(['prefix' => 'sub-categories', 'as' => 'sub-categories.'], function () {
+    Route::get('/', [CoursesAdminController::class, 'getCourseSubCategories']);
+});
 
 Route::group(['prefix' => 'course-categories', 'as' => 'course-categories.'], function () {
     Route::get('/{id}', [CoursesAdminController::class, 'getCourseCategoriesList']);

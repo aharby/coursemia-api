@@ -55,6 +55,11 @@ class CourseFlashcard extends Model
                 function ($quer) {
                     $quer->where('category_id', '=', request()->category);
                 }
+            )->when(
+                request()->has('sub_category'),
+                function ($quer) {
+                    $quer->where('category_id', '=', request()->sub_category);
+                }
             );
     }
 

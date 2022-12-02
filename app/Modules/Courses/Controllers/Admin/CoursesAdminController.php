@@ -324,7 +324,13 @@ class CoursesAdminController extends Controller
 
     public function getCourseCategories()
     {
-        $categories = Category::where('course_id', \request()->course_id)->get();
+        $categories = Category::where('course_id', \request()->course_id)->query();
+        return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function getCourseSubCategories()
+    {
+        $categories = Category::where('course_id', \request()->course_id)->where('parent_id', \request()->category_id)->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
     }
 
@@ -341,6 +347,10 @@ class CoursesAdminController extends Controller
         $categories = $categories->where('course_id', $id);
         if (isset($sortBy) && $sortBy == 'title_en'){
             $categories = $categories->orderBy('title_en', $sortDir);
+        }
+        $is_sub = \request()->is_sub;
+        if (isset($is_sub) && $is_sub == "true"){
+            $categories = $categories->whereNotNull('parent_id');
         }
         $categories = $categories->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
