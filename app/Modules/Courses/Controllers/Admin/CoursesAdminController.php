@@ -324,7 +324,8 @@ class CoursesAdminController extends Controller
 
     public function getCourseCategories()
     {
-        $categories = Category::where('course_id', \request()->course_id)->query();
+        $categories = Category::query();
+        $categories = $categories->where('course_id', \request()->course_id);
         $categories = $categories->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
     }
