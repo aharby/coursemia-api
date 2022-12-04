@@ -200,7 +200,8 @@ class CoursesAdminController extends Controller
         foreach ($notes as $note) {
             $courseNote = new CourseNote;
             $courseNote->{'title:en'} = $note['title_en'];
-            $courseNote->{'title:ar'} = $note['title_ar'];
+            if (isset($note['title_ar']))
+                $courseNote->{'title:ar'} = $note['title_ar'];
             $courseNote->is_free_content = $note['is_free_content'];
             $courseNote->category_id = $note['sub_category_id'] ?? $note['category_id'];
             $courseNote->course_id = $course_id;

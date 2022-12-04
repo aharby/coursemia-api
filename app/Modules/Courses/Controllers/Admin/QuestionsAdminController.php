@@ -42,7 +42,7 @@ class QuestionsAdminController extends Controller
     public function update(Request $request, $id){
         $question = Question::find($id);
         $question->course_id = $request->course_id;
-        $question->category_id = $request->category_id;
+        $question->category_id = $request->sub_category_id ?? $request->category_id;
         if (isset($request->title_en))
             $question->{'title:en'} = $request->title_en;
         if ($request->title_ar){

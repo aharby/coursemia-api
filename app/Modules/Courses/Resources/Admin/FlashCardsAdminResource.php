@@ -20,10 +20,18 @@ class FlashCardsAdminResource extends JsonResource
     {
         if (isset($this->category->parent)){
             $parent = $this->category->parent->title;
+            $subs = $this->category->parent->subs()->get();
+            $subs = ValueTextCategoriesResource::collection($subs);
             $child = $this->category->title;
+            $cat_id = $this->category->parent_id;
+            $sub_cat_id = $this->category_id;
         }else{
             $parent = $this->category->title;
-            $child = '';
+            $subs = $this->category->subs()->get();
+            $subs = ValueTextCategoriesResource::collection($subs);
+            $child = $this->category->title;
+            $cat_id = $this->category_id;
+            $sub_cat_id = $this->category_id;
         }
         return [
             "id" => $this->id,
@@ -33,8 +41,10 @@ class FlashCardsAdminResource extends JsonResource
             "back_ar" => $this->translate('ar')->back,
             "course_id" => $this->course_id,
             "course" => $this->course->title,
-            "category_id" => $this->category_id,
+            "category_id" => $cat_id,
+            "sub_category_id" => $sub_cat_id,
             "category" => $parent,
+            "subs"      => $subs,
             "sub_category"    => $child,
             "is_active" => (bool)$this->is_active,
             "is_free_content" => $this->is_free_content,

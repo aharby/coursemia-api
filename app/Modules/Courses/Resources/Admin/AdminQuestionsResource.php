@@ -5,6 +5,7 @@ namespace App\Modules\Courses\Resources\API;
 use App\Modules\BaseApp\Enums\BaseEnum;
 use App\Modules\Courses\Models\WnatedToLearnCourse;
 use App\Modules\Courses\Resources\Admin\AdminAnswersResource;
+use App\Modules\Courses\Resources\Admin\ValueTextCategoriesResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -20,10 +21,18 @@ class AdminQuestionsResource extends JsonResource
     {
         if (isset($this->category->parent)){
             $parent = $this->category->parent->title;
+            $subs = $this->category->parent->subs()->get();
+            $subs = ValueTextCategoriesResource::collection($subs);
             $child = $this->category->title;
+            $cat_id = $this->category->parent_id;
+            $sub_cat_id = $this->category_id;
         }else{
             $parent = $this->category->title;
-            $child = '';
+            $subs = $this->category->subs()->get();
+            $subs = ValueTextCategoriesResource::collection($subs);
+            $child = $this->category->title;
+            $cat_id = $this->category_id;
+            $sub_cat_id = $this->category_id;
         }
         $extensions = ['png','jpg','jpeg'];
         $checkImage = substr($this->image,strpos($this->image, '.')+1);
@@ -39,6 +48,10 @@ class AdminQuestionsResource extends JsonResource
             $explanationImage = asset('no-image.jpg');
         }
         return [
+            "category_id" => $cat_id,
+            "sub_category_id" => $sub_cat_id,
+            "subs"          => $subs,
+            "sub_category"    => $child,
             'id'            => $this->id,
             'image'         => $image,
             'url'           => asset($this->url),
@@ -51,9 +64,7 @@ class AdminQuestionsResource extends JsonResource
             'explanation_image'=> $explanationImage,
             'answers'       => AdminAnswersResource::collection($this->answers),
             'course_id'     => $this->course_id,
-            'category_id'   => $this->category_id,
             'category'      => $parent,
-            'sub_category'  => $child,
             'course'        => $this->course->title_en,
             'is_active'     => (bool)$this->is_active,
             'is_free_content'     => (bool)$this->is_free_content,

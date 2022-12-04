@@ -70,7 +70,7 @@ class LecturesAdminController extends Controller
             $data['description_ar'] = $request->get('description_en');
         }
         if ($request->has('category_id')) {
-            $data['category_id'] = $request->get('category_id');
+            $data['category_id'] = $request->get('sub_category_id') ?? $request->get('category_id');
         }
         if ($request->has('course_id')) {
             $data['course_id'] = $request->get('course_id');

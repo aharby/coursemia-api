@@ -19,7 +19,8 @@ class QuestionsCategoriesResource extends JsonResource
         return [
             'id'            => $this->id,
             'title'         => $this->title,
-            'have_free_content' => $lecs ? true : false
+            'have_free_content' => $lecs ? true : false,
+            'subs'          => SubCategoriesResource::collection($this->subs)
         ];
     }
 }

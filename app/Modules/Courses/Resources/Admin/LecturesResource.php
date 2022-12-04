@@ -27,23 +27,33 @@ class LecturesResource extends JsonResource
         }
         if (isset($this->category->parent)){
             $parent = $this->category->parent->title;
+            $subs = $this->category->parent->subs()->get();
+            $subs = ValueTextCategoriesResource::collection($subs);
             $child = $this->category->title;
+            $cat_id = $this->category->parent_id;
+            $sub_cat_id = $this->category_id;
         }else{
             $parent = $this->category->title;
-            $child = '';
+            $subs = $this->category->subs()->get();
+            $subs = ValueTextCategoriesResource::collection($subs);
+            $child = $this->category->title;
+            $cat_id = $this->category_id;
+            $sub_cat_id = $this->category_id;
         }
         return [
+            "category_id" => $cat_id,
+            "sub_category_id" => $sub_cat_id,
+            "subs"          => $subs,
+            "sub_category"    => $child,
             'id'            => $this->id,
             'title_en'      => $this->title_en,
             'title_ar'      => $this->title_ar,
             'url'           => $this->url,
             'course_id'     => $this->course_id,
-            'category_id'   => $this->category_id,
             'image'         => $image,
             'description_en'=> $this->description_en,
             'description_ar'=> $this->description_ar,
             'category'      => $parent,
-            'sub_category'  => $child,
             'course'        => $this->course->title_en,
             'is_active'     => (bool)$this->is_active,
             'is_free_content'     => (bool)$this->is_free_content,
