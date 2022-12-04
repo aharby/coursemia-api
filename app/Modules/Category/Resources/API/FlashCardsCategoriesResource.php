@@ -5,6 +5,7 @@ namespace App\Modules\Category\Resources\API;
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\CourseFlashcard;
 use App\Modules\Courses\Models\CourseLecture;
+use App\Modules\Courses\Models\CourseNote;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -18,12 +19,24 @@ class FlashCardsCategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $lecs = CourseFlashcard::where('category_id' , $this->id)->where('is_free_content', 1)->first();
+        $parent = $this->parent;
+        if (isset($parent)){
+            $id = $parent->id;
+            $title = $parent->title;
+            $lecs = CourseFlashcard::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
+                ->where('is_free_content', 1)->first();
+            $subs = SubCategoriesResource::collection($parent->subs);
+        }else{
+            $id = $this->id;
+            $title = $this->title;
+            $lecs = CourseFlashcard::where('category_id' , $id)->where('is_free_content', 1)->first();
+            $subs = SubCategoriesResource::collection($this->subs);
+        }
         return [
-            'id'            => $this->id,
-            'title'         => $this->title,
+            'id'            => $id,
+            'title'         => $title,
             'have_free_content' => $lecs ? true : false,
-            'subs'          => SubCategoriesResource::collection($this->subs)
+            'subs'          => $subs
         ];
     }
 }

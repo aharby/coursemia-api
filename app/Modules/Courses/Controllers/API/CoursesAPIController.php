@@ -71,8 +71,18 @@ class CoursesAPIController extends Controller
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
         $lectures = CourseLecture::query();
-        if (isset($request->category_id)) {
-            $lectures = $lectures->where('category_id', '=', $request->category_id);
+        if (isset($request->category_id) && !isset($request->sub_category_id)) {
+            $lectures = $lectures->where(function ($q){
+                $q->where('category_id', request()->category_id)
+                    ->orWhereHas('category', function ($cat){
+                        $cat->whereHas('parent', function ($parent){
+                            $parent->where('id', request()->category_id);
+                        });
+                    });
+            });
+        }
+        if (isset($request->sub_category_id)){
+            $lectures = $lectures->where('category_id', $request->sub_category_id);
         }
         $lectures = $lectures->where('course_id', $request->course_id)->get();
         return customResponse(CourseLectureResource::collection($lectures), __("Done"), 200, StatusCodesEnum::DONE);

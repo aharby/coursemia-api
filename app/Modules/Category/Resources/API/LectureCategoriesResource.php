@@ -17,12 +17,25 @@ class LectureCategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $lecs = CourseLecture::where('category_id' , $this->id)->where('is_free_content', 1)->first();
+        $parent = $this->parent;
+        if (isset($parent)){
+            $id = $parent->id;
+            $title = $parent->title;
+            $lecs = CourseLecture::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
+                ->where('is_free_content', 1)->first();
+            $subs = SubCategoriesResource::collection($parent->subs);
+        }else{
+            $id = $this->id;
+            $title = $this->title;
+            $lecs = CourseLecture::where('category_id' , $id)
+                ->where('is_free_content', 1)->first();
+            $subs = SubCategoriesResource::collection($this->subs);
+        }
         return [
-            'id'            => $this->id,
-            'title'         => $this->title,
+            'id'            => $id,
+            'title'         => $title,
             'have_free_content' => $lecs ? true : false,
-            'subs'          => SubCategoriesResource::collection($this->subs)
+            'subs'          => $subs
         ];
     }
 }

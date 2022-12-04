@@ -70,10 +70,10 @@ class CourseDetailsResource extends JsonResource
             'notes_count'   => $notes->count(),
             'questions_count'=> $questions->count(),
             'flash_cards_count'=> $flashcards->count(),
-            'lectures_categories' => LectureCategoriesResource::collection(Category::whereIn('id', $lectures_categories)->get()),
-            'notes_categories' => NotesCategoriesResource::collection(Category::whereIn('id', $notes_categories)->get()),
-            'questions_categories' => QuestionsCategoriesResource::collection(Category::whereIn('id', $questions_categories)->get()),
-            'flash_cards_categories' => FlashCardsCategoriesResource::collection(Category::whereIn('id', $flashcards_categories)->get()),
+            'lectures_categories' => LectureCategoriesResource::collection(Category::whereIn('id', $lectures_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
+            'notes_categories' => NotesCategoriesResource::collection(Category::whereIn('id', $notes_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
+            'questions_categories' => QuestionsCategoriesResource::collection(Category::whereIn('id', $questions_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
+            'flash_cards_categories' => FlashCardsCategoriesResource::collection(Category::whereIn('id', $flashcards_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
         ];
     }
 }
