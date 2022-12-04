@@ -22,8 +22,15 @@ class LecturesAdminController extends Controller
         if (isset($request->course)){
             $lectures = $lectures->where('course_id', $request->course);
         }
-        if (isset($request->category)){
-            $lectures = $lectures->where('category_id', $request->category);
+        if (isset($request->category) && !isset($request->sub_category)){
+            $lectures = $lectures->where(function ($q){
+                $q->where('category_id', request()->category)
+                    ->orWhereHas('category', function ($cat){
+                        $cat->whereHas('parent', function ($parent){
+                            $parent->where('id', request()->category);
+                        });
+                    });
+            });
         }
         if (isset($request->sub_category)){
             $lectures = $lectures->where('category_id', $request->sub_category);
@@ -91,7 +98,7 @@ class LecturesAdminController extends Controller
 //            $lecture->is_active = $request->is_active;
 //        }
         $lecture->course_id = $request->lectureData['course_id'];
-        $lecture->category_id = $request->lectureData['category_id'];
+        $lecture->category_id = $request->lectureData['sub_category_id'] ?? $request->lectureData['category_id'];
         $lecture->url = $request->lectureData['path'];
         $lecture->title_en = $request->lectureData['title_en'];
         if ($request->lectureData['title_ar']){

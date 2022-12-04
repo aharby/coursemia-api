@@ -17,10 +17,16 @@ class AdminCategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (isset($this->parent)){
+            $parent_name = $this->parent->title_en;
+        }else{
+            $parent_name = '';
+        }
         return [
             'id'                 => $this->id,
             'title_en'           => $this->title_en,
             'title_ar'           => $this->title_ar,
+            'parent_category'    => $parent_name,
             'subs'               => AdminCategoriesResource::collection($this->subs)
         ];
     }

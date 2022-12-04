@@ -25,8 +25,15 @@ class NotesAdminController extends Controller
         if (isset($request->course)){
             $notes = $notes->where('course_id', $request->course);
         }
-        if (isset($request->category)){
-            $notes = $notes->where('category_id', $request->category);
+        if (isset($request->category) && !isset($request->sub_category)){
+            $notes = $notes->where(function ($q){
+                $q->where('category_id', request()->category)
+                    ->orWhereHas('category', function ($cat){
+                        $cat->whereHas('parent', function ($parent){
+                            $parent->where('id', request()->category);
+                        });
+                    });
+            });
         }
         if (isset($request->sub_category)){
             $notes = $notes->where('category_id', $request->sub_category);
@@ -85,7 +92,7 @@ class NotesAdminController extends Controller
 //            $note->is_active = $request->is_active;
 //        }
         $note->course_id = $request->noteData['course_id'];
-        $note->category_id = $request->noteData['category_id'];
+        $note->category_id = $request->noteData['sub_category_id'] ?? $request->noteData['category_id'];
         $note->url = $request->noteData['path'];
         $note->{'title:en'} = $request->noteData['title_en'];
         $note->{'title:ar'} = $request->noteData['title_ar'];

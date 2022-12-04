@@ -25,6 +25,13 @@ class LecturesResource extends JsonResource
         }else{
             $image = asset('no-image.jpg');
         }
+        if (isset($this->category->parent)){
+            $parent = $this->category->parent->title;
+            $child = $this->category->title;
+        }else{
+            $parent = $this->category->title;
+            $child = '';
+        }
         return [
             'id'            => $this->id,
             'title_en'      => $this->title_en,
@@ -35,7 +42,8 @@ class LecturesResource extends JsonResource
             'image'         => $image,
             'description_en'=> $this->description_en,
             'description_ar'=> $this->description_ar,
-            'category'      => $this->category->title_en,
+            'category'      => $parent,
+            'sub_category'  => $child,
             'course'        => $this->course->title_en,
             'is_active'     => (bool)$this->is_active,
             'is_free_content'     => (bool)$this->is_free_content,

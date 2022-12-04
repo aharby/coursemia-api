@@ -77,10 +77,20 @@ class Question extends Model
                 });
             })
         ->when(request()->get('category') != '', function ($query) {
-                $query->where(function ($q) {
-                    $q->where('category_id', request()->category);
+                $query->where(function ($q){
+                    $q->where('category_id', request()->category)
+                        ->orWhereHas('category', function ($cat){
+                            $cat->whereHas('parent', function ($parent){
+                                $parent->where('id', request()->category);
+                            });
+                        });
                 });
-            });
+            })->when(
+                request()->has('sub_category'),
+                function ($quer) {
+                    $quer->where('category_id', '=', request()->sub_category);
+                }
+            );
     }
 
     public function ScopeSorter($query)

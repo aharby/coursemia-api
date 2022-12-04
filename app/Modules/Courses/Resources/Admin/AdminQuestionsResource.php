@@ -18,6 +18,13 @@ class AdminQuestionsResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (isset($this->category->parent)){
+            $parent = $this->category->parent->title;
+            $child = $this->category->title;
+        }else{
+            $parent = $this->category->title;
+            $child = '';
+        }
         $extensions = ['png','jpg','jpeg'];
         $checkImage = substr($this->image,strpos($this->image, '.')+1);
         $checkExplanationImage = substr($this->explanation_image,strpos($this->explanation_image, '.')+1);
@@ -45,7 +52,8 @@ class AdminQuestionsResource extends JsonResource
             'answers'       => AdminAnswersResource::collection($this->answers),
             'course_id'     => $this->course_id,
             'category_id'   => $this->category_id,
-            'category'      => $this->category->title_en,
+            'category'      => $parent,
+            'sub_category'  => $child,
             'course'        => $this->course->title_en,
             'is_active'     => (bool)$this->is_active,
             'is_free_content'     => (bool)$this->is_free_content,

@@ -18,6 +18,13 @@ class FlashCardsAdminResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (isset($this->category->parent)){
+            $parent = $this->category->parent->title;
+            $child = $this->category->title;
+        }else{
+            $parent = $this->category->title;
+            $child = '';
+        }
         return [
             "id" => $this->id,
             "front_en" => $this->translate('en')->front,
@@ -27,7 +34,8 @@ class FlashCardsAdminResource extends JsonResource
             "course_id" => $this->course_id,
             "course" => $this->course->title,
             "category_id" => $this->category_id,
-            "category" => $this->category->title,
+            "category" => $parent,
+            "sub_category"    => $child,
             "is_active" => (bool)$this->is_active,
             "is_free_content" => $this->is_free_content,
             "status" => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,

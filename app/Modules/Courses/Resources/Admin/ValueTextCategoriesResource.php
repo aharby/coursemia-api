@@ -17,9 +17,15 @@ class ValueTextCategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (isset($this->parent)){
+            $parent_name = $this->parent->title_en;
+        }else{
+            $parent_name = '';
+        }
         return [
             'value'             => $this->id,
             'label'              => $this->title_en,
+            'parent_category'  => $parent_name
         ];
     }
 }

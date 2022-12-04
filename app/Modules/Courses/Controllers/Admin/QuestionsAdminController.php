@@ -85,7 +85,7 @@ class QuestionsAdminController extends Controller
     public function store(Request $request){
         $question = new Question();
         $question->course_id = $request->questionData['course_id'];
-        $question->category_id = $request->questionData['category_id'];
+        $question->category_id = $request->questionData['sub_category_id'] ?? $request->questionData['category_id'];
         $question->{'title:en'} = $request->questionData['title_en'];
         $question->{'title:ar'} = $request->questionData['title_ar'];
         if (isset($request->questionData['explanation_en']) && $request->questionData['explanation_en'] != 'undefined')

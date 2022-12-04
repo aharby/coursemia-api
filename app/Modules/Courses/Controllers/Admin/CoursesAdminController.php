@@ -182,7 +182,7 @@ class CoursesAdminController extends Controller
         foreach ($cards as $card) {
             $flash = new CourseFlashcard;
             $flash->course_id = $course_id;
-            $flash->category_id = $card['category_id'];
+            $flash->category_id = $card['sub_category_id'] ?? $card['category_id'];
             $flash->is_free_content = $card['is_free_content'];
             $flash->{'back:en'} = $card['back_en'];
             $flash->{'back:ar'} = $card['back_ar'];
@@ -202,7 +202,7 @@ class CoursesAdminController extends Controller
             $courseNote->{'title:en'} = $note['title_en'];
             $courseNote->{'title:ar'} = $note['title_ar'];
             $courseNote->is_free_content = $note['is_free_content'];
-            $courseNote->category_id = $note['category_id'];
+            $courseNote->category_id = $note['sub_category_id'] ?? $note['category_id'];
             $courseNote->course_id = $course_id;
             $courseNote->url = $note['path'];
             $courseNote->save();
@@ -217,7 +217,7 @@ class CoursesAdminController extends Controller
         foreach ($lectures as $lecture) {
             $courseLecture = new CourseLecture;
             $courseLecture->course_id = $course_id;
-            $courseLecture->category_id = $lecture['category_id'];
+            $courseLecture->category_id = $lecture['sub_category_id'] ?? $lecture['category_id'];
             $courseLecture->title_en = $lecture['title_en'];
             $courseLecture->title_ar = $lecture['title_ar'];
             $courseLecture->description_en = $lecture['description_en'];
@@ -278,7 +278,7 @@ class CoursesAdminController extends Controller
         foreach ($questions as $question) {
             $courseQuestion = new Question;
             $courseQuestion->course_id = $course_id;
-            $courseQuestion->category_id = $question['category_id'];
+            $courseQuestion->category_id = $question['sub_category_id'] ?? $question['category_id'];
             $courseQuestion->{'title:en'} = $question['title_en'];
             $courseQuestion->{'title:ar'} = $question['title_ar'];
             $courseQuestion->{'explanation:en'} = $question['explanation']['explanation_en'];
@@ -325,7 +325,7 @@ class CoursesAdminController extends Controller
     public function getCourseCategories()
     {
         $categories = Category::query();
-        $categories = $categories->where('course_id', \request()->course_id);
+        $categories = $categories->where('course_id', \request()->course_id)->whereNull('parent_id');
         $categories = $categories->get();
         return customResponse(ValueTextCategoriesResource::collection($categories), "Categories added successfully", 200, StatusCodesEnum::DONE);
     }
@@ -353,6 +353,8 @@ class CoursesAdminController extends Controller
         $is_sub = \request()->is_sub;
         if (isset($is_sub) && $is_sub == "true"){
             $categories = $categories->whereNotNull('parent_id');
+        }else{
+            $categories = $categories->whereNull('parent_id');
         }
         $categories = $categories->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
@@ -399,6 +401,10 @@ class CoursesAdminController extends Controller
         $category->course_id = $id;
         $category->title_ar = \request()->title_ar;
         $category->title_en = \request()->title_en;
+        $parent_category = request()->parent_category;
+        if (isset($parent_category) && $parent_category > 0){
+            $category->parent_id = $parent_category;
+        }
         $category->save();
         return customResponse(new AdminCategoriesResource($category), "Category added successfully", 200, StatusCodesEnum::DONE);
     }

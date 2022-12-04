@@ -17,6 +17,13 @@ class AdminCourseNoteResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (isset($this->category->parent)){
+            $parent = $this->category->parent->title;
+            $child = $this->category->title;
+        }else{
+            $parent = $this->category->title;
+            $child = '';
+        }
         return [
             'id'            => $this->id,
             'url'           => asset($this->url),
@@ -24,7 +31,8 @@ class AdminCourseNoteResource extends JsonResource
             'title_ar'      => $this->translate('ar')->title,
             'course_id'     => $this->course_id,
             'category_id'   => $this->category_id,
-            'category'      => $this->category->title_en,
+            'category'      => $parent,
+            'sub_category'  => $child,
             'course'        => $this->course->title_en,
             'is_active'     => (bool)$this->is_active,
             'is_free_content'     => (bool)$this->is_free_content,
