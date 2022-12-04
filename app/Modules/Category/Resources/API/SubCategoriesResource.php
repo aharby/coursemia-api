@@ -7,7 +7,7 @@ use App\Modules\Courses\Models\CourseLecture;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class CategoriesResource extends JsonResource
+class SubCategoriesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,7 +21,6 @@ class CategoriesResource extends JsonResource
         return [
             'id'            => $this->id,
             'title'         => $this->title,
-            'subs'          => SubCategoriesResource::collection($this->subs),
             'have_free_content' => $lecs ? true : false
         ];
     }
