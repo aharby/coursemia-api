@@ -30,7 +30,7 @@ class CoursesFlashCardsAPIController extends Controller
         $flashs = CourseFlashcard::query();
         $flashs->where('course_id', $request->course_id);
         if (isset($category_id) && !isset($sub_category_id)){
-            $flashs->where('category_id', request()->category_id)
+            $flashs = $flashs->where('category_id', request()->category_id)
                 ->orWhereHas('category', function ($cat){
                     $cat->whereHas('parent', function ($parent){
                         $parent->where('id', request()->category_id);

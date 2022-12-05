@@ -97,8 +97,18 @@ class CoursesAPIController extends Controller
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
         $notes = CourseNote::where('course_id', $request->course_id);
-        if (isset($request->category_id)) {
-            $notes = $notes->where('category_id', $request->category_id);
+        if (isset($request->category_id) && !isset($request->sub_category_id)) {
+            $notes = $notes->where(function ($q){
+                $q->where('category_id', request()->category_id)
+                    ->orWhereHas('category', function ($cat){
+                        $cat->whereHas('parent', function ($parent){
+                            $parent->where('id', request()->category_id);
+                        });
+                    });
+            });
+        }
+        if (isset($request->sub_category_id)){
+            $notes = $notes->where('category_id', $request->sub_category_id);
         }
         $notes = $notes->get();
         return customResponse(CourseNoteResource::collection($notes), __("Done"), 200, StatusCodesEnum::DONE);
