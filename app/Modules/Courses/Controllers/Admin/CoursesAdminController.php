@@ -377,12 +377,7 @@ class CoursesAdminController extends Controller
         if (isset($sortBy) && $sortBy == 'title_en'){
             $categories = $categories->orderBy('title_en', $sortDir);
         }
-        $is_sub = \request()->is_sub;
-        if (isset($is_sub) && $is_sub == "true"){
-            $categories = $categories->whereNotNull('parent_id');
-        }else{
-            $categories = $categories->whereNull('parent_id');
-        }
+        $categories->whereNotNull('parent_id');
         $categories = $categories->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $categories->total(),
