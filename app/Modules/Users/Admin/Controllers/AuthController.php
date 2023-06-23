@@ -10,6 +10,7 @@ use App\Modules\Users\UserEnums;
 use App\Modules\BaseApp\Controllers\AjaxController;
 use App\Modules\Users\Repository\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,7 +32,14 @@ class AuthController extends AjaxController
         }
         return customResponse([
             "user" => new AdminResource($admin),
-            "token" => $admin->createToken('AccessToken')->accessToken,
+            "token" => $admin->createToken('AdminAccessToken')->accessToken,
         ], "Logged in successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function logout()
+    {
+        $token = auth('admin')->user()->token();
+        $token->revoke();
+        return customResponse((object)[], __("Logged Out Successfully"),200, StatusCodesEnum::DONE);
     }
 }

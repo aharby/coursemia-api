@@ -33,6 +33,8 @@ class Category extends Model
                 $query->where('title_en', 'LIKE', '%'.request()->q.'%')
                     ->orWhere('title_ar', 'LIKE', '%'.request()->q.'%');
             });
+        })->when(request()->has('parent_id'), function ($quer) {
+            $quer->where('parent_id', request()->parent_id);
         });
     }
 

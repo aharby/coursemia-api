@@ -5,6 +5,7 @@ use \App\Modules\Users\Admin\Controllers\UsersController;
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
 });
 
 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {

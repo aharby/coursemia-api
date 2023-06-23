@@ -31,6 +31,10 @@ return array(
     'Finished successfully' => 'انتهى بنجاح',
     'You already rated this course' => 'لقد قمت بالفعل بتقييم هذه الدورة',
     'media attached successfully' => 'تم اضافه الوسائط بنجاح',
-    'course questions' => 'الاسئله الخاصه بالكورس'
-
+    'course questions' => 'الاسئله الخاصه بالكورس',
+    'UnFollowed successfully' => 'تمت الازالة من قائمة المتابعة بنجاح',
+    'Followed successfully' => 'تم ارسال طلب المتابعة',
+    'Follow rejected successfully'  => 'تم رفض طلب المتابعة',
+    'Follow accepted successfully' => 'تم قبول طلب المتابعة',
+    'Follow request not found' => 'لم يتم اعثور على طلب المتابعة'
 );

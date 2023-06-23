@@ -21,6 +21,7 @@ class CategoriesResource extends JsonResource
             'id'            => $this->id,
             'title_en'      => $this->title_en,
             'title_ar'      => $this->title_ar,
+            'course_id'     => $this->course_id
         ];
     }
 }

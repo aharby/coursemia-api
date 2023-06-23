@@ -5,6 +5,7 @@ namespace App\Modules\Users\Models;
 use App\Modules\Countries\Models\Country;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseUser;
+use App\UserFollow;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,6 +58,15 @@ class User extends Authenticatable
 
     public function courses(){
         return $this->hasManyThrough(Course::class, CourseUser::class,'user_id', 'id', 'id', 'course_id');
+    }
+
+    public function followers(){
+        return $this->hasMany(UserFollow::class, 'followed_id');
+    }
+
+    public function getRankAttribute(){
+        $higherUsers = User::where('total_correct_answers', '>', $this->attributes['total_correct_answers'])->count();
+        return $higherUsers+1;
     }
 
     public function ScopeSorter($query)

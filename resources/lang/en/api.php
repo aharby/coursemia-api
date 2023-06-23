@@ -30,5 +30,10 @@ return array(
     'Finished successfully' => 'Finished successfully',
     'You already rated this course' => 'You already rated this course',
     'media attached successfully' => 'Media Attached Successfully',
-    'course questions' => 'course questions'
+    'course questions' => 'course questions',
+    'UnFollowed successfully'   => 'UnFollowed successfully',
+    'Followed successfully' => 'Follow request sent successfully',
+    'Follow rejected successfully'  => 'Follow rejected successfully',
+    'Follow accepted successfully' => 'Follow accepted successfully',
+    'Follow request not found'  => 'Follow request not found'
     );

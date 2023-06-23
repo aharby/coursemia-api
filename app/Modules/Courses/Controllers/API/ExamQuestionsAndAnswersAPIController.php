@@ -14,6 +14,7 @@ use App\Modules\Courses\Models\FlashCardAnswer;
 use App\Modules\Courses\Models\Question;
 use App\Modules\Courses\Models\UserQuestionAnswer;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
+use App\Modules\Courses\Requests\Api\StorePostRequest;
 use App\Modules\Courses\Requests\Api\SubmitExamAnswersRequest;
 use App\Modules\Courses\Requests\Api\SubmitFlashCardAnswersRequest;
 use App\Modules\Courses\Resources\API\CourseDetailsResource;

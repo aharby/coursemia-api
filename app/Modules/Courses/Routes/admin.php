@@ -36,8 +36,20 @@ Route::group(['prefix' => 'sub-categories', 'as' => 'sub-categories.'], function
     Route::get('/', [CoursesAdminController::class, 'getCourseSubCategories']);
 });
 
+Route::group(['prefix' => 'get-course-by-category-id', 'as' => 'get-course-by-category-id.'], function () {
+    Route::get('/', [CoursesAdminController::class, 'getCourseByCategoryId']);
+});
+
 Route::group(['prefix' => 'course-categories', 'as' => 'course-categories.'], function () {
     Route::get('/{id}', [CoursesAdminController::class, 'getCourseCategoriesList']);
+});
+
+Route::group(['prefix' => 'all-categories', 'as' => 'all-categories.'], function () {
+    Route::get('/', [CoursesAdminController::class, 'getAllCategories']);
+});
+
+Route::group(['prefix' => 'all-categories-no-pagination', 'as' => 'all-categories-no-pagination.'], function () {
+    Route::get('/', [CoursesAdminController::class, 'getAllCategoriesNoPagination']);
 });
 
 Route::group(['prefix' => 'flashcards', 'as' => 'flashcards.'], function () {
