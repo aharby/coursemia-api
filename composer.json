@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "astrotomic/laravel-translatable": "^11.1",
         "bensampo/laravel-enum": "^v4.0.0",
         "benwilkins/laravel-fcm-notification": "^4.0",

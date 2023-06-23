@@ -24,7 +24,10 @@ class UserResorce extends JsonResource
             'country_id'        => $this->country_id,
             'country_name'      => $this->country->translated_title,
             'is_phone_verified' => (bool) $this->is_verified,
-            'referral_code'      => $this->refer_code
+            'referral_code'     => $this->refer_code,
+            'rank'              => $this->rank,
+            'followers'         => $this->followers()->count(),
+            'posts'             => $this->posts()->count()
         ];
     }
 }

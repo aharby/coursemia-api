@@ -20,6 +20,7 @@ use App\Modules\Payments\Enums\TransactionTypesEnums;
 use App\Modules\Payments\Models\Order;
 use App\Modules\Payments\Models\PaymentTransaction;
 use App\Modules\Payments\Models\Transaction;
+use App\Modules\Post\Models\Post;
 use App\Modules\Quizzes\Quiz;
 use App\Modules\SchoolAccounts\ClassroomClassSessions\ClassroomClassSession;
 use App\Modules\SchoolAccounts\ClassroomClassSessions\Instructor\Models\ClassroomClassSessionScores;
@@ -42,6 +43,7 @@ use App\Modules\VCRSchedules\Models\VCRSchedule;
 use App\Modules\VCRSchedules\Models\VCRSessionParticipant;
 use App\Modules\VCRSchedules\Models\VCRSessionPresence;
 use App\Modules\VCRSessions\General\Models\UserZoom;
+use App\UserFollow;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -87,6 +89,19 @@ class User extends Authenticatable
 
     public function devices(){
         return $this->hasMany(UserDevice::class);
+    }
+
+    public function followers(){
+        return $this->hasMany(UserFollow::class, 'followed_id');
+    }
+
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
+
+    public function getRankAttribute(){
+        $higherUsers = \App\Modules\Users\Models\User::where('total_correct_answers', '>', $this->attributes['total_correct_answers'])->count();
+        return $higherUsers+1;
     }
 
     public function courses(){

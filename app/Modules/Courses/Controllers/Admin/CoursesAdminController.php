@@ -364,6 +364,32 @@ class CoursesAdminController extends Controller
         ]);
     }
 
+    public function getAllCategories(){
+        $sortBy = \request()->sortBy;
+        $sortDesc = \request()->sortDesc;
+        if ($sortDesc == 'true'){
+            $sortDir = 'DESC';
+        }else{
+            $sortDir = 'ASC';
+        }
+        $categories = Category::query();
+        $categories = $categories->filter()->sorter();
+        if (isset($sortBy) && $sortBy == 'title_en'){
+            $categories = $categories->orderBy('title_en', $sortDir);
+        }
+        $is_sub = \request()->is_sub;
+        if (isset($is_sub) && $is_sub == "true"){
+            $categories = $categories->whereNotNull('parent_id');
+        }else{
+            $categories = $categories->whereNull('parent_id');
+        }
+        $categories = $categories->paginate(request()->perPage, ['*'], 'page', request()->page);
+        return response()->json([
+            'total' => $categories->total(),
+            'categories' => AdminCategoriesResource::collection($categories->items())
+        ]);
+    }
+
     public function showCategory($id){
         $category = Category::where('id', $id)->first();
         return customResponse(new AdminCategoriesResource($category), "Category deleted successfully", 200, StatusCodesEnum::DONE);
@@ -447,5 +473,16 @@ class CoursesAdminController extends Controller
     public function delete($id){
         Course::where('id', $id)->delete();
         return customResponse((object)[], "Course deleted successfully", 200, StatusCodesEnum::DONE);
+    }
+
+    public function getAllCategoriesNoPagination(){
+        $categories = Category::whereNull('parent_id')->get();
+        return customResponse(CategoriesResource::collection($categories), "Done", 200, StatusCodesEnum::DONE);
+    }
+
+    public function getCourseByCategoryId(Request $request)
+    {
+        $category = Category::findOrFail($request->category_id);
+        return customResponse(new CategoriesResource($category), '', 200, StatusCodesEnum::DONE);
     }
 }
