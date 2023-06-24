@@ -44,6 +44,7 @@ Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspe
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function (){
     require base_path('app/Modules/Users/Admin/Routes/admin.php');
+    Route::post('upload-image', [\App\Modules\Config\Controllers\ConfigsController::class, 'uploadImage']);
 });
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {
     require base_path('app/Modules/GarbageMedia/Routes/api.php');
