@@ -26,6 +26,11 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
     public function ScopeFilter($query)
     {
         $query->when(request()->has('q'), function ($quer) {
@@ -35,6 +40,8 @@ class Category extends Model
             });
         })->when(request()->has('parent_id'), function ($quer) {
             $quer->where('parent_id', request()->parent_id);
+        })->when(request()->has('course_id'), function ($quer) {
+            $quer->where('course_id', request()->course_id);
         });
     }
 

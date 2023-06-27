@@ -19,17 +19,17 @@ class AdminCourseNoteResource extends JsonResource
     public function toArray($request)
     {
         if (isset($this->category->parent)){
-            $parent = $this->category->parent->title;
+            $parent = $this->category->parent->title_en;
             $subs = $this->category->parent->subs()->get();
             $subs = ValueTextCategoriesResource::collection($subs);
-            $child = $this->category->title;
+            $child = $this->category->title_en;
             $cat_id = $this->category->parent_id;
             $sub_cat_id = $this->category_id;
         }else{
-            $parent = $this->category->title;
+            $parent = $this->category->title_en;
             $subs = $this->category->subs()->get();
             $subs = ValueTextCategoriesResource::collection($subs);
-            $child = $this->category->title;
+            $child = $this->category->title_en;
             $cat_id = $this->category_id;
             $sub_cat_id = $this->category_id;
         }
@@ -41,7 +41,7 @@ class AdminCourseNoteResource extends JsonResource
             'id'            => $this->id,
             'url'           => asset($this->url),
             'title_en'      => $this->translate('en')->title,
-            'title_ar'      => $this->translate('ar')->title,
+            'title_ar'      => $this->translate('ar') ? $this->translate('ar')->title : '',
             'course_id'     => $this->course_id,
             'category'      => $parent,
             'course'        => $this->course->title_en,
