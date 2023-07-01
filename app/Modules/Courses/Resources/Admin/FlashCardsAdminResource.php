@@ -49,6 +49,8 @@ class FlashCardsAdminResource extends JsonResource
             "is_active" => (bool)$this->is_active,
             "is_free_content" => $this->is_free_content,
             "status" => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,
+            "created_at" => Carbon::parse($this->created_at)->format('Y-m-d h:i a'),
+            "created_by" => $this->admin ? $this->admin->name : ''
         ];
     }
 }

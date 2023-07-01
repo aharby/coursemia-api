@@ -114,6 +114,7 @@ class LecturesAdminController extends Controller
         if (isset($request->lectureData['video_thumb'])){
             $lecture->video_thumb = moveSingleGarbageMediaToPublic($request->lectureData['video_thumb'], 'courses');
         }
+        $lecture->admin_id = auth('admin')->user()->id;
         $lecture->save();
         return customResponse(new LecturesResource($lecture), "Lecture added successfully", 200, StatusCodesEnum::DONE);
     }

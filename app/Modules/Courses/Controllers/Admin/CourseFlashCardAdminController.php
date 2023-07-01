@@ -104,6 +104,7 @@ class CourseFlashCardAdminController extends Controller
         if ($request->has('is_free_content')) {
             $data['is_free_content'] = $request->get('is_free_content');
         }
+        $data['admin_id'] = auth('admin')->user()->id;
         if ($this->flashCardRepository->create($data)) {
             return customResponse('', trans('api.Created Successfully'), 200, 1);
         }
