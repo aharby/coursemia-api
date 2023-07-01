@@ -2,6 +2,7 @@
 
 namespace App\Modules\Courses\Models;
 
+use App\Modules\Users\Admin\Models\Admin;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -62,5 +63,10 @@ class CourseNote extends Model
                     $quer->orderBy('id', $sortByDir);
             }
         });
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 }

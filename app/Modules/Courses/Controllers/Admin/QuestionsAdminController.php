@@ -100,6 +100,7 @@ class QuestionsAdminController extends Controller
         if (isset($request->questionData['explanation_voice']) && $request->questionData['explanation_voice'] != 'undefined')
             $question->explanation_voice = $request->questionData['explanation_voice'];
         $question->is_free_content = $request->questionData['is_free_content'];
+        $question->admin_id = auth('admin')->user()->id;
         $question->save();
         foreach ($request->questionData['answers'] as $questionAnswer){
             $answer = new Answer;

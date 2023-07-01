@@ -2,6 +2,7 @@
 
 namespace App\Modules\Courses\Models;
 
+use App\Modules\Users\Admin\Models\Admin;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ class CourseFlashcard extends Model
 
     protected $fillable = [
         'course_id',
+        'admin_id',
         'category_id',
         'is_free_content',
     ];
@@ -110,5 +112,10 @@ class CourseFlashcard extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 }

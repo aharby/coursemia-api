@@ -97,6 +97,7 @@ class NotesAdminController extends Controller
         $note->{'title:en'} = $request->noteData['title_en'];
         $note->{'title:ar'} = $request->noteData['title_ar'];
         $note->is_free_content = $request->noteData['is_free_content'];
+        $note->admin_id = auth('admin')->user()->id;
         $note->save();
         return customResponse(new AdminCourseNoteResource($note), "Note added successfully", 200, StatusCodesEnum::DONE);
     }
