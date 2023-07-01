@@ -41,10 +41,12 @@ class QuestionsAdminController extends Controller
 
     public function update(Request $request, $id){
         $question = Question::find($id);
-        $question->course_id = $request->course_id;
-        $question->category_id = $request->sub_category_id ?? $request->category_id;
+        if (isset($request->course_id))
+            $question->course_id = $request->course_id;
+        if (isset($request->category_id) || isset($request->sub_category_id))
+            $question->category_id = $request->sub_category_id ?? $request->category_id;
         if (isset($request->title_en))
-            $question->{'title:en'} = $request->title_en;
+            $question->{'title:en'} = strip_tags($request->title_en);
         if ($request->title_ar){
             $question->{'title:ar'} = $request->title_ar;
         }
@@ -59,18 +61,22 @@ class QuestionsAdminController extends Controller
             $question->explanation_image = moveSingleGarbageMediaToPublic($request->explanation_image_id, 'courses');
         if (isset($request->explanation_voice) && $request->explanation_voice != 'undefined')
             $question->explanation_voice = $request->explanation_voice;
-        $question->is_free_content = $request->is_free_content;
-        $question->is_active = $request->is_active;
+        if (isset($request->is_free_content))
+            $question->is_free_content = $request->is_free_content;
+        if (isset($request->is_active))
+            $question->is_active = $request->is_active;
 
         if ($question->save()) {
-            foreach ($request->answers as $questionAnswer){
-                $answer = Answer::find($questionAnswer['id']);
-                $answer->{'answer:en'} = $questionAnswer['answer_en'];
-                $answer->{'answer:ar'} = $questionAnswer['answer_ar'];
-                $answer->is_correct = $questionAnswer['is_correct'];
-                $answer->question_id = $question->id;
-                $answer->chosen_percentage = 0;
-                $answer->save();
+            if (isset($request->answers)){
+                foreach ($request->answers as $questionAnswer){
+                    $answer = Answer::find($questionAnswer['id']);
+                    $answer->{'answer:en'} = $questionAnswer['answer_en'];
+                    $answer->{'answer:ar'} = $questionAnswer['answer_ar'];
+                    $answer->is_correct = $questionAnswer['is_correct'];
+                    $answer->question_id = $question->id;
+//                    $answer->chosen_percentage = 0;
+                    $answer->save();
+                }
             }
             return customResponse('', trans('api.Updated Successfully'), 200, 1);
         }
@@ -86,7 +92,7 @@ class QuestionsAdminController extends Controller
         $question = new Question();
         $question->course_id = $request->questionData['course_id'];
         $question->category_id = $request->questionData['sub_category_id'] ?? $request->questionData['category_id'];
-        $question->{'title:en'} = $request->questionData['title_en'];
+        $question->{'title:en'} = strip_tags($request->questionData['title_en']);
         $question->{'title:ar'} = $request->questionData['title_ar'];
         if (isset($request->questionData['explanation_en']) && $request->questionData['explanation_en'] != 'undefined')
             $question->{'explanation:en'} = $request->questionData['explanation_en'];

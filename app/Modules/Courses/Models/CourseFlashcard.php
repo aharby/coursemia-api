@@ -17,6 +17,7 @@ class CourseFlashcard extends Model
 
     protected $fillable = [
         'course_id',
+        'is_active',
         'admin_id',
         'category_id',
         'is_free_content',
