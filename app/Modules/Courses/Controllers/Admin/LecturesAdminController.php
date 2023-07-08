@@ -19,7 +19,8 @@ class LecturesAdminController extends Controller
     }
     public function index(Request $request){
         $lectures = CourseLecture::query();
-        $lectures = $lectures->whereIn('admin_id', [request()->header('Admin-Id'),1]);
+        if (auth()->user()->role != 'super')
+            $lectures = $lectures->where('admin_id', request()->header('Admin-Id'));
         if (isset($request->course)){
             $lectures = $lectures->where('course_id', $request->course);
         }

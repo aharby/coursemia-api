@@ -25,7 +25,8 @@ class QuestionsAdminController extends Controller
     }
     public function index(){
         $questions = Question::query();
-        $questions = $questions->whereIn('admin_id', [request()->header('Admin-Id'),1]);
+        if (auth()->user()->role != 'super')
+            $questions = $questions->where('admin_id', request()->header('Admin-Id'));
         $questions = $questions->filter()->sorter();
         $questions = $questions->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
