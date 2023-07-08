@@ -20,7 +20,8 @@ class FlashCardRepository implements FlashCardRepositoryInterface
     {
         $query = $this->model
             ->query();
-        $query = $query->whereIn('admin_id', [request()->header('Admin-Id'),1]);
+        if (auth()->user()->role != 'super')
+            $query = $query->where('admin_id', request()->header('Admin-Id'));
         if ($isActive) {
             $query->active();
         }

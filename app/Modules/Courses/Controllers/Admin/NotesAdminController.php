@@ -22,7 +22,8 @@ class NotesAdminController extends Controller
     }
     public function index(Request $request){
         $notes = CourseNote::query();
-        $notes = $notes->whereIn('admin_id', [request()->header('Admin-Id'),1]);
+        if (auth()->user()->role != 'super')
+            $notes = $notes->where('admin_id', request()->header('Admin-Id'));
         if (isset($request->course)){
             $notes = $notes->where('course_id', $request->course);
         }
