@@ -42,6 +42,7 @@ class LecturesResource extends JsonResource
         }
         return [
             "category_id" => $cat_id,
+            'admin_id'  => $this->admin_id,
             "sub_category_id" => $sub_cat_id,
             "subs"          => $subs,
             "sub_category"    => $child,
