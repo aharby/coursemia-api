@@ -48,6 +48,9 @@ class AdminQuestionsResource extends JsonResource
         }else{
             $explanationImage = asset('no-image.jpg');
         }
+        $explanation_voice = null;
+        if (isset($this->explanation_voice))
+            $explanation_voice = asset($this->explanation_voice);
         return [
             "category_id" => $cat_id,
             "sub_category_id" => $sub_cat_id,
@@ -63,6 +66,7 @@ class AdminQuestionsResource extends JsonResource
             'explanation_en'=> $this->translate('en')->explanation,
             'explanation_ar'=> $this->translate('ar')->explanation,
             'explanation_image'=> $explanationImage,
+            'explanation_voice'=> $explanation_voice,
             'answers'       => AdminAnswersResource::collection($this->answers),
             'course_id'     => $this->course_id,
             'category'      => $parent,
