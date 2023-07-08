@@ -47,7 +47,7 @@ class QuestionsAdminController extends Controller
             $question->category_id = $request->sub_category_id ?? $request->category_id;
         if (isset($request->title_en))
             $question->{'title:en'} = strip_tags($request->title_en);
-        if ($request->title_ar){
+        if ($request->title_ar == "" || isset($request->title_ar)){
             $question->{'title:ar'} = $request->title_ar;
         }
         if (isset($request->explanation_en))
