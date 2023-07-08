@@ -35,6 +35,7 @@ class FlashCardsAdminResource extends JsonResource
         }
         return [
             "id" => $this->id,
+            'admin_id'  => $this->admin_id,
             "front_en" => $this->translate('en')->front,
             "front_ar" => $this->translate('ar')->front,
             "back_en" => $this->translate('en')->back,

@@ -53,6 +53,7 @@ class AdminQuestionsResource extends JsonResource
             $explanation_voice = asset($this->explanation_voice);
         return [
             "category_id" => $cat_id,
+            'admin_id'  => $this->admin_id,
             "sub_category_id" => $sub_cat_id,
             "subs"          => $subs,
             "sub_category"    => $child,

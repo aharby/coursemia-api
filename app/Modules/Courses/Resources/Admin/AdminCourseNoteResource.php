@@ -40,6 +40,7 @@ class AdminCourseNoteResource extends JsonResource
             "subs"          => $subs,
             "sub_category"    => $child,
             'id'            => $this->id,
+            'admin_id'  => $this->admin_id,
             'url'           => asset($this->url),
             'title_en'      => $this->translate('en')->title,
             'title_ar'      => $this->translate('ar') ? $this->translate('ar')->title : '',
