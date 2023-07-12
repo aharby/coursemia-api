@@ -35,6 +35,7 @@ Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspe
 
     require base_path('app/Modules/HomeScreen/Routes/api.php');
     require base_path('app/Modules/Courses/Routes/api.php');
+    require base_path('app/Modules/WantToLearn/Routes/api.php');
     require base_path('app/Modules/Countries/Routes/api.php');
     require base_path('app/Modules/Config/Routes/api.php');
     require base_path('app/Modules/Specialities/Routes/api.php');
