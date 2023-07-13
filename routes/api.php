@@ -36,6 +36,8 @@ Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspe
     require base_path('app/Modules/HomeScreen/Routes/api.php');
     require base_path('app/Modules/Courses/Routes/api.php');
     require base_path('app/Modules/WantToLearn/Routes/api.php');
+    require base_path('app/Modules/Settings/Routes/api.php');
+    require base_path('app/Modules/MyProgress/Routes/api.php');
     require base_path('app/Modules/Countries/Routes/api.php');
     require base_path('app/Modules/Config/Routes/api.php');
     require base_path('app/Modules/Specialities/Routes/api.php');
@@ -50,6 +52,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function (){
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {
     require base_path('app/Modules/GarbageMedia/Routes/api.php');
     require base_path('app/Modules/Config/Routes/admin.php');
+    require base_path('app/Modules/Settings/Routes/admin.php');
     require base_path('app/Modules/Countries/Routes/admin.php');
     require base_path('app/Modules/Specialities/Routes/admin.php');
     require base_path('app/Modules/Courses/Routes/admin.php');
