@@ -14,8 +14,8 @@ class AddIndexUniqueToQuestionsTable extends Migration
     public function up()
     {
         Schema::table('question_translations', function (Blueprint $table) {
-            $table->longText('title')->index()->nullable()->change();
-            $table->longText('description')->index()->nullable()->change();
+            $table->longText('title')->nullable()->change();
+            $table->longText('description')->nullable()->change();
             $table->longText('explanation')->nullable()->change();
         });
         \Illuminate\Support\Facades\DB::unprepared('ALTER TABLE question_translations ADD UNIQUE key question_translations_title_unique (title(64))');
