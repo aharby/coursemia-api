@@ -13,13 +13,12 @@ class AddIndexUniqueToQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('questions', function (Blueprint $table) {
-            Schema::table('question_translations', function (Blueprint $table) {
-                $table->longText('title')->unique()->index()->nullable()->change();
-                $table->longText('description')->index()->nullable()->change();
-                $table->longText('explanation')->nullable()->change();
-            });
+        Schema::table('question_translations', function (Blueprint $table) {
+            $table->longText('title')->index()->nullable()->change();
+            $table->longText('description')->index()->nullable()->change();
+            $table->longText('explanation')->nullable()->change();
         });
+        \Illuminate\Support\Facades\DB::unprepared('ALTER TABLE question_translations ADD UNIQUE key question_translations_title_unique (title(64))');
     }
 
     /**
