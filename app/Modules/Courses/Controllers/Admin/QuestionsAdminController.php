@@ -5,6 +5,7 @@ namespace App\Modules\Courses\Controllers\Admin;
 use App\Enums\StatusCodesEnum;
 use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Answer;
+use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
@@ -117,6 +118,11 @@ class QuestionsAdminController extends Controller
             $answer->question_id = $question->id;
             $answer->chosen_percentage = 0;
             $answer->save();
+        }
+        if (!isset($question->category_id)){
+            $cat = Category::where('course_id', $question->course_id)->whereNotNull('parent_id')->first();
+            $question->category_id = $cat->id;
+            $question->save();
         }
         return customResponse(new AdminQuestionsResource($question), "Question added successfully", 200, StatusCodesEnum::DONE);
     }
