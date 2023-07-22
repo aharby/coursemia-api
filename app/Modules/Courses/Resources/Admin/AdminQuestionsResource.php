@@ -60,7 +60,7 @@ class AdminQuestionsResource extends JsonResource
             'id'            => $this->id,
             'image'         => $image,
             'url'           => asset($this->url),
-            'title_en'      => $this->translate('en')->title,
+            'title_en'      => $this->translate('en') ? $this->translate('en')->title : '',
             'title_ar'      => $this->translate('ar')->title,
             'description_en'=> $this->translate('en')->description,
             'description_ar'=> $this->translate('ar')->description,
