@@ -45,15 +45,15 @@ class Question extends Model
 
     public function getTranslatedTitleAttribute()
     {
-        return $this->translate(app()->getLocale())->title;
+        return $this->translate(app()->getLocale())->title ?? '';
     }
     public function getTranslatedDescriptionAttribute()
     {
-        return $this->translate(app()->getLocale())->description;
+        return $this->translate(app()->getLocale())->description ?? '';
     }
     public function getTranslatedExplanationAttribute()
     {
-        return $this->translate(app()->getLocale())->explanation;
+        return $this->translate(app()->getLocale())->explanation ?? '';
     }
 
     public function answers()
