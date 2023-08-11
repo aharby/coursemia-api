@@ -24,6 +24,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         if (request()->exam_type == 2){
             return $questions
                 ->active()
+                ->filter()
                 ->inRandomOrder()
                 ->where('course_id', $courseId)
                 ->with(['answers'])
@@ -32,6 +33,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         // Question bank so we have to get certain number of questions
        return $questions
             ->active()
+            ->filter()
             ->inRandomOrder()
             ->where('course_id', $courseId)
             ->with(['answers'])
