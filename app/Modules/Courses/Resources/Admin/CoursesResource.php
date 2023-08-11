@@ -46,6 +46,7 @@ class CoursesResource extends JsonResource
             'speciality_id' => $this->speciality_id,
             'rate'          => $this->rate,
             'price'         => $this->price,
+            'admin_name'    => $this->admin->name,
             'price_after_discount'         => $this->price_after_discount,
             'is_active'     => (bool)$this->is_active,
             'status'        => $this->is_active ? BaseEnum::ACTIVE : BaseEnum::NOT_ACTIVE,

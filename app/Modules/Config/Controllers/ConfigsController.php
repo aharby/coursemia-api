@@ -9,6 +9,7 @@ use App\Modules\Config\Repository\ConfigRepositoryInterface;
 use App\Modules\Config\Requests\ConfigRequest;
 use App\Modules\Countries\Resources\Api\ListConfigsIndex;
 use App\Modules\Users\Admin\Middleware\IsSuperAdmin;
+use App\Modules\Users\Admin\Models\Admin;
 use App\VersionConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -41,5 +42,12 @@ class ConfigsController extends Controller {
         return customResponse([
             'url' => asset('storage' . '/' . $path),
         ],'',200, 200);
+    }
+
+    public function getAdmins()
+    {
+        return customResponse([
+            'data' => Admin::get()
+        ], 'Done', 200, StatusCodesEnum::DONE);
     }
 }

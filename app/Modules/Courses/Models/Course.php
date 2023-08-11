@@ -3,6 +3,7 @@
 namespace App\Modules\Courses\Models;
 
 use App\Modules\Specialities\Models\Speciality;
+use App\Modules\Users\Admin\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,11 @@ class Course extends Model
 
     public function images(){
         return $this->hasMany(CourseImage::class);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 
     public function speciality(){
