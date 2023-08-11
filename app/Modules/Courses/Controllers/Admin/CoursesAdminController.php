@@ -46,8 +46,11 @@ class CoursesAdminController extends Controller
         if (isset($request->status)) {
             $courses = $courses->where('is_active', $request->status);
         }
+        if (isset($request->admin_id)) {
+            $courses = $courses->where('admin_id', $request->admin_id);
+        }
         $courses = $courses->sorter();
-        $courses = $courses->paginate(request()->perPage, ['*'], 'page', request()->page);
+        $courses = $courses->with('admin')->paginate(request()->perPage, ['*'], 'page', request()->page);
         return response()->json([
             'total' => $courses->total(),
             'courses' => CoursesResource::collection($courses->items())
