@@ -87,7 +87,18 @@ class Question extends Model
                             });
                         });
                 });
-            })->when(
+            })
+            ->when(request()->get('category_ids') != '', function ($query) {
+                $query->where(function ($q){
+                    $q->whereIn('category_id', request()->category_ids)
+                        ->orWhereHas('category', function ($cat){
+                            $cat->whereHas('parent', function ($parent){
+                                $parent->where('id', request()->category_ids);
+                            });
+                        });
+                });
+            })
+            ->when(
                 request()->has('sub_category'),
                 function ($quer) {
                     $quer->where('category_id', '=', request()->sub_category);
