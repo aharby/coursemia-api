@@ -15,10 +15,21 @@ class QuestionsRepository implements QuestionsRepositoryInterface
     public function getQuestionsByCourseId($courseId)
     {
         $category_ids = request()->category_ids;
+        $sub_category = request()->sub_category_id;
         $number_of_questions = request()->exam_content;
         $questions = $this->model->query();
         if (isset($category_ids)){
-            $questions = $questions->whereIn('category_id', $category_ids);
+            $questions = $questions->where(function ($q){
+                $q->whereIn('category_id', request()->category_ids)
+                    ->orWhereHas('category', function ($cat){
+                        $cat->whereHas('parent', function ($parent){
+                            $parent->where('id', request()->category_ids);
+                        });
+                    });
+            });
+        }
+        if (isset($sub_category)){
+            $questions = $questions->where('category_id', $sub_category);
         }
         // Timed test so we have to get all questions
         if (request()->exam_type == 2){
