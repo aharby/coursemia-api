@@ -15,7 +15,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
     public function getQuestionsByCourseId($courseId)
     {
         $category_ids = request()->category_ids;
-        $sub_category = request()->sub_category_id;
+        $sub_category = request()->sub_category_ids;
         $number_of_questions = request()->exam_content;
         $questions = $this->model->query();
         if (isset($category_ids)){
@@ -29,7 +29,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
             });
         }
         if (isset($sub_category)){
-            $questions = $questions->where('category_id', $sub_category);
+            $questions = $questions->whereIn('category_id', $sub_category);
         }
         // Timed test so we have to get all questions
         if (request()->exam_type == 2){
