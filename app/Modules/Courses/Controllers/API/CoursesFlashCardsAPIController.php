@@ -25,15 +25,15 @@ class CoursesFlashCardsAPIController extends Controller
     public function getCourseFlashCards(Request $request)
     {
         $user = auth('api')->user();
-        $category_ids = \request()->category_ids;
+        $category_id = \request()->category_id;
         $sub_category_ids = \request()->sub_category_ids;
         $flashs = CourseFlashcard::query();
         $flashs->where('course_id', $request->course_id);
-        if (isset($category_ids) && !isset($sub_category_ids)){
-            $flashs = $flashs->whereIn('category_id', request()->category_ids)
+        if (isset($category_id) && !isset($sub_category_ids)){
+            $flashs = $flashs->where('category_id', request()->category_id)
                 ->orWhereHas('category', function ($cat){
                     $cat->whereHas('parent', function ($parent){
-                        $parent->where('id', request()->category_ids);
+                        $parent->where('id', request()->category_id);
                     });
                 });
         }
