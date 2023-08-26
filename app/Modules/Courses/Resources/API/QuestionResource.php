@@ -33,7 +33,8 @@ class QuestionResource extends JsonResource
             $explanationObject = [
                 'text'  => $explanation,
                 'image' => $explanation_image,
-                'voice' => $explanation_voice
+                'voice' => $explanation_voice,
+                'voice_duration' => $this->duration
             ];
         }
         return [
