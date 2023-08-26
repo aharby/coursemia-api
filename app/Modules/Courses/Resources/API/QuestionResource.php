@@ -30,17 +30,22 @@ class QuestionResource extends JsonResource
         if (isset($this->explanation_image)){
             $explanation_image = asset($this->explanation_image);
         }
+        if (!isset($explanation) && !isset($this->explanation_voice) && !isset($this->explanation_image)){
+            $explanationObject = null;
+        }else{
+            $explanationObject = [
+                'text'  => $explanation,
+                'image' => $explanation_image,
+                'voice' => $explanation_voice
+            ]
+        }
         return [
             'id'            => $this->id,
             'question'      => $this->translated_title,
             'image'         => $image,
             'is_free_content' => (boolean)$this->is_free_content,
             'answers'       => QuestionAnswersResource::collection($this->answers),
-            'explanation'   => [
-                'text'  => $explanation,
-                'image' => $explanation_image,
-                'voice' => $explanation_voice
-            ]
+            'explanation'   => $explanationObject
         ];
     }
 }
