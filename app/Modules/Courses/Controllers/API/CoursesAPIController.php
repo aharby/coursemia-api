@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\CourseUser;
 use App\Modules\Courses\Repository\HostCourseRequestRepositoryInterface;
 use App\Modules\Courses\Requests\Api\SubmitHostCourseRequestRequest;
 use App\Modules\Courses\Resources\API\CourseDetailsResource;
@@ -71,6 +72,10 @@ class CoursesAPIController extends Controller
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
         $lectures = CourseLecture::query();
+        $user = auth('api')->user();
+        $isMyCourse = 0;
+        if (isset($user))
+            $isMyCourse = CourseUser::where(['course_id' => $request->course_id, 'user_id' => $user->id])->count();
         if (isset($request->category_id) && !isset($request->sub_category_ids)) {
             $lectures = $lectures->where(function ($q){
                 $q->where('category_id', request()->category_id)
@@ -84,6 +89,8 @@ class CoursesAPIController extends Controller
         if (isset($request->sub_category_ids)){
             $lectures = $lectures->whereIn('category_id', $request->sub_category_ids);
         }
+        if ($isMyCourse < 1)
+            $lectures = $lectures->where('is_free_content' , '=', 1);
         $lectures = $lectures->where('course_id', $request->course_id)->get();
         return customResponse(CourseLectureResource::collection($lectures), __("Done"), 200, StatusCodesEnum::DONE);
     }
@@ -96,6 +103,10 @@ class CoursesAPIController extends Controller
         if ($v->fails()) {
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
+        $user = auth('api')->user();
+        $isMyCourse = 0;
+        if (isset($user))
+            $isMyCourse = CourseUser::where(['course_id' => $request->course_id, 'user_id' => $user->id])->count();
         $notes = CourseNote::where('course_id', $request->course_id);
         if (isset($request->category_id) && !isset($request->sub_category_ids)) {
             $notes = $notes->where(function ($q){
@@ -110,6 +121,8 @@ class CoursesAPIController extends Controller
         if (isset($request->sub_category_ids)){
             $notes = $notes->whereIn('category_id', $request->sub_category_ids);
         }
+        if ($isMyCourse < 1)
+            $notes = $notes->where('is_free_content' , '=', 1);
         $notes = $notes->get();
         return customResponse(CourseNoteResource::collection($notes), __("Done"), 200, StatusCodesEnum::DONE);
     }

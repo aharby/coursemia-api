@@ -9,6 +9,7 @@ use App\Modules\Courses\Models\Course;
 use App\Modules\Courses\Models\CourseFlashcard;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\CourseUser;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
 use App\Modules\Courses\Resources\API\CourseDetailsResource;
 use App\Modules\Courses\Resources\API\CourseLectureResource;
@@ -27,10 +28,10 @@ class CoursesFlashCardsAPIController extends Controller
         $user = auth('api')->user();
         $category_id = \request()->category_id;
         $sub_category_ids = \request()->sub_category_ids;
-        $flashs = CourseFlashcard::query();
-        $flashs->where('course_id', $request->course_id);
+        $flashes = CourseFlashcard::query();
+        $flashes->where('course_id', $request->course_id);
         if (isset($category_id) && !isset($sub_category_ids)){
-            $flashs = $flashs->where('category_id', request()->category_id)
+            $flashes = $flashes->where('category_id', request()->category_id)
                 ->orWhereHas('category', function ($cat){
                     $cat->whereHas('parent', function ($parent){
                         $parent->where('id', request()->category_id);
@@ -38,12 +39,14 @@ class CoursesFlashCardsAPIController extends Controller
                 });
         }
         if (isset($sub_category_ids)){
-            $flashs = $flashs->whereIn('category_id', $request->sub_category_ids);
+            $flashes = $flashes->whereIn('category_id', $request->sub_category_ids);
         }
+        $isMyCourse = 0;
         if (isset($user))
-            $flash_cards = $flashs->get();
-        else
-            $flash_cards = $flashs->where('is_free_content', '=', 1)->get();
+            $isMyCourse = CourseUser::where(['course_id' => $request->course_id, 'user_id' => $user->id])->count();
+        if ($isMyCourse < 1)
+            $flashes = $flashes->where('is_free_content' , '=', 1);
+        $flash_cards = $flashes->get();
         return customResponse(FlashCardsResource::collection($flash_cards), trans('api.course flashcards'), 200, StatusCodesEnum::DONE);
     }
 }
