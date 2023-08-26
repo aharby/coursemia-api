@@ -38,7 +38,9 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                 ->filter()
                 ->inRandomOrder()
                 ->where('course_id', $courseId)
-                ->with(['answers'])
+                ->with(['answers' => function ($answers) {
+                    $answers->inRandomOrder();
+                }])
                 ->get();
         }
         // Question bank so we have to get certain number of questions
@@ -47,7 +49,9 @@ class QuestionsRepository implements QuestionsRepositoryInterface
             ->filter()
             ->inRandomOrder()
             ->where('course_id', $courseId)
-            ->with(['answers'])
+            ->with(['answers' => function ($answers) {
+               $answers->inRandomOrder();
+            }])
             ->take($number_of_questions)
             ->get();
     }
