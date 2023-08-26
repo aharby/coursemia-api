@@ -14,20 +14,17 @@ class QuestionResource extends JsonResource
      */
     public function toArray($request)
     {
-        $image = null;
-        $explanation = null;
-        $explanation_image = null;
-        $explanation_voice = null;
-        if (isset($this->image)){
+        $image = $this->image;
+        $explanation = $this->translated_explanation;
+        $explanation_image = $this->explanation_image;
+        $explanation_voice = $this->explanation_voice;
+        if (isset($image)){
             $image = asset($this->image);
         }
-        if (isset($this->translated_explanation)){
-            $explanation = $this->translated_explanation;
-        }
-        if (isset($this->explanation_voice)){
+        if (isset($explanation_voice)){
             $explanation_voice = asset($this->explanation_voice);
         }
-        if (isset($this->explanation_image)){
+        if (isset($explanation_image)){
             $explanation_image = asset($this->explanation_image);
         }
         if ((!isset($explanation) || $explanation == "") && (!isset($this->explanation_voice) || $this->explanation_voice == "") && (!isset($this->explanation_image) || $this->explanation_image == "")){
