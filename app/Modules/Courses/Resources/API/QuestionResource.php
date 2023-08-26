@@ -30,7 +30,7 @@ class QuestionResource extends JsonResource
         if (isset($this->explanation_image)){
             $explanation_image = asset($this->explanation_image);
         }
-        if (!isset($explanation) && !isset($this->explanation_voice) && !isset($this->explanation_image)){
+        if ((!isset($explanation) || $explanation == "") && (!isset($this->explanation_voice) || $this->explanation_voice == "") && (!isset($this->explanation_image) || $this->explanation_image == "")){
             $explanationObject = null;
         }else{
             $explanationObject = [
