@@ -27,7 +27,7 @@ class QuestionResource extends JsonResource
         if (isset($explanation_image)){
             $explanation_image = asset($this->explanation_image);
         }
-        if ((!isset($explanation) || $explanation == "") && (!isset($this->explanation_voice) || $this->explanation_voice == "") && (!isset($this->explanation_image) || $this->explanation_image == "")){
+        if ((!isset($explanation) || $explanation == "") && (!isset($this->explanation_voice) || $this->explanation_voice == "") && (!isset($this->explanation_image) || $this->explanation_image == "" || $this->explanation_image == 'storage/uploads/large/')){
             $explanationObject = null;
         }else{
             $explanationObject = [
