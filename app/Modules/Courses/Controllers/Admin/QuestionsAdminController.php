@@ -105,8 +105,12 @@ class QuestionsAdminController extends Controller
             $question->image = moveSingleGarbageMediaToPublic($request->questionData['image_id'], 'courses');;
         if (isset($request->questionData['explanation_image_id']) && $request->questionData['explanation_image_id'] != 'undefined')
             $question->explanation_image = moveSingleGarbageMediaToPublic($request->questionData['explanation_image_id'], 'courses');
-        if (isset($request->questionData['explanation_voice']) && $request->questionData['explanation_voice'] != 'undefined')
+        if (isset($request->questionData['explanation_voice']) && $request->questionData['explanation_voice'] != 'undefined') {
             $question->explanation_voice = $request->questionData['explanation_voice'];
+            $result = shell_exec("ffmpeg -i ".asset($request->questionData['explanation_voice']).' 2>&1 | grep -o \'Duration: [0-9:.]*\'');
+            $duration =  substr($result,10,11);
+            $question->duration = $duration;
+        }
         $question->is_free_content = $request->questionData['is_free_content'];
         $question->admin_id = auth('admin')->user()->id;
         $question->save();
