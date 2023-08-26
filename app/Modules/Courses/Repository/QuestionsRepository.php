@@ -36,7 +36,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         if (isset($sub_category)){
             $questions = $questions->whereIn('category_id', $sub_category);
         }
-        if ($isMyCourse > 0)
+        if ($isMyCourse < 1)
             $questions = $questions->where('is_free_content' , '=', 1);
         // Timed test so we have to get all questions
         if (request()->exam_type == 2){
