@@ -37,7 +37,7 @@ class QuestionResource extends JsonResource
                 'text'  => $explanation,
                 'image' => $explanation_image,
                 'voice' => $explanation_voice
-            ]
+            ];
         }
         return [
             'id'            => $this->id,
