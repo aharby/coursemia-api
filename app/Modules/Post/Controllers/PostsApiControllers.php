@@ -31,16 +31,19 @@ class PostsApiControllers
     {
         $user = auth('api')->user();
         $posts = Post::query();
-        if ($request->posts_type == 'recent'){
+        if ($request->posts_type == 1){ // if type = recent
             $posts = $posts->orderBy('created_at', 'DESC');
         }
-        if ($request->posts_type == 'top'){
+        if ($request->posts_type == 2){ // if type = 'top'
             $posts = $posts->withCount('likes')->orderByDesc('likes_count');
         }
-        if ($request->posts_type == 'followed'){
-            $followed = UserFollow::where('follower_id', $user->id)->pluck('followed_id')->toArray();
-            $posts = $posts->whereIn('user_id', $followed);
-        }
+        if (isset($user))
+            if ($request->posts_type == 3){  // if type == 'followed'
+                $followed = UserFollow::where('follower_id', $user->id)->pluck('followed_id')->toArray();
+                $posts = $posts->whereIn('user_id', $followed);
+            }
+        else
+            return customResponse((object)[], "You are not logged in to view followers posts", 422, StatusCodesEnum::FAILED);
         $posts = $posts->paginate(request()->perPage, ['*'], 'page', request()->page);
         return customResponse(new PostsCollection($posts), "Done", 200, StatusCodesEnum::DONE);
     }
