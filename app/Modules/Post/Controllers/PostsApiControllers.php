@@ -37,11 +37,12 @@ class PostsApiControllers
         if ($request->posts_type == 2){ // if type = 'top'
             $posts = $posts->withCount('likes')->orderByDesc('likes_count');
         }
-        if (isset($user))
-            if ($request->posts_type == 3){  // if type == 'followed'
+        if (isset($user)) {
+            if ($request->posts_type == 3) {  // if type == 'followed'
                 $followed = UserFollow::where('follower_id', $user->id)->pluck('followed_id')->toArray();
                 $posts = $posts->whereIn('user_id', $followed);
             }
+        }
         else
             return customResponse((object)[], "You are not logged in to view followers posts", 422, StatusCodesEnum::FAILED);
         $posts = $posts->paginate(request()->perPage, ['*'], 'page', request()->page);
