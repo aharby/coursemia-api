@@ -27,6 +27,8 @@ class Post extends Model
     }
 
     public function getIsLikedAttribute(){
+        if (!auth('api')->user())
+            return false;
         $liked = PostLike::where([
             'post_id' => $this->attributes['id'],
             'type' => 'like',
@@ -38,6 +40,8 @@ class Post extends Model
     }
 
     public function getIsLovedAttribute(){
+        if (!auth('api')->user())
+            return false;
         $liked = PostLike::where([
             'post_id' => $this->attributes['id'],
             'type' => 'love',
