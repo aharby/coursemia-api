@@ -26,7 +26,6 @@ class PostsResource extends JsonResource
             $video = asset($this->video);
             $type == 'text_with_image_and_file' ? $type = 'text_with_image_and_file_and_video' : $type = 'text_with_video' ;
         }
-        $comments = $this->comments;
         return [
             "id"        => $this->id,
             "type"      => $type,
@@ -41,7 +40,7 @@ class PostsResource extends JsonResource
             "loves"     => $this->likes()->where('type', 'love')->count(),
             "user"      => new PostOwnerResource($this->user),
             "comments"  => PostCommentsResource::collection($this->whenLoaded('comments')),
-            "comments_count"  => sizeof($comments),
+            "comments_count"  => $this->comments_count,
             "date"      =>  Carbon::parse($this->created_at)->format('Y-m-d h:i:s')
         ];
     }
