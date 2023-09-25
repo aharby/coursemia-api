@@ -2,6 +2,7 @@
 
 namespace App\Modules\Post\Resources\Api;
 
+use App\Enums\PostTypeEnum;
 use App\Modules\Users\Resources\UserResorce;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -13,18 +14,18 @@ class PostsResource extends JsonResource
         $image = null;
         $file = null;
         $video = null;
-        $type = 'text';
+        $type = PostTypeEnum::TEXT;
         if (isset($this->image)){
             $image = asset($this->image);
-            $type = 'text_with_image';
+            $type = PostTypeEnum::TEXT_WITH_IMAGE;
         }
         if (isset($this->file)){
             $file = asset($this->file);
-            $type == 'text_with_image' ? $type = 'text_with_image_and_file' : $type = 'text_with_file';
+            $type == PostTypeEnum::TEXT_WITH_IMAGE ? $type = PostTypeEnum::TEXT_WITH_IMAGE_AND_FILE : $type = PostTypeEnum::TEXT_WITH_FILE;
         }
         if (isset($this->video)){
             $video = asset($this->video);
-            $type == 'text_with_image_and_file' ? $type = 'text_with_image_and_file_and_video' : $type = 'text_with_video' ;
+            $type == PostTypeEnum::TEXT_WITH_IMAGE_AND_FILE ? $type = PostTypeEnum::TEXT_WITH_IMAGE_AND_FILE_AND_VIDEO : $type = PostTypeEnum::TEXT_WITH_VIDEO ;
         }
         return [
             "id"        => $this->id,

@@ -15,6 +15,7 @@ class ListCourseQuestionsPaginator extends ResourceCollection
             'path'              => $this->path(),
             'per_page'          => $this->perPage(),
             'total'             => $this->total(),
+            'is_last_page'      => $this->currentPage() == $this->lastPage() ? true : false
         ];
     }
 }
