@@ -47,7 +47,11 @@ class PostsApiControllers
         }
 
         $posts = $posts->withCount('comments')->paginate(request()->perPage, ['*'], 'page', request()->page);
-        return customResponse(new PostsCollection($posts), "Done", 200, StatusCodesEnum::DONE);
+        return response()->json([
+            'data'  => new PostsCollection($posts),
+            'message'  => "Done",
+            'status_code'   => StatusCodesEnum::DONE
+        ], 200);
     }
 
     public function getPost($id){
