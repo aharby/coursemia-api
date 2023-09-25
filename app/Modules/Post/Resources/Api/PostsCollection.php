@@ -9,7 +9,7 @@ class PostsCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            "posts"             => PostsResource::collection($this->collection),
+            "data"             => PostsResource::collection($this->collection),
             'current_page'      => $this->currentPage(),
             'last_page'         => $this->lastPage(),
             'path'              => $this->path(),
