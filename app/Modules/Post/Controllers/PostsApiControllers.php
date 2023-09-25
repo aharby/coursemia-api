@@ -51,7 +51,7 @@ class PostsApiControllers
     }
 
     public function getPost($id){
-        $post = Post::with('comments')->find($id);
+        $post = Post::with('comments')->withCount('comments')->find($id);
         return customResponse(new PostsResource($post), 'Done', 200, StatusCodesEnum::DONE);
     }
 
