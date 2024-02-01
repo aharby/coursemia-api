@@ -151,6 +151,7 @@ class CoursesAdminController extends Controller
         if ($request->has('cover_image')) {
             $course->cover_image = moveSingleGarbageMediaToPublic($request->get('cover_image'), 'courses');
         }
+        $course->admin_id = auth('admin')->user()->id;
         $course->save();
         return customResponse(new CoursesResource($course), "Course added successfully, you can continue adding course data or add them later", 200, StatusCodesEnum::DONE);
     }
