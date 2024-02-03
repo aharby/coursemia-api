@@ -29,7 +29,7 @@ class SubmitExamAnswersRequest extends FormRequest
     {
         return [
             'course_id'             => 'required|exists:courses,id',
-            'category_id'           => 'required|exists:categories,id',
+//            'category_id'           => 'required|exists:categories,id',
             'answers'               => 'required|array',
             'answers.*.question_id' => 'required|exists:questions,id',
             'answers.*.answer_id'   => 'required|exists:answers,id',
