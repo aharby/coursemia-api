@@ -38,17 +38,26 @@ class ExamQuestionsAndAnswersAPIController extends Controller
         $count = sizeof($answers);
         foreach ($answers as $answer){
 //            $question = Question::find($answer['question_id']);
-            $myAnswer = Answer::find($answer['answer_id']);
-            $myAnswer->selection_count++;
-            $myAnswer->save();
-            $userQuestionAnswer = UserQuestionAnswer::create([
-                'user_id' => auth('api')->user()->id,
-                'question_id' => $myAnswer->question_id,
-                'answer_id' => $myAnswer->id,
-            ]);
-            if ($myAnswer->is_correct){
-                $correctAnswers++;
+            if (isset($answer['answer_id'])){
+                $myAnswer = Answer::find($answer['answer_id']);
+                $myAnswer->selection_count++;
+                $myAnswer->save();
+                $userQuestionAnswer = UserQuestionAnswer::create([
+                    'user_id' => auth('api')->user()->id,
+                    'question_id' => $myAnswer->question_id,
+                    'answer_id' => $myAnswer->id,
+                ]);
+                if ($myAnswer->is_correct){
+                    $correctAnswers++;
+                }
+            }else{
+                $userQuestionAnswer = UserQuestionAnswer::create([
+                    'user_id' => auth('api')->user()->id,
+                    'question_id' => $answer['question_id'],
+                    'answer_id' => null,
+                ]);
             }
+
         }
         $percentage = ($correctAnswers / $count)*100;
         return customResponse($percentage, trans('api.submit exam'), 200, StatusCodesEnum::DONE);
