@@ -39,7 +39,7 @@ class CoursesFlashCardsAPIController extends Controller
                 });
         }
         if (isset($sub_category_ids)){
-            $flashes = $flashes->whereIn('category_id', $request->sub_category_ids);
+            $flashes = $flashes->whereIn('category_id', json_decode($request->sub_category_ids));
         }
         $isMyCourse = 0;
         if (isset($user))

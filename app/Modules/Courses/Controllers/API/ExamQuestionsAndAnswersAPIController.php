@@ -109,6 +109,9 @@ class ExamQuestionsAndAnswersAPIController extends Controller
                 }
             }
         }
-        return customResponse($correctAnswers, trans('api.submit flashcard'), 200, StatusCodesEnum::DONE);
+        return customResponse([
+            'correct_answers' => $correctAnswers
+           ] , trans('api.submit flashcard'), 200, StatusCodesEnum::DONE);
     }
 }
+
