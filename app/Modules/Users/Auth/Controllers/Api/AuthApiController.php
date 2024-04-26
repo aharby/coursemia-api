@@ -237,21 +237,6 @@ class AuthApiController extends BaseApiController
 
     public function verifyPhone(VerificationRequest $request)
     {
-        $user = User::where('phone', $request->phone_number)->first();
-        $user->is_verified = 1;
-        $user->save();
-        /* Save user device */
-        if (isset($request->device_name)){
-            $device = new UserDevice;
-            $device->device_name = $request->device_name;
-            $device->device_type = request()->header('device-type');
-            $device->device_id = request()->header('device-id');
-            $device->user_id = $user->id;
-            $device->is_tablet = $request->is_tablet;
-            $device->save();
-        }
-        /* Authenticate user */
-        return customResponse((object)[], trans('Phone number verified successfully'),200, StatusCodesEnum::DONE);
         try{
             $token = getenv("TWILIO_AUTH_TOKEN");
             $twilio_sid = getenv("TWILIO_SID");
@@ -263,8 +248,12 @@ class AuthApiController extends BaseApiController
                     'to' => $request->country_code.$request->phone_number,
                     'code' => $request->verification_code
                 ]);
+                
             if ($verification->valid) {
-                $user = tap(User::where('phone', $request->phone_number))->update(['is_verified' => 1]);
+                $user = User::where('phone', $request->phone_number)->first();
+                $user->is_verified = 1;
+                $user->save();
+
                 /* Save user device */
                 if (isset($request->device_name)){
                     $device = new UserDevice;
@@ -330,7 +319,7 @@ class AuthApiController extends BaseApiController
 
     public function forgetPassword(ForgetPasswordRequest $request){
         try {
-//            $this->sendVerifyMessage($request->country_code.$request->phone_number);
+           $this->sendVerifyMessage($request->country_code.$request->phone_number);
             return customResponse((object)[], __("Verification code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);

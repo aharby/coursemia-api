@@ -100,7 +100,14 @@ class User extends Authenticatable
     }
 
     public function getRankAttribute(){
-        $higherUsers = \App\Modules\Users\Models\User::where('total_correct_answers', '>', $this->attributes['total_correct_answers'])->count();
+        
+        $higherUsers = 0;
+        
+        if(array_key_exists('total_correct_answers', $this->attributes))
+        {
+            $higherUsers = \App\Modules\Users\Models\User::where('total_correct_answers', '>', $this->attributes['total_correct_answers'])->count();
+        }
+
         return $higherUsers+1;
     }
 
