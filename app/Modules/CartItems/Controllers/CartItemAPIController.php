@@ -9,9 +9,22 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Modules\CartItems\Models\CartItem;
 
+use App\Modules\Courses\Resources\API\CoursesResource;
+
 class CartItemAPIController extends Controller
 {
-    //
+    public function getCourses()
+    {
+        $user = auth('api')->user();
+
+        $courses = CartItem::where('user_id', $user->id)
+        ->with('course')
+        ->get()
+        ->pluck('course'); // Extract the item from the relationship
+    
+        return customResponse(CoursesResource::collection($courses), __("Fetched cart courses successfully"), 200, StatusCodesEnum::DONE);
+
+    }
 
     public function addCourse(Request $request)
     {

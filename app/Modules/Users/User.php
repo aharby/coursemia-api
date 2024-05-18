@@ -544,4 +544,9 @@ class User extends Authenticatable
             }
         });
     }
+
+    public function cartItems()
+    {
+        return $this->hasMany(\App\Modules\CartItems\Models\CartItem::class);
+    }
 }

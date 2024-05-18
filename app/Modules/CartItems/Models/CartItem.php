@@ -24,4 +24,10 @@ class CartItem extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function emptyCart($userId){
+
+        CartItem::where('user_id', $userId)->delete();
+
+    }
 }

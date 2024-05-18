@@ -98,4 +98,9 @@ class Course extends Model
             }
         });
     }
+
+    public function cartItems()
+    {
+        return $this->hasMany(\App\Modules\CartItems\Models\CartItem::class);
+    }
 }
