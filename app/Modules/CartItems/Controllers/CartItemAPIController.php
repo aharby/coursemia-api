@@ -26,37 +26,57 @@ class CartItemAPIController extends Controller
 
     }
 
-    public function addCourse(Request $request)
+    public function addCourse($courseId)
     {
-        $validator = Validator::make($request->all(), [
-            'course_id' => 'required|exists:courses,id',
+        $validator = Validator::make(
+            ['course_id' => $courseId] ,[
+            'course_id' => 'required|exists:courses,id'
         ]);
+
+
         if ($validator->fails()){
             return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
 
+        $userId = auth('api')->user()->id;
+        $cartItemExists = CartItem::where('user_id', $userId)->where('course_id', $courseId)->exists();
+
+        if($cartItemExists){
+            return customResponse(null, "Course already in cart", 400, StatusCodesEnum::FAILED);
+        }
+
         $cartItem = new CartItem();
-        $cartItem->user_id = auth('api')->user()->id;
-        $cartItem->course_id = $request['course_id'];
+        $cartItem->user_id = $userId;
+        $cartItem->course_id = $courseId;
+
         $cartItem->save();
 
         return customResponse(null, "Course added to cart", 200, StatusCodesEnum::DONE);
 
     }
 
-    public function removeCourse(Request $request)
+    public function removeCourse($courseId)
     {
-        $validator = Validator::make($request->all(), [
-            'course_id' => 'required|exists:courses,id',
+        $validator = Validator::make(
+            ['course_id' => $courseId] ,[
+            'course_id' => 'required|exists:courses,id'
         ]);
+
+
         if ($validator->fails()){
             return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
 
+
         $userId = auth('api')->user()->id;
-        $courseId = $request['course_id']; 
         
-        CartItem::where('user_id', $userId)->where('course_id', $courseId)->delete();
+        $cartItem = CartItem::where('user_id', $userId)->where('course_id', $courseId);
+
+        if(!($cartItem->exists())){
+            return customResponse(null, "Course is not in cart", 400, StatusCodesEnum::FAILED);
+        }
+
+        $cartItem->delete();
 
         return customResponse(null, "Course was removed from cart", 200, StatusCodesEnum::DONE);
 

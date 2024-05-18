@@ -10,8 +10,8 @@ Route::group([
     Route::group(['middleware' => 'auth:api'], function (){
         Route::get('get-courses',[CartItemAPIController::class, 'getCourses']);
         
-        Route::post('add-course', [CartItemAPIController::class, 'addCourse']);
+        Route::post('add-course/{course_id}', [CartItemAPIController::class, 'addCourse']);
 
-        Route::delete('remove-course', [CartItemAPIController::class, 'removeCourse']);
+        Route::delete('remove-course/{course_id}', [CartItemAPIController::class, 'removeCourse']);
     });
 });
