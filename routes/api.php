@@ -43,6 +43,8 @@ Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspe
     require base_path('app/Modules/Specialities/Routes/api.php');
     require base_path('app/Modules/GarbageMedia/Routes/api.php');
     require base_path('app/Modules/Post/Routes/api.php');
+    require base_path('app/Modules/CartItems/Routes/api.php');
+
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function (){
