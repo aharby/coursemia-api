@@ -16,7 +16,7 @@ Route::group([
         Route::post('add-course-review', 'CourseReviewsAPIController@addCourseReview');
 
         // Submit Exam APIs
-        Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@getCourseFlashCards');
+        Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@submitExamAnswers');
 
     });
     Route::post('get-courses', 'CoursesAPIController@courses');
