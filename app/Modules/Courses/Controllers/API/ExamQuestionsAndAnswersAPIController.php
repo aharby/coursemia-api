@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ExamQuestionsAndAnswersAPIController extends Controller
 {
-    public function getCourseFlashCards(SubmitExamAnswersRequest $request)
+    public function submitExamAnswers(SubmitExamAnswersRequest $request)
     {
         $course_id = $request->course_id;
         $category_id = $request->category_id;
@@ -60,7 +60,9 @@ class ExamQuestionsAndAnswersAPIController extends Controller
 
         }
         $percentage = ($correctAnswers / $count)*100;
-        return customResponse($percentage, trans('api.submit exam'), 200, StatusCodesEnum::DONE);
+        return customResponse([
+            'score_percentage' => $percentage
+           ], trans('api.submit exam'), 200, StatusCodesEnum::DONE);
     }
 
     public function submitFlashCardAnswer(SubmitFlashCardAnswersRequest $request){
