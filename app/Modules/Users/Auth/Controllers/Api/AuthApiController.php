@@ -7,7 +7,7 @@ use App\Modules\Users\Auth\Requests\AddDeviceTokenRequest;
 use App\Modules\Users\Auth\Requests\Api\ResetPasswordRequest;
 use App\Modules\Users\Auth\Requests\ApiRegisterRequest;
 use App\Modules\Users\Auth\Requests\ChangePasswordRequest;
-use App\Modules\Users\Auth\Requests\ForgetPasswordRequest;
+use App\Modules\Users\Auth\Requests\VerificationCodeRequest;
 use App\Modules\Users\Auth\Requests\LoginRequest;
 use App\Modules\Users\Auth\Requests\VerificationRequest;
 use App\Modules\Users\Models\UserDevice;
@@ -317,7 +317,7 @@ class AuthApiController extends BaseApiController
 
     }
 
-    public function forgetPassword(ForgetPasswordRequest $request){
+    public function sendVerificationCode(VerificationCodeRequest $request){
         try {
            $this->sendVerifyMessage($request->country_code.$request->phone_number);
             return customResponse((object)[], __("Verification code sent successfully"),200, StatusCodesEnum::DONE);
@@ -381,14 +381,34 @@ class AuthApiController extends BaseApiController
     }
 
     public function resetPassword(ResetPasswordRequest $request){
-        $user = User::where(['phone' => $request->phone_number, 'country_code' => $request->country_code])
-            ->first();
-        if (isset($user)){
-            $user->password = Hash::make($request->password);
-            $user->save();
-            return customResponse((object)[], __("Password reset successfully"), 200, StatusCodesEnum::DONE);
+
+        try{
+            $token = getenv("TWILIO_AUTH_TOKEN");
+            $twilio_sid = getenv("TWILIO_SID");
+            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+            $twilio = new Client($twilio_sid, $token);
+            $verification = $twilio->verify->v2->services($twilio_verify_sid)
+                ->verificationChecks
+                ->create([
+                    'to' => $request->country_code.$request->phone_number,
+                    'code' => $request->verification_code
+                ]);
+                
+            if ($verification->valid) {
+                $user = User::where(['phone' => $request->phone_number, 'country_code' => $request->country_code])
+                ->first();
+                if (isset($user)){
+                    $user->password = Hash::make($request->password);
+                    $user->save();
+                    return customResponse((object)[], __("Password reset successfully"), 200, StatusCodesEnum::DONE);
+                }
+                return customResponse((object)[], __("User not found"), 422, StatusCodesEnum::FAILED);
+            }
+            return customResponse((object)[], 'verification failed',422, StatusCodesEnum::FAILED);
+        }catch (\Exception $e){
+            return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
-        return customResponse((object)[], __("User not found"), 422, StatusCodesEnum::FAILED);
+
     }
 
     public function activateOtp(UserActivateOtp $userActivateOtp)

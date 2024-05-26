@@ -44,9 +44,8 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::post('create-account', 'AuthApiController@register');
     Route::post('delete-devices', 'AuthApiController@deleteDevices');
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
-    Route::post('forgot-password', 'AuthApiController@forgetPassword');
     Route::post('reset-password', 'AuthApiController@resetPassword');
-    Route::post('resend-verification-code', 'AuthApiController@forgetPassword');
+    Route::post('send-verification-code', 'AuthApiController@sendVerificationCode');
     Route::post('login', 'AuthApiController@login');
     Route::group(['middleware' => 'userActive'], function (){
         Route::group(['middleware' => 'auth:api'], function (){

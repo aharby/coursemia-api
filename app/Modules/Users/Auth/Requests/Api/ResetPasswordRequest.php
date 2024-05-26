@@ -28,7 +28,8 @@ class ResetPasswordRequest extends FormRequest
         return [
             'country_code'      => 'required|exists:countries,country_code',
             'phone_number'      => 'required|exists:users,phone',
-            'password'          => 'required'
+            'password'          => 'required',
+            'verification_code' => 'required'
         ];
     }
 
