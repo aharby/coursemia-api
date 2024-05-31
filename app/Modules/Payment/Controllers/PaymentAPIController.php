@@ -43,7 +43,8 @@ class PaymentAPIController extends Controller
               ]);
 
             return customResponse([
-                "stripe_client_secret" => $paymentIntent->client_secret
+                "stripe_client_secret" => $paymentIntent->client_secret,
+                "total_amount_in_cents" => $amount
             ], "Payment Intent Created successfully", 200, StatusCodesEnum::DONE);
 
         } catch (\Exception $e) {
