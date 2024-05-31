@@ -30,17 +30,21 @@ class PaymentAPIController extends Controller
     {
         $stripe = new StripeClient(env('STRIPE_SECRET'));
 
+        $amount = $this->getTotalCost() * 100; // amount in cents, as stripe accepts it
+
+        if($amount == 0)
+            return customResponse(null, "Nothing to pay!", 200, StatusCodesEnum::DONE);
+
         try {
             $paymentIntent = $stripe->paymentIntents->create([
-                'amount' => $this->getTotalCost(), //amount in cents
+                'amount' => $amount,
                 'currency' => 'usd',
-                'payment_method_types' => ['card'],
-                'transfer_group' => 'ORDER100',
+                'payment_method_types' => ['card']
               ]);
 
-            return response()->json([
-                'paymentIntent' => $paymentIntent->client_secret,
-            ], 200);
+            return customResponse([
+                "stripe_client_secret" => $paymentIntent->client_secret
+            ], "Payment Intent Created successfully", 200, StatusCodesEnum::DONE);
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
