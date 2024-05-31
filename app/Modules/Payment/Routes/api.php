@@ -22,11 +22,9 @@ Route::group([
     'middleware' => ['userActive'],
     'prefix' => 'payment', 'as' => 'payment.'
 ], function (){
-    Route::group(['middleware' => 'auth:api'], function (){
-       // Route::get('get-courses',[CartItemAPIController::class, 'getCourses']);
-        
-        Route::post('create-intent', [PaymentAPIController::class, 'createPaymentIntent']);
+    Route::group(['middleware' => 'auth:api'], function (){        
 
-        //Route::delete('remove-course/{course_id}', [CartItemAPIController::class, 'removeCourse']);
+        Route::post('checkout', [PaymentAPIController::class, 'createPaymentIntent']);
+
     });
 });
