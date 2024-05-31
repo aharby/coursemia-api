@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\CartItems\Controllers;
+namespace App\Modules\Payment\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
 use APP\Enums\StatusCodesEnum;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,7 +20,7 @@ class CartItemAPIController extends Controller
         $courses = CartItem::where('user_id', $user->id)
         ->with('course')
         ->get()
-        ->pluck('course'); // Extract the item from the relationship
+        ->pluck('course');
     
         return customResponse(CoursesResource::collection($courses), __("Fetched cart courses successfully"), 200, StatusCodesEnum::DONE);
 
