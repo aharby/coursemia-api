@@ -21,7 +21,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
             $isMyCourse = CourseUser::where(['course_id' => $courseId, 'user_id' => $user->id])->count();
         $category_ids = request()->category_ids;
         $sub_category = request()->sub_category_ids;
-        $number_of_questions = request()->exam_content;
+        $number_of_questions = request()->number_of_questions;
         $questions = $this->model->query();
         if (isset($category_ids)){
             $questions = $questions->where(function ($q){
