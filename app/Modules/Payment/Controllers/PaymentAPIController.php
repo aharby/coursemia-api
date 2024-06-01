@@ -13,27 +13,39 @@ use App\Modules\CartItems\Models\CartItem;
 
 use Stripe\StripeClient;
 
+use  APP\Modules\Offers\Models\Offer;
+
 class PaymentAPIController extends Controller
 {
-    public function getTotalCost()
+    public function getTotalCost($promoCode)
     {
         $user = auth('api')->user();
 
-        return CartItem::where('user_id', $user->id)
+        $cartItems = CartItem::where('user_id', $user->id)
         ->with('course')
-        ->get()
-        ->pluck('course.price')
-        ->sum();
+        ->get();
+
+        // Calculate the total price
+        $totalPrice = $cartItems->map(function ($cartItem) {
+            $course = $cartItem->course;
+            return $course->price_after_discount ?? $course->price;
+        })->sum();
     }
     
     public function createPaymentIntent(Request $request)
     {
-        $stripe = new StripeClient(env('STRIPE_SECRET'));
+        $promoCode = $request->promo_code;
+        
+        // if promocode is passed, check if it is valid
+        if(!is_null($promoCode) && !Offer::whereRaw('LOWER(offer_code) = ?', [$promoCode])->count())
+            return customResponse((object)[], "The selected promo code is invalid.", 442, StatusCodesEnum::FAILED);
 
-        $amount = $this->getTotalCost() * 100; // amount in cents, as stripe accepts it
+        $amount = $this->getTotalCost($promoCode) * 100; // amount in cents, as stripe accepts it
 
         if($amount == 0)
             return customResponse(null, "Nothing to pay!", 200, StatusCodesEnum::DONE);
+
+        $stripe = new StripeClient(env('STRIPE_SECRET'));
 
         try {
             $paymentIntent = $stripe->paymentIntents->create([
@@ -52,4 +64,17 @@ class PaymentAPIController extends Controller
         }
     }
 
+    public function isPromoCodeValid($promoCode)
+    {
+        $promoCodeExists = Offer::whereRaw('LOWER(offer_code) = ?', [$promoCode])->count();
+
+        if ($promoCodeExists)
+            return customResponse([
+                "is_valid" => true
+            ], "Promocode is valid", 200, StatusCodesEnum::DONE);     
+        else
+            return customResponse([
+                "is_valid" => false
+            ], "Invalid Promocode", 200, StatusCodesEnum::DONE);
+    }
 }

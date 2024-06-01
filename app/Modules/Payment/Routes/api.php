@@ -26,5 +26,7 @@ Route::group([
 
         Route::post('checkout', [PaymentAPIController::class, 'createPaymentIntent']);
 
+        ROUTE::get('check-promocode/{promo_code}', [PaymentAPIController::class, 'isPromoCodeValid']);
+
     });
 });
