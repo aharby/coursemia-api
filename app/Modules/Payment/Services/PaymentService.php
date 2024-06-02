@@ -9,6 +9,7 @@ use Stripe\PaymentIntent;
 
 use App\Modules\CartItems\Models\CartItem;
 
+use App\Modules\Users\Models\User;
 class PaymentService
 {
     public function __construct()
@@ -16,39 +17,26 @@ class PaymentService
         Stripe::setApiKey(env('STRIPE_SECRET'));
     }
 
-    public function getStripeCustomer()
+    public function getStripeCustomerId()
     {
         $user = auth('api')->user();
 
-        $customer = $this->getStripeCustomerByEmail($user->email);
+        $customerId = $user->strip_customer_id;
 
-        if(!$customer)
-            $customer = $this->createStripeCustomer($user->email, $user->full_name);
+        if(!$customerId)
+        {
+            $stripe_customer = Customer::create([
+                'email' => $user->email,
+                'name' => $user->full_name,
+                ]);
 
-        return $customer;
-    }
+            $customerId = $stripe_customer->id;
 
-    public function getStripeCustomerByEmail($email)
-    {
-        $customers = Customer::all();
-
-        foreach ($customers->data as $customer) {
-            if ($customer->email === $email) {
-                return $customer;
-            }
+            $user->stripe_customer_id = $customerId;
+            $user->save();
         }
 
-        return null;
-    }
-
-    public function createStripeCustomer($email, $name)
-    {
-        $customer = Customer::create([
-            'email' => $email,
-            'name' => $name,
-        ]);
-
-        return $customer;
+        return $customerId;
     }
 
     public function getStripeCustomerEphemeralKey($customerId)
@@ -82,4 +70,12 @@ class PaymentService
             'payment_method_types' => ['card']
         ]);
     }
+
+    public function processSuccessfulPaymentForCustomer($customerId)
+    {
+        $stripCustomer = Customer::retrieve($customerId);
+
+        $user = User::where('stripe_customer_id', $customerId);
+    }
+
 }

@@ -32,17 +32,17 @@ class PaymentAPIController extends Controller
         if($amount == 0)
             return customResponse(null, "Nothing to pay!", 200, StatusCodesEnum::DONE);
 
-        $customer = $this->paymentService->getStripeCustomer();
+        $customerId = $this->paymentService->getStripeCustomerId();
 
-        $ephemeralKey = $this->paymentService->getStripeCustomerEphemeralKey($customer->id);
+        $ephemeralKey = $this->paymentService->getStripeCustomerEphemeralKey($customerId);
 
         try {
-            $paymentIntent = $this->paymentService->createPaymentIntent($customer->id, $amount);
+            $paymentIntent = $this->paymentService->createPaymentIntent($customerId, $amount);
 
             return customResponse([
                 "paymentIntent" => $paymentIntent->client_secret,
                 'ephemeralKey' => $ephemeralKey->secret,
-                'customer' => $customer->id,
+                'customer' => $customerId,
                 "total_amount_in_cents" => $amount
             ], "Payment Intent Created successfully", 200, StatusCodesEnum::DONE);
 
