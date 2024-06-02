@@ -58,6 +58,8 @@ class PaymentService
         $totalPrice = $courses->map(function ($course) {
             return $course->price_after_discount ?? $course->price;
         })->sum();
+
+        return $totalPrice;
     }
 
     public function createPaymentIntent($customerId, $amount, $currency = 'usd')
@@ -94,6 +96,8 @@ class PaymentService
 
         // empty cart
         CartCourse::where('user_id', $user->id)->delete();
+
+        // payout connected accounts
     }
 
 }

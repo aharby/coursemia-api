@@ -21,7 +21,7 @@ class StripeWebhookController extends Controller
     {
     }
 
-    public function updatePaymentIntentStatus(Request $request)
+    public function updatePaymentStatus(Request $request)
     {
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
