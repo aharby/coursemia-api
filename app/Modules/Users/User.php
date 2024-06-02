@@ -55,6 +55,8 @@ use Illuminate\Notifications\Notification;
 use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use App\Modules\payment\Models\CartCourse;
+
 class User extends Authenticatable
 {
     use HasAttach, Notifiable, Invitable, UserRatingable, HasFactory;
@@ -113,6 +115,10 @@ class User extends Authenticatable
 
     public function courses(){
         return $this->hasManyThrough(Course::class, CourseUser::class, 'user_id', 'id', 'id', 'course_id');
+    }
+
+    public function cartCourses(){
+        return $this->hasManyThrough(Course::class, CartCourse::class, 'user_id', 'id', 'id', 'course_id');
     }
 
     public function scopeActive($query)

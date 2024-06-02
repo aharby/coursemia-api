@@ -73,9 +73,14 @@ class PaymentService
 
     public function processSuccessfulPaymentForCustomer($customerId)
     {
-        $stripCustomer = Customer::retrieve($customerId);
-
         $user = User::where('stripe_customer_id', $customerId);
+
+
+
+
+
+        // empty cart
+        CartItem::emptyCartForUser($user->id);
     }
 
 }
