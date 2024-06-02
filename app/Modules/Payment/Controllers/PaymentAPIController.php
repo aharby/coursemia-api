@@ -21,14 +21,12 @@ class PaymentAPIController extends Controller
 
     public function createPaymentIntent(Request $request)
     {
-        //promo code
         $promoCode = $request->promo_code;
         
         // if promocode is passed, check if it is valid
         if(!is_null($promoCode) && !Offer::whereRaw('LOWER(offer_code) = ?', [$promoCode])->count())
             return customResponse((object)[], "The selected promo code is invalid.", 442, StatusCodesEnum::FAILED);
 
-        //amount
         $amount = $this->paymentService->getTotalCost($promoCode) * 100; // amount in cents, as stripe accepts it
 
         if($amount == 0)
