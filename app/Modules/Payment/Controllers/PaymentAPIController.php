@@ -9,53 +9,42 @@ use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 
-use App\Modules\CartItems\Models\CartItem;
-
-use Stripe\StripeClient;
+use App\Modules\Payment\Services\PaymentService;
 
 use  APP\Modules\Offers\Models\Offer;
 
 class PaymentAPIController extends Controller
 {
-    public function getTotalCost($promoCode)
+    public function __construct(private PaymentService $paymentService)
     {
-        $user = auth('api')->user();
-
-        $cartItems = CartItem::where('user_id', $user->id)
-        ->with('course')
-        ->get();
-
-        // Calculate the total price
-        $totalPrice = $cartItems->map(function ($cartItem) {
-            $course = $cartItem->course;
-            return $course->price_after_discount ?? $course->price;
-        })->sum();
     }
-    
+
     public function createPaymentIntent(Request $request)
     {
+        //promo code
         $promoCode = $request->promo_code;
         
         // if promocode is passed, check if it is valid
         if(!is_null($promoCode) && !Offer::whereRaw('LOWER(offer_code) = ?', [$promoCode])->count())
             return customResponse((object)[], "The selected promo code is invalid.", 442, StatusCodesEnum::FAILED);
 
-        $amount = $this->getTotalCost($promoCode) * 100; // amount in cents, as stripe accepts it
+        //amount
+        $amount = $this->paymentService->getTotalCost($promoCode) * 100; // amount in cents, as stripe accepts it
 
         if($amount == 0)
             return customResponse(null, "Nothing to pay!", 200, StatusCodesEnum::DONE);
 
-        $stripe = new StripeClient(env('STRIPE_SECRET'));
+        $customer = $this->paymentService->getStripeCustomer();
+
+        $ephemeralKey = $this->paymentService->getStripeCustomerEphemeralKey($customer->id);
 
         try {
-            $paymentIntent = $stripe->paymentIntents->create([
-                'amount' => $amount,
-                'currency' => 'usd',
-                'payment_method_types' => ['card']
-              ]);
+            $paymentIntent = $this->paymentService->createPaymentIntent($customer->id, $amount);
 
             return customResponse([
-                "stripe_client_secret" => $paymentIntent->client_secret,
+                "paymentIntent" => $paymentIntent->client_secret,
+                'ephemeralKey' => $ephemeralKey->secret,
+                'customer' => $customer->id,
                 "total_amount_in_cents" => $amount
             ], "Payment Intent Created successfully", 200, StatusCodesEnum::DONE);
 
