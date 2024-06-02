@@ -7,9 +7,11 @@ use Stripe\Customer;
 use Stripe\EphemeralKey;
 use Stripe\PaymentIntent;
 
-use App\Modules\CartItems\Models\CartItem;
-
 use App\Modules\Users\Models\User;
+use App\Modules\Payment\Models\CartCourse;
+
+use App\Modules\Courses\Models\CourseUser;
+
 class PaymentService
 {
     public function __construct()
@@ -50,13 +52,10 @@ class PaymentService
     {
         $user = auth('api')->user();
 
-        $cartItems = CartItem::where('user_id', $user->id)
-        ->with('course')
-        ->get();
+        $courses = $user->cartCourses;
 
         // Calculate the total price
-        $totalPrice = $cartItems->map(function ($cartItem) {
-            $course = $cartItem->course;
+        $totalPrice = $courses->map(function ($course) {
             return $course->price_after_discount ?? $course->price;
         })->sum();
     }
@@ -71,16 +70,30 @@ class PaymentService
         ]);
     }
 
-    public function processSuccessfulPaymentForCustomer($customerId)
+    public function processSuccessfulPayment(PaymentIntent $paymentIntent)
     {
-        $user = User::where('stripe_customer_id', $customerId);
+        $user = User::where('stripe_customer_id', $paymentIntent->customer);
 
+        //create order
+        $order = $user->orders()->create([
+            'total_price' => $paymentIntent->amount/100, // price in dollars
+            'stripe_invoice_id' => $paymentIntent->invoice
+        ]);
 
+        //add courses to user
+        $courses = $user->cartCourses;
 
+        foreach ($courses as $course){
+            $course_user = new CourseUser;
+            $course_user->user_id = $user->id;
+            $course_user->course_id = $course->id;
+            $course_user->save();
 
+            $order->courses()->attach($course->id);
+        }
 
         // empty cart
-        CartItem::emptyCartForUser($user->id);
+        CartCourse::where('user_id', $user->id)->delete();
     }
 
 }

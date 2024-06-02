@@ -7,6 +7,8 @@ use App\Modules\Users\Admin\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Modules\Payment\Models\Order;
+
 class Course extends Model
 {
     use HasFactory;
@@ -97,5 +99,10 @@ class Course extends Model
                     $quer->orderBy('id', $sortByDir);
             }
         });
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_course')->withTimestamps();
     }
 }

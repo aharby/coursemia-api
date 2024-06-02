@@ -46,7 +46,7 @@ class StripeWebhookController extends Controller
             Log::info('Payment Intent Succeeded', ['payment_intent' => $paymentIntent]);
             // You can add your own business logic here, e.g., updating order status in your database.
 
-            $this->paymentService->processSuccessfulPaymentForCustomer($paymentIntent->customer);
+            $this->paymentService->processSuccessfulPayment($paymentIntent);
         }
 
         return response()->json(['status' => 'success']);

@@ -43,7 +43,12 @@ class CartAPIController extends Controller
             return customResponse(null, "Course already in cart", 400, StatusCodesEnum::FAILED);
         }
 
-        $user->cartCourses()->create($courseId);
+        $cartCourse = new CartCourse();
+
+        $cartCourse->course_id = $courseId;
+        $cartCourse->user_id = $user->id;
+
+        $cartCourse->save();
 
         return customResponse(null, "Course added to cart", 200, StatusCodesEnum::DONE);
 
@@ -57,20 +62,18 @@ class CartAPIController extends Controller
         ]);
 
 
-        if ($validator->fails()){
+        if ($validator->fails())
             return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
-        }
 
 
         $user = auth('api')->user();
         
         $courseAlreadyInCart = $user->cartCourses->contains($courseId);
 
-        if(!$courseAlreadyInCart){
+        if(!$courseAlreadyInCart)
             return customResponse(null, "Course is not in cart", 400, StatusCodesEnum::FAILED);
-        }
 
-        $user->cartCourses()->where('course_id', $courseId)->delete();
+        CartCourse::where(['user_id' => $user->id, 'course_id' => $courseId])->delete();
 
         return customResponse(null, "Course was removed from cart", 200, StatusCodesEnum::DONE);
 
