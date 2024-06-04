@@ -6,6 +6,7 @@ use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\EphemeralKey;
 use Stripe\PaymentIntent;
+use Stripe\Transfer;
 
 use App\Modules\Users\Models\User;
 use App\Modules\Payment\Models\CartCourse;
@@ -98,6 +99,13 @@ class PaymentService
         CartCourse::where('user_id', $user->id)->delete();
 
         // payout connected accounts
+
+        $transfer = Transfer::create([
+            'amount' => 7000,
+            'currency' => 'usd',
+            'destination' => '{{CONNECTED_ACCOUNT_ID}}',
+            'transfer_group' => $paymentIntent->transfer_group,
+          ]);
     }
 
 }
