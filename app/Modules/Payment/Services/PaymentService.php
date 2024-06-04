@@ -93,19 +93,22 @@ class PaymentService
             $course_user->save();
 
             $order->courses()->attach($course->id);
+
+            // payout connected account
+
+            $stripeConnectedAccountId = $course->admin->stripe_connected_account_id;
+
+            $transfer = Transfer::create([
+                'amount' => 7000,
+                'currency' => 'usd',
+                'destination' => $stripeConnectedAccountId,
+                'transfer_group' => $paymentIntent->transfer_group,
+              ]);
         }
 
         // empty cart
         CartCourse::where('user_id', $user->id)->delete();
-
-        // payout connected accounts
-
-        $transfer = Transfer::create([
-            'amount' => 7000,
-            'currency' => 'usd',
-            'destination' => '{{CONNECTED_ACCOUNT_ID}}',
-            'transfer_group' => $paymentIntent->transfer_group,
-          ]);
+       
     }
 
 }
