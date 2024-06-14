@@ -33,7 +33,9 @@ class CoursesResource extends JsonResource
             'lectures_count'=> $this->lectures()->count(),
             'notes_count'   => $this->notes()->count(),
             'questions_count'=> $this->questions()->count(),
-            'flash_cards_count'=> $this->flashCards()->count()
+            'flash_cards_count'=> $this->flashCards()->count(),
+            'price'         => (double)$this->price,
+            'price_after_discount'         => (double)$this->price_after_discount
         ];
     }
 }
