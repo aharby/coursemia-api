@@ -5,6 +5,7 @@ namespace App\Modules\Courses\Resources\API;
 use App\Modules\Courses\Models\CourseUser;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
+use Carbon\Carbon;
 
 class CoursesResource extends JsonResource
 {
@@ -16,6 +17,7 @@ class CoursesResource extends JsonResource
      */
     public function toArray($request)
     {
+        
         $is_purchased = false;
         $user = auth('api')->user();
         if (isset($user)){
@@ -24,6 +26,13 @@ class CoursesResource extends JsonResource
             if (isset($course_user))
                 $is_purchased = true;
         }
+
+        if (isset($this->expire_date)){
+            $expire = Carbon::parse($this->expire_date)->format('Y-m-d');
+        }else{
+            $expire = $this->expire_duration;
+        }
+
         return [
             'id'            => $this->id,
             'title'         => $this->title,
@@ -35,7 +44,8 @@ class CoursesResource extends JsonResource
             'questions_count'=> $this->questions()->count(),
             'flash_cards_count'=> $this->flashCards()->count(),
             'price'         => (double)$this->price,
-            'price_after_discount'         => (double)$this->price_after_discount
+            'price_after_discount'         => (double)$this->price_after_discount,
+            'expiration_date' => $expire
         ];
     }
 }
