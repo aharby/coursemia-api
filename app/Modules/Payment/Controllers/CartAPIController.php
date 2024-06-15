@@ -67,7 +67,7 @@ class CartAPIController extends Controller
 
         $user = auth('api')->user();
         
-        $courseAlreadyInCart = $user->cartCourses->contains($courseId);
+        $courseAlreadyInCart = $user->cartCourses->contains('course_id', $courseId);
 
         if(!$courseAlreadyInCart)
             return customResponse(null, "Course is not in cart", 400, StatusCodesEnum::FAILED);
