@@ -53,7 +53,7 @@ class PaymentService
     {
         $user = auth('api')->user();
 
-        $courses = $user->cartCourses;
+        $courses = $user->cartCourses->pluck('course');
 
         // Calculate the total price
         $totalPrice = $courses->map(function ($course) {
