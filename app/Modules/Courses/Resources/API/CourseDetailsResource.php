@@ -9,6 +9,7 @@ use App\Modules\Category\Resources\API\NotesCategoriesResource;
 use App\Modules\Category\Resources\API\QuestionsCategoriesResource;
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\CourseUser;
+use App\Modules\Payment\Models\CartCourse;
 use App\Modules\Courses\Models\OfferCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,13 +26,18 @@ class CourseDetailsResource extends JsonResource
     public function toArray($request)
     {
         $is_purchased = false;
+        $is_in_cart = false;
+
         $user = auth('api')->user();
         if (isset($user)){
             $user_id = auth('api')->user()->id;
             $course_user = CourseUser::where(['course_id' => $this->id, 'user_id' => $user_id])->first();
             if (isset($course_user))
                 $is_purchased = true;
+
+            $is_in_cart = $user->cartCourses()->where(['course_id' => $this->id])->exists();
         }
+
         $lectures = $this->lectures();
         $notes = $this->notes();
         $questions = $this->questions();
@@ -57,6 +63,7 @@ class CourseDetailsResource extends JsonResource
             'id'            => $this->id,
             'is_in_my_cart' => false, //@todo implement is in my cart
             'is_purchased'  => $is_purchased,
+            'is_in_cart'    => $is_in_cart,
             'title'         => $this->title,
             'cover_image'   => asset($this->cover_image),
             'images'        => $images,

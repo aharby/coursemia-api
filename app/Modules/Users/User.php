@@ -545,8 +545,8 @@ class User extends Authenticatable
         });
     }
 
-    public function cartItems()
+    public function cartCourses()
     {
-        return $this->hasMany(\App\Modules\CartItems\Models\CartItem::class);
+        return $this->hasMany(\App\Modules\Payment\Models\CartCourse::class);
     }
 }
