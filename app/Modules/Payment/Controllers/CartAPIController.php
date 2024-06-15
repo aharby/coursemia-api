@@ -7,20 +7,17 @@ use App\Http\Controllers\Controller;
 use APP\Enums\StatusCodesEnum;
 use Illuminate\Support\Facades\Validator;
 
-use App\Modules\CartItems\Models\CartItem;
+use App\Modules\Payment\Models\CartCourse;
 
 use App\Modules\Courses\Resources\API\CoursesResource;
 
-class CartItemAPIController extends Controller
+class CartAPIController extends Controller
 {
     public function getCourses()
     {
         $user = auth('api')->user();
 
-        $courses = CartItem::where('user_id', $user->id)
-        ->with('course')
-        ->get()
-        ->pluck('course');
+        $courses = $user->cartCourses;
     
         return customResponse(CoursesResource::collection($courses), __("Fetched cart courses successfully"), 200, StatusCodesEnum::DONE);
 
@@ -38,18 +35,20 @@ class CartItemAPIController extends Controller
             return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
 
-        $userId = auth('api')->user()->id;
-        $cartItemExists = CartItem::where('user_id', $userId)->where('course_id', $courseId)->exists();
+        $user = auth('api')->user();
 
-        if($cartItemExists){
+        $courseAlreadyInCart = $user->cartCourses->contains($courseId);
+
+        if($courseAlreadyInCart){
             return customResponse(null, "Course already in cart", 400, StatusCodesEnum::FAILED);
         }
 
-        $cartItem = new CartItem();
-        $cartItem->user_id = $userId;
-        $cartItem->course_id = $courseId;
+        $cartCourse = new CartCourse();
 
-        $cartItem->save();
+        $cartCourse->course_id = $courseId;
+        $cartCourse->user_id = $user->id;
+
+        $cartCourse->save();
 
         return customResponse(null, "Course added to cart", 200, StatusCodesEnum::DONE);
 
@@ -63,20 +62,18 @@ class CartItemAPIController extends Controller
         ]);
 
 
-        if ($validator->fails()){
+        if ($validator->fails())
             return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
-        }
 
 
-        $userId = auth('api')->user()->id;
+        $user = auth('api')->user();
         
-        $cartItem = CartItem::where('user_id', $userId)->where('course_id', $courseId);
+        $courseAlreadyInCart = $user->cartCourses->contains($courseId);
 
-        if(!($cartItem->exists())){
+        if(!$courseAlreadyInCart)
             return customResponse(null, "Course is not in cart", 400, StatusCodesEnum::FAILED);
-        }
 
-        $cartItem->delete();
+        CartCourse::where(['user_id' => $user->id, 'course_id' => $courseId])->delete();
 
         return customResponse(null, "Course was removed from cart", 200, StatusCodesEnum::DONE);
 

@@ -7,6 +7,8 @@ use App\Modules\Users\Admin\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Modules\Payment\Models\Order;
+
 class Course extends Model
 {
     use HasFactory;
@@ -99,8 +101,8 @@ class Course extends Model
         });
     }
 
-    public function cartItems()
+    public function orders()
     {
-        return $this->hasMany(\App\Modules\CartItems\Models\CartItem::class);
+        return $this->belongsToMany(Order::class, 'order_course')->withTimestamps();
     }
 }
