@@ -46,7 +46,8 @@ class PaymentService
     {
         return EphemeralKey::create([
             'customer' => $customerId
-        ]);
+        ], [ 'stripe_version' => '2024-04-10']);
+    
     }
 
     public function getTotalCost($promoCode)
