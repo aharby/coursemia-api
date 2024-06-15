@@ -17,10 +17,9 @@ class CartAPIController extends Controller
     {
         $user = auth('api')->user();
 
-        $courses = $user->cartCourses;
+        $courses = $user->cartCourses->pluck('course');
     
         return customResponse(CoursesResource::collection($courses), __("Fetched cart courses successfully"), 200, StatusCodesEnum::DONE);
-
     }
 
     public function addCourse($courseId)
