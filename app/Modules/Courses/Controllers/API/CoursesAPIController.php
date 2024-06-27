@@ -60,10 +60,6 @@ class CoursesAPIController extends Controller
     public function getCourseById()
     {
         $course = Course::find(request()->course_id);
-
-        if(!isset($course))
-            return customResponse(-1, "Course Does not exist", 404, StatusCodesEnum::DONE);
-
         return customResponse(new CourseDetailsResource($course), __("Get course details successfully"), 200, StatusCodesEnum::DONE);
     }
 
