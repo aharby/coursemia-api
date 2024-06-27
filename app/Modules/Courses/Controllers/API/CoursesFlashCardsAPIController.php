@@ -39,6 +39,9 @@ class CoursesFlashCardsAPIController extends Controller
                 });
         }
         if (!empty($sub_category_ids)){
+            if(!is_array($sub_category_ids))
+                return customResponse(-1, "sub_category_ids must be an array", 400, StatusCodesEnum::DONE);
+
             $flashes = $flashes->whereIn('category_id', $sub_category_ids);
         }
         $isMyCourse = 0;
