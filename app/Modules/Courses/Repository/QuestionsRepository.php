@@ -23,7 +23,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $sub_category = request()->sub_category_ids;
         $number_of_questions = request()->number_of_questions;
         $questions = $this->model->query();
-        if (isset($category_ids)){
+        if (!empty($category_ids)){
             $questions = $questions->where(function ($q){
                 $q->whereIn('category_id', request()->category_ids)
                     ->orWhereHas('category', function ($cat){
@@ -33,7 +33,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                     });
             });
         }
-        if (isset($sub_category)){
+        if (!empty($sub_category)){
             $questions = $questions->whereIn('category_id', $sub_category);
         }
         if ($isMyCourse < 1)
