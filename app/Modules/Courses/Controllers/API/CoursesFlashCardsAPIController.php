@@ -27,10 +27,10 @@ class CoursesFlashCardsAPIController extends Controller
     {
         $user = auth('api')->user();
         $category_id = \request()->category_id;
-        $sub_category_ids = \request()->sub_category_ids;
+        $sub_category_ids = json_decode($request->sub_category_ids);
         $flashes = CourseFlashcard::query();
         $flashes->where('course_id', $request->course_id);
-        if (isset($category_id) && !isset($sub_category_ids)){
+        if (isset($category_id) && empty($sub_category_ids)){
             $flashes = $flashes->where('category_id', request()->category_id)
                 ->orWhereHas('category', function ($cat){
                     $cat->whereHas('parent', function ($parent){
@@ -38,8 +38,8 @@ class CoursesFlashCardsAPIController extends Controller
                     });
                 });
         }
-        if (isset($sub_category_ids)){
-            $flashes = $flashes->whereIn('category_id', json_decode($request->sub_category_ids));
+        if (!empty($sub_category_ids)){
+            $flashes = $flashes->whereIn('category_id', $sub_category_ids);
         }
         $isMyCourse = 0;
         if (isset($user))
