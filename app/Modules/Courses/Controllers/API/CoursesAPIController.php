@@ -87,7 +87,7 @@ class CoursesAPIController extends Controller
             });
         }
         if (isset($request->sub_category_ids)){
-            $lectures = $lectures->whereIn('category_id', $request->sub_category_ids);
+            $lectures = $lectures->whereIn('category_id', json_decode($request->sub_category_ids));
         }
         if ($isMyCourse < 1)
             $lectures = $lectures->where('is_free_content' , '=', 1);
