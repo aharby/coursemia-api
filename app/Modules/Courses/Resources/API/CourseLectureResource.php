@@ -2,8 +2,7 @@
 
 namespace App\Modules\Courses\Resources\API;
 
-use App\Modules\Courses\Models\WnatedToLearnCourse;
-use App\Modules\WantToLearn\Models\WantToLearn;
+use App\Modules\WantToLearn\Lectures\Models\WantToLearnLecture;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
@@ -20,7 +19,7 @@ class CourseLectureResource extends JsonResource
         $user = auth('api')->user();
         $want_to_learn = false;
         if (isset($user)){
-            $want_to_learn = WantToLearn::where(['lecture_id' => $this->id, 'user_id' => $user->id])
+            $want_to_learn = WantToLearnLecture::where(['lecture_id' => $this->id, 'user_id' => $user->id])
                 ->first();
         }
         return [
