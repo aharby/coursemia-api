@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\WantToLearn\Models;
+namespace App\Modules\WantToLearn\Lectures\Models;
 
 use App\Modules\Courses\Models\CourseLecture;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WantToLearn extends Model
+class WantToLearnLecture extends Model
 {
     use HasFactory;
     protected $fillable = ['user_id', 'lecture_id'];
