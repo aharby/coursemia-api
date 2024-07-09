@@ -25,6 +25,7 @@ class UsersController extends AjaxController
         $search = request()->q;
         $status = request()->status;
         $verified = request()->verified;
+        $isActive = request()->is_active;
         $users = User::query();
         if (isset($search)){
             $users = $users->where(function ($query) use ($search){
@@ -38,6 +39,9 @@ class UsersController extends AjaxController
         }
         if (isset($verified)){
             $users = $users->where('is_verified', '=', $verified);
+        }
+        if (isset($isActive)){
+            $users = $users->where('is_active', '=', $isActive);
         }
         $users = $users->sorter();
         $users = $users->paginate(request()->perPage, ['*'], 'page', request()->page);
