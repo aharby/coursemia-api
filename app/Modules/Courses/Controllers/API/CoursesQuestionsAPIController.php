@@ -30,7 +30,12 @@ class CoursesQuestionsAPIController extends Controller
 
     public function getCourseQuestions(Request $request)
     {
-        $questions = $this->questionsRepository->getQuestionsByCourseId($request->course_id);
-        return customResponse(QuestionResource::collection($questions), trans('api.course questions'), 200, StatusCodesEnum::DONE);
+        try{
+            $questions = $this->questionsRepository->getQuestionsByCourseId($request->course_id);
+            return customResponse(QuestionResource::collection($questions), trans('api.course questions'), 200, StatusCodesEnum::DONE);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
