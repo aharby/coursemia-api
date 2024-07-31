@@ -25,7 +25,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $number_of_questions = request()->number_of_questions;
         $questions = $this->model->query();
         if (!empty($category_ids)){
-            $questions = $questions->where(function ($q, $category_ids){
+            $questions = $questions->where(function ($q) use ($category_ids) {
                 $q->whereIn('category_id', request()->category_ids)
                     ->orWhereIn('category_id', Category::whereIn('parent', $category_ids));
             });
