@@ -23,16 +23,20 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $sub_category = request()->sub_category_ids;
         $number_of_questions = request()->number_of_questions;
         $questions = $this->model->query();
-        if (!empty($category_ids)){
-            $questions = $questions->where(function ($q){
-                $q->whereIn('category_id', request()->category_ids)
-                    ->orWhereHas('category', function ($cat){
-                        $cat->whereHas('parent', function ($parent){
-                            $parent->whereIn('id', request()->category_ids);
+        if (!empty($category_ids))
+            try{
+                $questions = $questions->where(function ($q){
+                    $q->whereIn('category_id', request()->category_ids)
+                        ->orWhereHas('category', function ($cat){
+                            $cat->whereHas('parent', function ($parent){
+                                $parent->whereIn('id', request()->category_ids);
+                            });
                         });
-                    });
-            });
-        }
+                });
+            }
+            catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
         if (!empty($sub_category)){
             $questions = $questions->whereIn('category_id', $sub_category);
         }
