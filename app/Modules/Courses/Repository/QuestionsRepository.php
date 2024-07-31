@@ -25,7 +25,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $number_of_questions = request()->number_of_questions;
         $questions = $this->model->query();
         if (!empty($category_ids)){
-            $sub_categories_of_category_ids = Category::whereIn('parent_id', $category_ids )->pluck('id');
+            $sub_categories_of_category_ids = Category::whereIn('parent_id', $category_ids )->pluck('id')->toArray();
             $questions = $questions->whereIn('category_id', array_merge($category_ids, $sub_categories_of_category_ids));
         }
         if (!empty($sub_category)){
