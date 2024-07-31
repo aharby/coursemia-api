@@ -28,7 +28,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                 $q->whereIn('category_id', request()->category_ids)
                     ->orWhereHas('category', function ($cat){
                         $cat->whereHas('parent', function ($parent){
-                            $parent->where('id', request()->category_ids);
+                            $parent->whereIn('id', request()->category_ids);
                         });
                     });
             });
