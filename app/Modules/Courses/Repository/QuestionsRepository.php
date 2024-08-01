@@ -34,6 +34,10 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         if ($isMyCourse < 1)
             $questions = $questions->where('is_free_content' , '=', 1);
         // Timed test so we have to get all questions
+        // [Abanoub] when the no. of question is large, 
+        // the memory limit gets exceeded. 
+        // this is a hard coded limit until we implemt limit param
+        $number_of_questions = 100;
         if (request()->exam_type == 2){
             return $questions
                 ->active()
@@ -43,6 +47,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                 ->with(['answers' => function ($answers) {
                     $answers->inRandomOrder();
                 }])
+                ->take($number_of_questions)
                 ->get();
         }
         // Question bank so we have to get certain number of questions
