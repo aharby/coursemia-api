@@ -37,7 +37,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         // [Abanoub] when the no. of question is large, 
         // the memory limit gets exceeded. 
         // this is a hard coded limit until we implemt limit param
-        $number_of_questions = 100;
+        $questions_limit = 100;
         if (request()->exam_type == 2){
             return $questions
                 ->active()
@@ -47,7 +47,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                 ->with(['answers' => function ($answers) {
                     $answers->inRandomOrder();
                 }])
-                ->take($number_of_questions)
+                ->take($questions_limit)
                 ->get();
         }
         // Question bank so we have to get certain number of questions
