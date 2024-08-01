@@ -26,10 +26,10 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $questions = $this->model->query();
         if (!empty($category_ids)){
             $sub_categories_of_category_ids = Category::whereIn('parent_id', $category_ids )->pluck('id')->toArray();
-            $questions = $questions->whereIn('category_id', array_merge($category_ids, $sub_categories_of_category_ids));
+            $questions = $questions->whereIntegerInRaw('category_id', array_merge($category_ids, $sub_categories_of_category_ids));
         }
         if (!empty($sub_category)){
-            $questions = $questions->whereIn('category_id', $sub_category);
+            $questions = $questions->whereIntegerInRaw('category_id', $sub_category);
         }
         if ($isMyCourse < 1)
             $questions = $questions->where('is_free_content' , '=', 1);
