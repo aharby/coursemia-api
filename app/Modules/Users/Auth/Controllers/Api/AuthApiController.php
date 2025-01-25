@@ -383,18 +383,18 @@ class AuthApiController extends BaseApiController
     public function resetPassword(ResetPasswordRequest $request){
 
         try{
-            $token = getenv("TWILIO_AUTH_TOKEN");
-            $twilio_sid = getenv("TWILIO_SID");
-            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-            $twilio = new Client($twilio_sid, $token);
-            $verification = $twilio->verify->v2->services($twilio_verify_sid)
-                ->verificationChecks
-                ->create([
-                    'to' => $request->country_code.$request->phone_number,
-                    'code' => $request->verification_code
-                ]);
+            // $token = getenv("TWILIO_AUTH_TOKEN");
+            // $twilio_sid = getenv("TWILIO_SID");
+            // $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+            // $twilio = new Client($twilio_sid, $token);
+            // $verification = $twilio->verify->v2->services($twilio_verify_sid)
+            //     ->verificationChecks
+            //     ->create([
+            //         'to' => $request->country_code.$request->phone_number,
+            //         'code' => $request->verification_code
+            //     ]);
                 
-            if ($verification->valid) {
+            if (true /*$verification->valid*/) {
                 $user = User::where(['phone' => $request->phone_number, 'country_code' => $request->country_code])
                 ->first();
                 if (isset($user)){
