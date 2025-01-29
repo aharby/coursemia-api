@@ -47,7 +47,7 @@ class LoginUseCase implements LoginUseCaseInterface
 
         $devices = UserDevice::where('user_id', $user->id);
             
-        $device_exists = $devices::where('id', request()->header('device-id'));
+        $device_exists = $devices->where('id', request()->header('device-id'))->exists();
 
         if((!$device_exists && $devices->count()>= 2)
             || (!$device_exists && $devices->first()->is_tablet == $request['is_tablet'])){
