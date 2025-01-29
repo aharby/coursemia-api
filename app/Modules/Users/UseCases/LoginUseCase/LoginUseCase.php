@@ -45,17 +45,19 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
-        $devices = UserDevice::where('user_id', $user->id);
-            
-        $device_exists = $devices->where('id', request()->header('device-id'))->exists();
+        $devices = UserDevice::where('user_id', $user->id); 
 
-        if((!$device_exists && $devices->count()>= 2)
-            || (!$device_exists && $devices->first()->is_tablet == $request['is_tablet'])){
-                $loginCase['message'] = __('Maximum device numbers exceeded');
-                return $loginCase;
+        $devices_count = $devices->count(); 
+        $device_exists = $devices->where('id', request()->header('device-id'))->exists();
+        $first_device = $devices->first();
+
+        if ((!$device_exists && $devices_count >= 2)
+            || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
+            $loginCase['message'] = __('Maximum device numbers exceeded');
+            return $loginCase;
         }
 
-        if(!$device_exists && $devices->first()->is_tablet != $request['is_tablet']){
+        if(!$device_exists && $first_device && $first_device->is_tablet != $request['is_tablet']){
             $user_device = new UserDevice;
             $user_device->user_id = $user->id;
             $user_device->device_type = request()->header('device-type');
