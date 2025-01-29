@@ -34,46 +34,44 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase['data'] = (object)[];
         $loginCase['message'] = __('Invalid login details');
         $loginCase['status_code'] = StatusCodesEnum::FAILED;
-        if (isset($user)){
-            $devices = UserDevice::where('user_id', $user->id)->get();
-            if (count($devices) >= 2){
+
+        if(!isset($user)){
+            return $loginCase;
+        }
+
+        $password_check = Hash::check($request['password'], $user->password);
+
+        if(!$password_check){
+            return $loginCase;
+        }
+
+        $devices = UserDevice::where('user_id', $user->id);
+            
+        $device_exists = $devices::where('id', request()->header('device-id'));
+
+        if((!$device_exists && $devices->count()>= 2)
+            || (!$device_exists && $devices->first()->is_tablet == $request['is_tablet']))
                 $loginCase['message'] = __('Maximum device numbers exceeded');
                 return $loginCase;
-            }
-            foreach ($devices as $device){
-                if ($request['is_tablet'] == 0 && $device->is_tablet == 0){
-                    $loginCase['message'] = __('Exceeded number of mobile device.');
-                    return $loginCase;
-                }
-                if ($request['is_tablet'] == 1 && $device->is_tablet == 1){
-                    $loginCase['message'] = __('Exceeded number of tablets.');
-                    return $loginCase;
-                }
-            }
-
-            $password_check = Hash::check($request['password'], $user->password);
-            if ($password_check){
-                $user_device = UserDevice::where(['user_id' => $user->id, 'is_tablet' => $request['is_tablet']])->first();
-                if (!isset($user_device) && $user->is_verified == 1){
-                    $user_device = new UserDevice;
-                    $user_device->user_id = $user->id;
-                    $user_device->device_type = request()->header('device-type');
-                    $user_device->device_id = request()->header('device-id');
-                    $user_device->is_tablet = $request['is_tablet'];
-                    $user_device->device_name = $request['device_name'];
-                    $user_device->save();
-                }
-                $loginCase['data'] = [];
-                $loginCase['data']['user'] = new UserResorce($user);
-                $loginCase['data']['token'] = $user->createToken('AccessToken')->accessToken;
-                $loginCase['message'] = __('Logged in successfully');
-                $loginCase['status_code'] = StatusCodesEnum::DONE;
-
-                return $loginCase;
-            }
         }
-        return $loginCase;
 
+        if(!$device_exists && $devices->first()->is_tablet != $request['is_tablet']){
+            $user_device = new UserDevice;
+            $user_device->user_id = $user->id;
+            $user_device->device_type = request()->header('device-type');
+            $user_device->device_id = request()->header('device-id');
+            $user_device->is_tablet = $request['is_tablet'];
+            $user_device->device_name = $request['device_name'];
+            $user_device->save();
+        }
+            
+        $loginCase['data'] = [];
+        $loginCase['data']['user'] = new UserResorce($user);
+        $loginCase['data']['token'] = $user->createToken('AccessToken')->accessToken;
+        $loginCase['message'] = __('Logged in successfully');
+        $loginCase['status_code'] = StatusCodesEnum::DONE;
+
+        return $loginCase;
     }
 
     public function profile(UserRepositoryInterface $userRepository) : array
