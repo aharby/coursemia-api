@@ -50,7 +50,7 @@ class LoginUseCase implements LoginUseCaseInterface
         $device_exists = $devices::where('id', request()->header('device-id'));
 
         if((!$device_exists && $devices->count()>= 2)
-            || (!$device_exists && $devices->first()->is_tablet == $request['is_tablet']))
+            || (!$device_exists && $devices->first()->is_tablet == $request['is_tablet'])){
                 $loginCase['message'] = __('Maximum device numbers exceeded');
                 return $loginCase;
         }
