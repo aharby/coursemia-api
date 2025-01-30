@@ -32,7 +32,7 @@ class LoginUseCase implements LoginUseCaseInterface
         }
         $loginCase = array();
         $loginCase['data'] = (object)[];
-        $loginCase['message'] = __('Invalid login details');
+        $loginCase['message'] = __('auth.Invalid login details');
         $loginCase['status_code'] = StatusCodesEnum::FAILED;
 
         if(!isset($user)){
@@ -40,7 +40,7 @@ class LoginUseCase implements LoginUseCaseInterface
         }
 
         if(!$user->is_verified){
-            $loginCase['message'] = __('User not verified');
+            $loginCase['message'] = __('auth.User not verified');
             return $loginCase;
         }
 
@@ -58,7 +58,7 @@ class LoginUseCase implements LoginUseCaseInterface
 
         if ((!$device_exists && $devices_count >= 2)
             || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
-            $loginCase['message'] = __('Maximum device numbers exceeded');
+            $loginCase['message'] = __('auth.Maximum device numbers exceeded');
             return $loginCase;
         }
 
@@ -75,7 +75,7 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase['data'] = [];
         $loginCase['data']['user'] = new UserResorce($user);
         $loginCase['data']['token'] = $user->createToken('AccessToken')->accessToken;
-        $loginCase['message'] = __('Logged in successfully');
+        $loginCase['message'] = __('auth.Logged in successfully');
         $loginCase['status_code'] = StatusCodesEnum::DONE;
 
         return $loginCase;
@@ -85,7 +85,7 @@ class LoginUseCase implements LoginUseCaseInterface
     {
         $user = auth('api')->user();
         $loginCase['data'] = new UserResorce($user);
-        $loginCase['message'] = __('Logged in successfully');
+        $loginCase['message'] = __('auth.Logged in successfully');
         $loginCase['status_code'] = StatusCodesEnum::DONE;
         return $loginCase;
     }
@@ -95,29 +95,25 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase = [];
         if(isset($request['abilities_user']) && $request['abilities_user']){
             $loginCase['user'] = null;
-            $loginCase['message'] = 'There is no account with this email';
-            $loginCase['detail'] = trans('auth.There is no account with this email');
+            $loginCase['message'] = __('auth.There is no account with this email');
             return $loginCase;
         }
         $user = $userRepository->findByUsername($request['email']);
         if (!$user) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'There is no account with this email';
-            $loginCase['detail'] = trans('auth.There is no account with this email');
+            $loginCase['message'] = 'auth.There is no account with this email';
             return $loginCase;
         }
         if (is_null($user->password) && is_null($user->facebook_id) && is_null($user->twitter_id)) {
             $loginCase['user'] = $user;
             $loginCase['shouldChangePassword'] = true;
-            $loginCase['message'] = 'Welcome to your dashboard';
-            $loginCase['detail'] = trans('auth.Welcome to your dashboard');
+            $loginCase['message'] = __('auth.Welcome to your dashboard');
             return $loginCase;
         }
 
         if (!$user) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'There is no account with this email';
-            $loginCase['detail'] = trans('auth.There is no account with this email');
+            $loginCase['message'] = __('auth.There is no account with this email');
             return $loginCase;
         }
 
@@ -125,28 +121,24 @@ class LoginUseCase implements LoginUseCaseInterface
             $validLogin = $this->validateDeviceWithType($request['device_type'], $user->type);
             if (!$validLogin) {
                 $loginCase['user'] = null;
-                $loginCase['message'] = 'Cannot Login From This Device';
-                $loginCase['detail'] = trans('auth.Cannot Login From This Device');
+                $loginCase['message'] = __('auth.Cannot Login From This Device');
                 return $loginCase;
             }
         }
 
         if (!Hash::check(trim($request['password'] ?? ''), $user->password)) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'Trying to login with invalid password';
-            $loginCase['detail'] = trans('auth.Trying to login with invalid password');
+            $loginCase['message'] = trans('auth.Trying to login with invalid password');
             return $loginCase;
         }
         if (!$user->is_active) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'This account is banned';
-            $loginCase['detail'] = trans('auth.This account is banned');
+            $loginCase['message'] = trans('auth.This account is banned');
             return $loginCase;
         }
         if (!is_null($user->suspended_at)) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'This account is suspended';
-            $loginCase['detail'] = trans('auth.This account is suspended');
+            $loginCase['message'] = trans('auth.This account is suspended');
             return $loginCase;
         }
 
@@ -165,13 +157,11 @@ class LoginUseCase implements LoginUseCaseInterface
                     $user->student->gradeClass->gradeColor->slug : '';
 
             }
-            $loginCase['message'] = 'Welcome to your dashboard';
-            $loginCase['detail'] = trans('auth.Welcome to your dashboard');
+            $loginCase['message'] = trans('auth.Welcome to your dashboard');
             return $loginCase;
         } else {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'Oopps Something is broken';
-            $loginCase['detail'] = trans('app.Oopps Something is broken');
+            $loginCase['message'] = trans('auth.Oopps Something is broken');
             return $loginCase;
         }
     }
@@ -214,8 +204,7 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase = [];
         if (!$user) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'There is no account with this email';
-            $loginCase['detail'] = trans('auth.There is no account with this email');
+            $loginCase['message'] = __('There is no account with this email');
 
             return $loginCase;
         }
@@ -223,8 +212,7 @@ class LoginUseCase implements LoginUseCaseInterface
         if (isset($request['user_type']) && $request['user_type'] == UserEnums::ADMIN_TYPE) {
             if (!$user->super_admin) {
                 $loginCase['user'] = null;
-                $loginCase['message'] = 'Trying to login with non super admin account';
-                $loginCase['detail'] = trans('auth.Trying to login with non super admin account');
+                $loginCase['message'] = __('auth.Trying to login with non super admin account');
 
                 return $loginCase;
             }
@@ -234,8 +222,7 @@ class LoginUseCase implements LoginUseCaseInterface
             $validLogin = $this->validateDeviceWithType($request['device_type'], $user->type);
             if (!$validLogin) {
                 $loginCase['user'] = null;
-                $loginCase['message'] = 'Cannot Login From This Device';
-                $loginCase['detail'] = trans('auth.Cannot Login From This Device');
+                $loginCase['message'] = trans('auth.Cannot Login From This Device');
 
                 return $loginCase;
             }
@@ -243,29 +230,25 @@ class LoginUseCase implements LoginUseCaseInterface
 
         if (!Hash::check(trim($request['password']), $user->password)) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'Trying to login with invalid password';
-            $loginCase['detail'] = trans('auth.Trying to login with invalid password');
+            $loginCase['message'] = trans('auth.Trying to login with invalid password');
 
             return $loginCase;
         }
         if (!$user->is_active) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'This account is banned';
-            $loginCase['detail'] = trans('auth.This account is banned');
+            $loginCase['message'] = trans('auth.This account is banned');
 
             return $loginCase;
         }
         if (!is_null($user->suspended_at)) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'This account is suspended';
-            $loginCase['detail'] = trans('auth.This account is suspended');
+            $loginCase['message'] = trans('auth.This account is suspended');
 
             return $loginCase;
         }
         if ($user->deleted_ios_action) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'This account is suspended';
-            $loginCase['detail'] = trans('auth.This account is suspended');
+            $loginCase['message'] = trans('auth.This account is suspended');
 
             return $loginCase;
         }
@@ -273,8 +256,7 @@ class LoginUseCase implements LoginUseCaseInterface
 
         if (!$user->confirmed && ($user->type == UserEnums::STUDENT_TYPE ||$user->type == UserEnums::PARENT_TYPE)) {
             $loginCase['user'] = null;
-            $loginCase['message'] = 'This account is not confirmed';
-            $loginCase['detail'] = trans('auth.This account is not confirmed');
+            $loginCase['message'] = trans('auth.This account is not confirmed');
 
             return $loginCase;
         }
