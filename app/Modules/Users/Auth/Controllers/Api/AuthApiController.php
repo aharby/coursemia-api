@@ -173,7 +173,7 @@ class AuthApiController extends BaseApiController
                 return customResponse([
                     'user' => new UserResorce($user),
                     'token'=> $user->createToken('AccessToken')->accessToken
-                ], trans("Account created successfully"), 200, StatusCodesEnum::DONE);
+                ], trans("auth.Account created successfully"), 200, StatusCodesEnum::DONE);
             }
         } catch (\Throwable $e) {
             Log::error($e);
@@ -198,20 +198,20 @@ class AuthApiController extends BaseApiController
             if (!isset($checkEmail)){
                 $user->email = $request->email;
             }else{
-                return customResponse((object)[], trans('api.Email already taken.'),422, StatusCodesEnum::FAILED);
+                return customResponse((object)[], trans('auth.Email already taken.'),422, StatusCodesEnum::FAILED);
             }
         }
         $user->save();
-        return customResponse(new UserResorce($user), trans('api.Profile updated successfully'), 200, StatusCodesEnum::DONE);
+        return customResponse(new UserResorce($user), trans('auth.Profile updated successfully'), 200, StatusCodesEnum::DONE);
     }
 
     public function deleteDevices(){
         $user = User::where('phone', \request()->phone_number)->first();
         if (isset($user)){
             $user->devices()->delete();
-            return customResponse((object)[], trans('api.Devices deleted successfully'), 200, StatusCodesEnum::DONE);
+            return customResponse((object)[], trans('auth.Devices deleted successfully'), 200, StatusCodesEnum::DONE);
         }
-        return customResponse((object)[], trans('api.User does not exist.'),422, StatusCodesEnum::FAILED);
+        return customResponse((object)[], trans('auth.User does not exist.'),422, StatusCodesEnum::FAILED);
     }
 
     public function deleteMyDevice(Request $request){
@@ -227,12 +227,12 @@ class AuthApiController extends BaseApiController
         if (isset($device)){
             if ($device->device_id != $request->header('device-id')){
                 $device->delete();
-                return customResponse((object)[], trans('api.Device deleted successfully'), 200, StatusCodesEnum::DONE);
+                return customResponse((object)[], trans('auth.Device deleted successfully'), 200, StatusCodesEnum::DONE);
             }else{
-                return customResponse((object)[], trans('api.Can not delete your current device'), 422, StatusCodesEnum::FAILED);
+                return customResponse((object)[], trans('auth.Can not delete your current device'), 422, StatusCodesEnum::FAILED);
             }
         }
-        return customResponse((object)[], trans('api.Device not found'), 422, StatusCodesEnum::FAILED);
+        return customResponse((object)[], trans('auth.Device not found'), 422, StatusCodesEnum::FAILED);
     }
 
     public function verifyPhone(VerificationRequest $request)
@@ -265,9 +265,9 @@ class AuthApiController extends BaseApiController
                     $device->save();
                 }
                 /* Authenticate user */
-                return customResponse((object)[], 'Phone number verified successfully',200, StatusCodesEnum::DONE);
+                return customResponse((object)[], __('auth.Phone number verified successfully'),200, StatusCodesEnum::DONE);
             }
-            return customResponse((object)[], 'verification failed',422, StatusCodesEnum::FAILED);
+            return customResponse((object)[], __('auth.verification failed'),422, StatusCodesEnum::FAILED);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
@@ -275,7 +275,7 @@ class AuthApiController extends BaseApiController
 
     public function getUserConfig(){
         $user = auth('api')->user();
-        return customResponse(new UserConfigurationsResourceResorce($user), trans("api.Done"), 200, StatusCodesEnum::DONE);
+        return customResponse(new UserConfigurationsResourceResorce($user), trans("auth.Done"), 200, StatusCodesEnum::DONE);
     }
 
     public function allowPushNotifications(Request $request){
@@ -283,11 +283,11 @@ class AuthApiController extends BaseApiController
         $allow_notifications = $request->allow_notifications;
         if ($allow_notifications == "false") {
             $allow_notifications = 0;
-            $message = trans('api.Push notifications disabled');
+            $message = trans('auth.Push notifications disabled');
         }
         else {
             $allow_notifications = 1;
-            $message = trans('api.Push notifications enabled');
+            $message = trans('auth.Push notifications enabled');
         }
         $device = $user->devices()->where('device_id', $request->header('device-id'))->first();
         $device->allow_push_notifications = $allow_notifications;
@@ -312,7 +312,7 @@ class AuthApiController extends BaseApiController
             }
 
         return response()->json([
-            'message' => trans('api.Account activated')
+            'message' => trans('auth.Account activated')
         ]);
 
     }
