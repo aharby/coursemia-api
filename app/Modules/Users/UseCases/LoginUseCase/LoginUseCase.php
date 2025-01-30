@@ -39,17 +39,22 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
+        if(!$user->is_verified){
+            $loginCase['message'] = __('User not verified');
+            return $loginCase;
+        }
+
         $password_check = Hash::check($request['password'], $user->password);
 
         if(!$password_check){
             return $loginCase;
         }
 
-        $devices = UserDevice::where('user_id', $user->id); 
+        $devices = UserDevice::where('user_id', $user->id)->get(); 
 
-        $devices_count = $devices->count(); 
-        $device_exists = $devices->where('id', request()->header('device-id'))->exists();
-        $first_device = $devices->first();
+        $devices_count = $devices->count();
+        $device_exists = $devices->firstWhere('device_id', request()->header('device-id')) !== null;
+        $first_device = $devices->first(); 
 
         if ((!$device_exists && $devices_count >= 2)
             || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
