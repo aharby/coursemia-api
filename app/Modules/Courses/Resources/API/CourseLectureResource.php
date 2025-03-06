@@ -4,7 +4,6 @@ namespace App\Modules\Courses\Resources\API;
 
 use App\Modules\WantToLearn\Lectures\Models\WantToLearnLecture;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
 class CourseLectureResource extends JsonResource
 {
@@ -21,6 +20,10 @@ class CourseLectureResource extends JsonResource
         if (isset($user)){
             $want_to_learn = WantToLearnLecture::where(['lecture_id' => $this->id, 'user_id' => $user->id])
                 ->first();
+
+            $progress = $this->progress($user->id);
+
+            $last_position = $progress ?  $progress->last_position : 0;
         }
         return [
             'id'            => $this->id,
@@ -30,7 +33,8 @@ class CourseLectureResource extends JsonResource
             'description'   => $this->description,
             'want_to_learn' => $want_to_learn ? true : false,
             'is_free_content'=> (boolean)$this->is_free_content,
-            'course'        => $this->course->title
+            'course'        => $this->course->title,
+            'last_position' => $last_position
         ];
     }
 }

@@ -6,7 +6,8 @@ namespace App\Modules\Courses\Repository;
 use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Events\Models\Event;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+
+use App\Modules\Courses\Models\LectureProgress;
 
 class LectureRepository implements LectureRepositoryInterface
 {
@@ -61,4 +62,13 @@ class LectureRepository implements LectureRepositoryInterface
     {
         return $this->model->with('translations')->listsTranslations('name')->pluck('name', 'id');
     }
+
+    public function updateLastPosition($user_id, $lecture_id, $position)
+    {
+        return LectureProgress::updateOrCreate(
+            ['user_id' => $user_id, 'course_lecture_id' => $lecture_id],
+            ['last_position' => $position]
+        );
+    }
+
 }
