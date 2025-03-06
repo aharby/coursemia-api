@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Modules\Courses\Controllers\API\CoursesQuestionsAPIController;
 use \App\Modules\Courses\Controllers\API\CoursesFlashCardsAPIController;
-use Illuminate\Support\Facades\Route;
+use App\Modules\Courses\Controllers\API\CourseLectureAPIController;
 
 Route::group([
     'middleware' => ['userActive'],
@@ -44,4 +45,13 @@ Route::group([
     // Submit Flashcards APIs
     Route::post('submit-flashcard', 'ExamQuestionsAndAnswersAPIController@submitFlashCardAnswer');
 
+    // lectures Apis
+    Route::group([
+        'prefix' => 'lectures', 'as' => 'lectures.'
+    ], function(){
+        //lecture save last position
+        Route::post('/{lecture_id}/save-last-position', [CourseLectureAPIController::class, 'saveLastPosition']);
+
+    });
 });
+
