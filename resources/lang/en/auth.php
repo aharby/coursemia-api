@@ -33,4 +33,9 @@ return [
     'Device deleted successfully' => 'Device deleted successfully',
     'Push notifications disabled' => 'Push notifications disabled',
     'Profile updated successfully' => 'Profile updated successfully',
+    'Verification code sent successfully' => 'Verification code sent successfully',
+    'User not found' => 'User not found',
+    'Password reset successfully' => 'Password reset successfully',
+    'Account created successfully' => 'Account created successfully',
+    'Logged Out Successfully' => 'Logged Out Successfully'
 ];

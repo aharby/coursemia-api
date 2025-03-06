@@ -320,7 +320,7 @@ class AuthApiController extends BaseApiController
     public function sendVerificationCode(VerificationCodeRequest $request){
         try {
         //    $this->sendVerifyMessage($request->country_code.$request->phone_number);
-            return customResponse((object)[], __("Verification code sent successfully"),200, StatusCodesEnum::DONE);
+            return customResponse((object)[], __("auth.Verification code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
@@ -377,7 +377,7 @@ class AuthApiController extends BaseApiController
         $user->devices()->where('is_tablet', request()->is_tablet)->delete();
         $user = Auth::user()->token();
         $user->revoke();
-        return customResponse((object)[], __("Logged Out Successfully"),200, StatusCodesEnum::DONE);
+        return customResponse((object)[], __("auth.Logged Out Successfully"),200, StatusCodesEnum::DONE);
     }
 
     public function resetPassword(ResetPasswordRequest $request){
@@ -400,11 +400,11 @@ class AuthApiController extends BaseApiController
                 if (isset($user)){
                     $user->password = Hash::make($request->password);
                     $user->save();
-                    return customResponse((object)[], __("Password reset successfully"), 200, StatusCodesEnum::DONE);
+                    return customResponse((object)[], __("auth.Password reset successfully"), 200, StatusCodesEnum::DONE);
                 }
-                return customResponse((object)[], __("User not found"), 422, StatusCodesEnum::FAILED);
+                return customResponse((object)[], __("auth.User not found"), 422, StatusCodesEnum::FAILED);
             }
-            return customResponse((object)[], 'verification failed',422, StatusCodesEnum::FAILED);
+            return customResponse((object)[], 'auth.verification failed',422, StatusCodesEnum::FAILED);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }

@@ -33,5 +33,10 @@ return array(
     'Can not delete your current device' => 'لا يمكن حذف جهازك الحالي',
     'Device deleted successfully' => 'تم حذف الجهاز بنجاح',
     'Push notifications disabled' => 'ايقاف الإشعارات الفورية',
-    'Device not found' => 'لم يتم العثور على الجهاز'
+    'Device not found' => 'لم يتم العثور على الجهاز',
+    'Verification code sent successfully' => 'تم ارسال كود التحقق بنجاح',
+    'User not found' => 'لم يتم العثور علي المستخدم',
+    'Password reset successfully' => 'تم إعادة تعيين كلمة المرور بنجاح',
+    'Account created successfully' => 'تم انشاء الحساب بنجاح',
+    'Logged Out Successfully' => 'تم تسجيل الخروج بنجاح'
 );
