@@ -16,7 +16,7 @@ class CreateLectureProgressTable extends Migration
         Schema::create('lecture_progress', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('lecture_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_lecture_id')->constrained()->onDelete('cascade');
             $table->integer('last_position')->default(0);
             $table->timestamps();
         });

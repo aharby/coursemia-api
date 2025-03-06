@@ -5,7 +5,6 @@ namespace App\Modules\Courses\Models;
 use App\Modules\Users\Admin\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class CourseLecture extends Model
 {
     use HasFactory;
@@ -46,5 +45,11 @@ class CourseLecture extends Model
     public function admin()
     {
         return $this->belongsTo(Admin::class);
+    }
+
+    public function progress($user_id)
+    {
+        return $this->hasOne(LectureProgress::class)
+        ->where('user_id', $user_id)->first();
     }
 }

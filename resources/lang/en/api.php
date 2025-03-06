@@ -35,5 +35,8 @@ return array(
     'Followed successfully' => 'Follow request sent successfully',
     'Follow rejected successfully'  => 'Follow rejected successfully',
     'Follow accepted successfully' => 'Follow accepted successfully',
-    'Follow request not found'  => 'Follow request not found'
+    'Follow request not found'  => 'Follow request not found',
+
+    //course lecture position
+    'progress_saved' => 'Last position updated successfully.'
     );

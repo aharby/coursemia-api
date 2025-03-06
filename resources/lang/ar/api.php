@@ -36,5 +36,9 @@ return array(
     'Followed successfully' => 'تم ارسال طلب المتابعة',
     'Follow rejected successfully'  => 'تم رفض طلب المتابعة',
     'Follow accepted successfully' => 'تم قبول طلب المتابعة',
-    'Follow request not found' => 'لم يتم اعثور على طلب المتابعة'
+    'Follow request not found' => 'لم يتم اعثور على طلب المتابعة',
+
+    //course lecture position
+
+    'progress_saved' => 'تم تحديث آخر موضع بنجاح'
 );
