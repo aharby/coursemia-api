@@ -42,7 +42,7 @@ class CourseLectureAPIController extends Controller
 
         $this->lectureRepository->updateLastPosition($user->id, $request->lecture_id, $request->last_position);
 
-        return customResponse((object)[], trans('api.progress_saved'),422, StatusCodesEnum::DONE);
+        return customResponse((object)[], trans('api.progress_saved'),200, StatusCodesEnum::DONE);
 
     }
 
