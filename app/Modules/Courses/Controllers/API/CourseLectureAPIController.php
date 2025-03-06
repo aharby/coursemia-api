@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Modules\Courses\Repository\LectureRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CourseLectureAPIController extends Controller
 {
@@ -18,12 +19,21 @@ class CourseLectureAPIController extends Controller
         $this->lectureRepository = $lectureRepository;
     }
 
-    public function saveLastPosition(Request $request)
+    public function saveLastPosition($lecture_id ,Request $request)
     {
         $request->validate([
-            'lecture_id' => 'required|exists:lectures,id',
             'last_position' => 'required|integer|min:0',
         ]);
+
+        $validator = Validator::make(
+            ['lecture_id' => $lecture_id] ,[
+            'lecture_id' => 'required|exists:course_lectures,id'
+        ]);
+
+
+        if ($validator->fails()){
+            return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
+        }
 
         $user = Auth::user();
 

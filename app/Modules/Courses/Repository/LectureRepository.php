@@ -66,7 +66,7 @@ class LectureRepository implements LectureRepositoryInterface
     public function updateLastPosition($user_id, $lecture_id, $position)
     {
         return LectureProgress::updateOrCreate(
-            ['user_id' => $user_id, 'lecture_id' => $lecture_id],
+            ['user_id' => $user_id, 'course_lecture_id' => $lecture_id],
             ['last_position' => $position]
         );
     }

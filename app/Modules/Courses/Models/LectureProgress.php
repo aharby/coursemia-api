@@ -12,5 +12,6 @@ class LectureProgress extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'lecture_id', 'last_position'];
+    protected $fillable = ['user_id', 'course_lecture_id', 'last_position'];
+
 }

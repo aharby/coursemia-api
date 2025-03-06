@@ -38,5 +38,5 @@ return array(
     'Follow request not found'  => 'Follow request not found',
 
     //course lecture position
-    'progress_saved' => 'Last position updated successfully.'
+    'progress_saved' => 'Last position saved successfully.'
     );

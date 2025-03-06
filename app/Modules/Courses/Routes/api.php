@@ -45,13 +45,12 @@ Route::group([
     // Submit Flashcards APIs
     Route::post('submit-flashcard', 'ExamQuestionsAndAnswersAPIController@submitFlashCardAnswer');
 
-    // lectures Apis
-    Route::group([
-        'prefix' => 'lectures', 'as' => 'lectures.'
-    ], function(){
-        //lecture save last position
-        Route::post('/{lecture_id}/save-last-position', [CourseLectureAPIController::class, 'saveLastPosition']);
-
-    });
 });
 
+    // lectures Apis
+Route::group(['middleware' => 'auth:api',
+    'prefix' => 'lectures', 'as' => 'lectures.'
+], function (){
+    //lecture save last position
+    Route::post('/{lecture_id}/save-last-position', [CourseLectureAPIController::class, 'saveLastPosition']);
+});
