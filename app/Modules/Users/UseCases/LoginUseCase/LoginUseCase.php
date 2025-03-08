@@ -41,6 +41,7 @@ class LoginUseCase implements LoginUseCaseInterface
 
         if(!$user->is_verified){
             $loginCase['message'] = __('auth.User not verified');
+            $loginCase['status_code'] = StatusCodesEnum::UNVERIFIED;
             return $loginCase;
         }
 

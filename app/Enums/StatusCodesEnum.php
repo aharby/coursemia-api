@@ -13,4 +13,6 @@ final class StatusCodesEnum extends Enum
 {
     const DONE =   1;
     const FAILED =   2;
+    const UNAUTHORIZED = 3;
+    const UNVERIFIED = 4;
 }
