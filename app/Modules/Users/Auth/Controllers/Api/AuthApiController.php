@@ -359,17 +359,18 @@ class AuthApiController extends BaseApiController
     }
 
     public function addDeviceToken(AddDeviceTokenRequest $request){
-        try{
-            $user_id = auth('api')->user()->id;
-            $device = UserDevice::where(['user_id' => $user_id, 'is_tablet' => $request->is_tablet])->first();
-            if (isset($device)){
-                $device->device_token = $request->device_token;
-                $device->save();
-            }
-            return customResponse((object)[], __("Device Token Added Successfully"),200, StatusCodesEnum::DONE);
-        }catch (\Exception $e){
-            return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
-        }
+    
+        $user_id = auth('api')->user()->id;
+        $device = UserDevice::where(['user_id' => $user_id, 'device_id' => $request->header('device-id')])->first();
+        
+        if(!isset($device))
+            return customResponse((object)[], __("api.Device not found"),404, StatusCodesEnum::FAILED);
+
+        $device->device_token = $request->device_token;
+        $device->save();
+    
+        return customResponse((object)[], __("api.Device Token Added Successfully"),200, StatusCodesEnum::DONE);
+        
     }
 
     public function logout(){
