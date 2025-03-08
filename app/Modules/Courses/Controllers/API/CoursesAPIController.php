@@ -103,27 +103,36 @@ class CoursesAPIController extends Controller
         if ($v->fails()) {
             return customResponse((object)[], __($v->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
+
+        $category_id = \request()->category_id;
+        $sub_category_ids = json_decode($request->sub_category_ids);
+        $notes = CourseNote::query();
+        $notes->where('course_id', $request->course_id);
+        if (isset($category_id) && empty($sub_category_ids)){
+            $notes = $notes->where('category_id', request()->category_id)
+                ->orWhereHas('category', function ($note){
+                    $note->whereHas('parent', function ($parent){
+                        $parent->where('id', request()->category_id);
+                    });
+                });
+        }
+        if (!empty($sub_category_ids)){
+            if(!is_array($sub_category_ids))
+                return customResponse(-1, "sub_category_ids must be an array", 400, StatusCodesEnum::DONE);
+
+            $notes = $notes->whereIn('category_id', $sub_category_ids);
+        }
+
+        // if course is purchased
         $user = auth('api')->user();
         $isMyCourse = 0;
         if (isset($user))
             $isMyCourse = CourseUser::where(['course_id' => $request->course_id, 'user_id' => $user->id])->count();
-        $notes = CourseNote::where('course_id', $request->course_id);
-        if (isset($request->category_id) && !isset($request->sub_category_ids)) {
-            $notes = $notes->where(function ($q){
-                $q->where('category_id', request()->category_id)
-                    ->orWhereHas('category', function ($cat){
-                        $cat->whereHas('parent', function ($parent){
-                            $parent->where('id', request()->category_id);
-                        });
-                    });
-            });
-        }
-        if (isset($request->sub_category_ids)){
-            $notes = $notes->whereIn('category_id', $request->sub_category_ids);
-        }
         if ($isMyCourse < 1)
             $notes = $notes->where('is_free_content' , '=', 1);
+        
         $notes = $notes->get();
+
         return customResponse(CourseNoteResource::collection($notes), __("Done"), 200, StatusCodesEnum::DONE);
     }
 

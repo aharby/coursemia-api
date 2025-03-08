@@ -28,7 +28,7 @@ class CourseNote extends Model
 
     public function getTranslatedTitleAttribute()
     {
-        return $this->translate(app()->getLocale())->title;
+        return $this->translate(app()->getLocale())->title ?? '';
     }
 
     public function ScopeActive($query)
