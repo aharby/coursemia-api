@@ -2,8 +2,6 @@
 
 namespace App\Modules\BaseApp\Providers;
 
-use App\Modules\BaseNotification\FcmNotification\FcmNotification;
-use App\Modules\BaseNotification\FcmNotification\FcmNotificationInterface;
 use App\Modules\BaseNotification\MailNotification\MailNotificationInterface;
 use App\Modules\BaseNotification\NotifierFactory\NotifierFactory;
 use App\Modules\BaseNotification\NotifierFactory\NotifierFactoryInterface;
@@ -26,10 +24,7 @@ class NotificationsServiceProvider extends ServiceProvider
 //            SmsNotification::class
 //        );
 //
-//        $this->app->bind(
-//            FcmNotificationInterface::class,
-//            FcmNotification::class
-//        );
+
 //
 //        $this->app->bind(
 //            MailNotificationInterface::class,

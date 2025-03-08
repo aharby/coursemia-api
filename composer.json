@@ -19,6 +19,7 @@
         "jenssegers/model": "^1.2",
         "jpgraph/jpgraph": "^4.0",
         "laracasts/flash": "^3.0",
+        "laravel-notification-channels/fcm": "*",
         "laravel/framework": "^8.0",
         "laravel/helpers": "^1.2",
         "laravel/passport": "^10.1",

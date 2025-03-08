@@ -31,8 +31,6 @@ Route::post('/reset-password/confirm/code', '\App\Modules\Users\Auth\Controllers
    //logout
 Route::post('/logout', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@logout')->middleware('auth:api');
 
-Route::post('/fcm-tokens', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@storeFCMToken')->middleware('auth:api');
-
 Route::get('/confirm', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@getConfirm');
 
 Route::post('/change-language', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@changeLanguage')->middleware('auth:api');

@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'Asia/Riyadh'),
+    'timezone' => env('APP_TIMEZONE', 'Europe/Berlin'),
 
     /*Asia/Riyadh
     |--------------------------------------------------------------------------
