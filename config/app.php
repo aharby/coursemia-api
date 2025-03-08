@@ -177,7 +177,6 @@ return [
         App\Modules\BaseApp\Providers\UseCasesServiceProvider::class,
         App\Modules\BaseApp\Providers\NotificationsServiceProvider::class,
 
-        Benwilkins\FCM\FcmNotificationServiceProvider::class,
         Vimeo\Laravel\VimeoServiceProvider::class
 
 
