@@ -56,11 +56,6 @@ return [
         ],
     ],
 
-    // temporary key
-    // todo: make sure you give the sender id to mbile app dev to use it when generate device token
-    'fcm' => [
-        'key' => env('FCM_SECRET_KEY', 'AAAAdJ0lfs4:APA91bHNCt4wyEMJYFaNBYSIGcotfW6YRNKXNFpmmaf1i28jVjWjMQqcvtajqUjv3unxyRPixh8DX_wczXi0Qvb1Y7NeDCV4yfcQNJSEZrbRzA0JNyOWPnJwhqO0P-lTZz_vchW_QAHh'),
-     ],
     'opentok' => [
         'api_key' => env('OPEN_TOK_API_KEY', '46514992'),
         'api_secret' => env('OPEN_TOK_API_SECRET', '128bcd64d9c9fc02738dfa53cb989b1bfbd3aa05'),

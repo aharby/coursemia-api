@@ -27,6 +27,7 @@ class CheckAuthAndDevice
         if (isset($token) && !isset($device)){
             return customResponse(null,__("Device was logged out"), 401, StatusCodesEnum::FAILED);
         }
+
         return $next($request);
     }
 }

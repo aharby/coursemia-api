@@ -30,7 +30,6 @@ use App\Modules\SchoolAccounts\SessionPreparations\Models\PreparationMedia;
 use App\Modules\SchoolAdmin\Models\SchoolAdmin;
 use App\Modules\Subjects\Models\Subject;
 use App\Modules\Users\Models\ContentAuthor;
-use App\Modules\Users\Models\FirebaseToken;
 use App\Modules\Users\Models\Instructor;
 use App\Modules\Users\Models\ParentData;
 use App\Modules\Users\Models\Student;
@@ -177,21 +176,13 @@ class User extends Authenticatable
         return $this->hasMany(PaymentTransaction::class, 'receiver_id');
     }
 
-    public function firebaseTokens()
-    {
-        return $this->hasMany(FirebaseToken::class);
-    }
-
     /**
      * Route notifications for the FCM channel.
      *
      * @param Notification $notification
      * @return string
      */
-    public function routeNotificationForFcm($notification)
-    {
-        return $this->firebaseTokens()->pluck('device_token')->toArray();
-    }
+    
 
     /**
      * The parent and student relation

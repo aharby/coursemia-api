@@ -91,4 +91,9 @@ class User extends Authenticatable
             }
         });
     }
+
+    public function routeNotificationForFcm($notification)
+    {
+        return $this->devices()->pluck('device_token')->toArray();
+    }
 }

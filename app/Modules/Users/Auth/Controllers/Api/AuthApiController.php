@@ -44,7 +44,6 @@ use App\Modules\Users\Auth\Requests\Api\UserBasicDataRequest;
 use App\Modules\Users\Auth\Requests\Api\ChangeLanguageRequest;
 use App\Modules\Users\Auth\TokenManager\TokenManagerInterface;
 use App\Modules\Users\Auth\Requests\Api\UserLoginSocialRequest;
-use App\Modules\Users\Auth\Requests\Api\StoreFirebaseTokenRequest;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCaseInterface;
 use App\Modules\Users\UseCases\LoginSocialUseCase\LoginSocialUseCase;
 use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCaseInterface;
@@ -54,7 +53,6 @@ use App\Modules\Users\Auth\Requests\Api\UserActivateOtpRequest;
 class AuthApiController extends BaseApiController
 {
     private $loginSocialUseCase;
-    protected $firebaseRepository;
     /**
      * @var TokenManagerInterface
      */
@@ -68,7 +66,6 @@ class AuthApiController extends BaseApiController
 //        SendActivationMailUseCaseInterface $sendActivationMailUseCase,
 //        ActivateUserUseCaseInterface $activateUserUseCase,
 //        LoginSocialUseCase $loginSocialUseCase,
-//        FirebaseTokenRepositoryInterface $firebaseRepository,
 //        TokenManagerInterface $tokenManager
     )
     {
@@ -79,7 +76,6 @@ class AuthApiController extends BaseApiController
         $this->repository = $userRepository;
 //        $this->parserInterface = $parserInterface;
 //        $this->loginSocialUseCase = $loginSocialUseCase;
-//        $this->firebaseRepository = $firebaseRepository;
 //        $this->tokenManager = $tokenManager;
     }
 
@@ -501,36 +497,7 @@ class AuthApiController extends BaseApiController
             }
         }
     }
-
-//    public function logout(LogoutRequest $request)
-//    {
-//        $user = Auth::guard('api')->user();
-//        $data = $request->getContent();
-//        $data = $this->parserInterface->deserialize($data);
-//        $data = $data->getData();
-//
-//        try {
-//            $this->firebaseRepository->delete($user, $data->toArray());
-//
-//            $this->tokenManager->revokeAuthAccessToken();
-//
-//            return response()->json(
-//                [
-//                    "meta" => [
-//                        'message' => trans('api.Successfully Logged Out')
-//                    ]
-//                ]
-//            );
-//        } catch (\Exception $e) {
-//            $errorArray = [
-//                'status' => $e->getCode(),
-//                'title' => $e->getMessage(),
-//                'detail' => $e->getTrace()
-//            ];
-//            return formatErrorValidation($errorArray, 500);
-//        }
-//    }
-
+    
     public function deleteMyAccount(){
         $user = Auth::user();
         $user->delete();
@@ -562,23 +529,6 @@ class AuthApiController extends BaseApiController
             throw new CustomErrorException($e->getMessage());
         }
     }
-
-    public function storeFCMToken(StoreFirebaseTokenRequest $request)
-    {
-        $user = Auth::guard('api')->user();
-        $data = $request->getContent();
-        $data = $this->parserInterface->deserialize($data);
-        $data = $data->getData();
-
-        $token = $this->firebaseRepository->store($user, $data->toArray());
-
-        $meta = [
-            'message' => trans('auth.Token stored successfully')
-        ];
-
-        return response()->json(['meta' => $meta], 200);
-    }
-
     public function validateBasicData(UserBasicDataRequest $request)
     {
 
