@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use App\Modules\Users\Models\User;
 use App\Notifications\QuestionOfTheDay;
 use NotificationChannels\Fcm\Exceptions\CouldNotSendNotification;
+use App\Modules\Courses\Models\Question;
+use App\Modules\Courses\Resources\API\QuestionResource;
 
 class SendQuestionOfTheDayNotification extends Command
 {
@@ -56,17 +58,9 @@ class SendQuestionOfTheDayNotification extends Command
 
     private function getQuestionOfTheDay()
     {
-        // Define a set of questions
-        $questions = [
-            "What’s one thing you’re grateful for today?",
-            "If you could have dinner with any historical figure, who would it be and why?",
-            "What’s the most valuable lesson you’ve learned in the past year?",
-            "If you had to describe your mood in a song, what song would it be?",
-            "What’s a small change you can make today to improve your life?",
-        ];
+        $question = Question::inRandomOrder()->first();
 
-        // Return a random question each day
-        return $questions[array_rand($questions)];
+        return (new QuestionResource($question))->toJson();
     }
 
     private function logWarn($log_message){

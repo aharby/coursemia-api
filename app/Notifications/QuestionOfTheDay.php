@@ -28,8 +28,9 @@ class QuestionOfTheDay extends Notification
         return FcmMessage::create()
             ->setData(['question' => $this->question])
             ->setNotification(FcmNotification::create()
-                ->setTitle('Question of the Day')
-                ->setBody($this->question)
+                ->setTitle('🚨 Question of the Day')
+                ->setBody('🏆 Think you\'re the best? Prove it! A new question is live. Can you answer it correctly? 🎯')
+                ->setImage(null)
             );
     }
 }
