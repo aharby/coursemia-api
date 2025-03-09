@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Modules\Users\Models\User;
 use App\Notifications\QuestionOfTheDay;
+use NotificationChannels\Fcm\Exceptions\CouldNotSendNotification;
 
 class SendQuestionOfTheDayNotification extends Command
 {
@@ -30,14 +31,27 @@ class SendQuestionOfTheDayNotification extends Command
             return;
         }
         
+        $notifySuccessCount = 0;
+        $notifyFailureCount = 0;
+
         // Send notification to each user
         foreach ($users as $user) {
-            $user->notify(new QuestionOfTheDay($question));
+            try{
+
+                $user->notify(new QuestionOfTheDay($question));
+
+                $notifySuccessCount++;
+
+            } catch (CouldNotSendNotification $e) { // Catch notification-specific exceptions
+                $this->logWarn('Notification failed: ' . $e->getMessage(). ' Code: '. $e->getCode());
+                //clean expired tokens
+                $notifyFailureCount++;
+            }
         }
 
-        $this->info('Daily Question Notification sent to ' . $users->count(). ' users.');
-
-        $this->info('Daily Question Notification sent successfully.');
+        $this->logInfo('Daily Question Notification sent to ' . $notifySuccessCount . ' users.');
+        $this->logWarn('Daily Question Notification couldn\'t be sent to ' . $notifyFailureCount . ' users.');
+        $this->logInfo('Send Notification: Question of the Day Done.');
     }
 
     private function getQuestionOfTheDay()
@@ -53,5 +67,15 @@ class SendQuestionOfTheDayNotification extends Command
 
         // Return a random question each day
         return $questions[array_rand($questions)];
+    }
+
+    private function logWarn($log_message){
+        \Log::warning($log_message);
+        $this->warn($log_message);
+    }
+
+    private function logInfo($log_message){
+        \Log::info($log_message);
+        $this->info($log_message);
     }
 }
