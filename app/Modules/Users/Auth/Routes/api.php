@@ -44,7 +44,7 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::post('delete-devices', 'AuthApiController@deleteDevices');
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
     Route::get('verify-email', 'AuthApiController@verifyEmail')->name('verification.verify');
-    Route::post('resend-verify-email', 'AuthApiController@resendVerifyEmail')->middleware('auth:api')
+    Route::post('resend-verify-email', 'AuthApiController@resendVerifyEmail')->middleware('auth:api');
     Route::post('reset-password', 'AuthApiController@resetPassword');
     Route::post('send-verification-code', 'AuthApiController@sendVerificationCode');
     Route::post('login', 'AuthApiController@login');
