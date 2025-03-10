@@ -36,7 +36,11 @@ return array(
     'Follow rejected successfully'  => 'Follow rejected successfully',
     'Follow accepted successfully' => 'Follow accepted successfully',
     'Follow request not found'  => 'Follow request not found',
-
+    'Email was verified successfully' => 'Email was verified successfully',
+    'Email is already verified' => 'Email is already verified',
+    'Invalid verification link' => 'Invalid verification link',
+    'Verfication email sent' => 'Verfication email sent',
+    
     //course lecture position
     'progress_saved' => 'Last position saved successfully.'
     );

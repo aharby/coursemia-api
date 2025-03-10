@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\StatusCodesEnum;
+use App\Modules\Users\Auth\Controllers\Api\AuthApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@postLogin');
@@ -42,6 +43,8 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::post('create-account', 'AuthApiController@register');
     Route::post('delete-devices', 'AuthApiController@deleteDevices');
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
+    Route::get('verify-email', 'AuthApiController@verifyEmail')->name('verification.verify');
+    Route::post('resend-verify-email', 'AuthApiController@resendVerifyEmail')->middleware('auth:api')
     Route::post('reset-password', 'AuthApiController@resetPassword');
     Route::post('send-verification-code', 'AuthApiController@sendVerificationCode');
     Route::post('login', 'AuthApiController@login');
