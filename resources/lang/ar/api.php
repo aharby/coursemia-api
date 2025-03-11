@@ -38,6 +38,10 @@ return array(
     'Follow accepted successfully' => 'تم قبول طلب المتابعة',
     'Follow request not found' => 'لم يتم اعثور على طلب المتابعة',
 
+    'Email was verified successfully' => 'تم تفعيل البريد الالكتروني',
+    'Email is already verified' => 'البريد الالكتروني مفعل من قبل',
+    'Invalid verification link' => 'رابط تفعيل غير صالح',
+    'Verfication email sent' => 'تم ارسال بريد التفعيل',
     //course lecture position
 
     'progress_saved' => 'تم تحديث آخر موضع بنجاح'

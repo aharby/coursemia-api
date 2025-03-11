@@ -49,6 +49,8 @@ use App\Modules\Users\UseCases\LoginSocialUseCase\LoginSocialUseCase;
 use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCaseInterface;
 use App\Modules\Users\UseCases\SendActivationMailUseCase\SendActivationMailUseCaseInterface;
 use App\Modules\Users\Auth\Requests\Api\UserActivateOtpRequest;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 
 class AuthApiController extends BaseApiController
 {
@@ -166,6 +168,8 @@ class AuthApiController extends BaseApiController
 
             if (!is_null($user)) {
 
+                event(new Registered($user));
+
                 return customResponse([
                     'user' => new UserResorce($user),
                     'token'=> $user->createToken('AccessToken')->accessToken
@@ -173,8 +177,8 @@ class AuthApiController extends BaseApiController
             }
         } catch (\Throwable $e) {
             Log::error($e);
-//            throw  $e;
-            throw new CustomErrorException($e->getMessage());
+           throw  $e;
+            // throw new CustomErrorException($e->getMessage());
 
         }
     }
@@ -267,6 +271,40 @@ class AuthApiController extends BaseApiController
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
         }
+    }
+
+    public function verifyEmail(Request $request){
+        
+        $user = User::findOrFail($request->id);
+
+        if(!isset($user))
+            return customResponse((object)[], __("auth.User not found"), 422, StatusCodesEnum::FAILED);
+
+
+        if (!hash_equals( $request->hash, sha1($user->getEmailForVerification()))) {
+            return customResponse((object)[], __('auth.Invalid verification link'), 422, StatusCodesEnum::FAILED);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return customResponse((object)[], __('auth.Email is already verified'), 200, StatusCodesEnum::DONE);
+        }
+
+        $user->markEmailAsVerified();
+
+        event(new Verified($user));
+
+        return customResponse((object)[], __('auth.Email was verified successfully'), 200, StatusCodesEnum::DONE);
+    }
+
+    public function resendVerifyEmail(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return customResponse((object)[], __('auth.Email is already verified'), 200, StatusCodesEnum::DONE);
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return customResponse((object)[], __('auth.Verfication email sent'), 200, StatusCodesEnum::DONE);
     }
 
     public function getUserConfig(){
