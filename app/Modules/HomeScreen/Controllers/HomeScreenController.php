@@ -20,13 +20,17 @@ class HomeScreenController extends Controller
     public function getHomeScreen(){
         $offers = Offer::get();
         $events = Event::get();
-        $questions = Question::inRandomOrder()->take(5)->get();
+
         $courses = Course::orderBy('id', 'DESC')->active()->take(5)->get();
         $specialities = Speciality::inRandomOrder()->take(5)->get();
+
+        $qotd = Question::where('is_qotd', true)->first();
+        $qotd_res = $qotd? (new QuestionResource($qotd)) : null;
+
         return customResponse([
             "offers" => OffersResource::collection($offers),
             "events" => EventsResource::collection($events),
-            "question_of_the_day"   => QuestionResource::collection($questions),
+            "question_of_the_day"   => $qotd_res,
             "specialities"          => SpecialitiesResource::collection($specialities),
             "courses"   => CoursesResource::collection($courses)
         ], __("Get home content successfully"), 200, StatusCodesEnum::DONE);
