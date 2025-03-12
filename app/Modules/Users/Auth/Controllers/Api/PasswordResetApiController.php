@@ -2,6 +2,7 @@
 
 namespace App\Modules\Users\Auth\Controllers\Api;
 
+use App\Enums\StatusCodesEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
@@ -18,19 +19,15 @@ class PasswordResetApiController extends Controller
      */
     public function sendResetLink(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ]);
-
-        $status = Password::sendResetLink($request->only('email'));
-
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json(['message' => __($status)], 200);
-        }
-
-        throw ValidationException::withMessages([
-            'email' => [__($status)],
-        ]);
+        $request->validate(['email' => 'required|email']);
+ 
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+     
+        return $status === Password::RESET_LINK_SENT?
+         customResponse([], __('auth.Password reset link sent successfully'), 200, StatusCodesEnum::DONE):
+         customResponse([],__('auth.Password reset link sent failed'), 422, StatusCodesEnum::FAILED );
     }
 
     /**
@@ -39,9 +36,9 @@ class PasswordResetApiController extends Controller
     public function reset(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users,email',
             'token' => 'required',
-            'password' => 'required|string|min:8|confirmed',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8|confirmed',
         ]);
 
         $status = Password::reset(
@@ -49,17 +46,12 @@ class PasswordResetApiController extends Controller
             function (User $user, string $password) {
                 $user->forceFill([
                     'password' => Hash::make($password),
-                    'remember_token' => Str::random(60),
                 ])->save();
-
-                event(new PasswordReset($user));
             }
         );
 
-        if ($status === Password::PASSWORD_RESET) {
-            return response()->json(['message' => __($status)], 200);
-        }
-
-        return response()->json(['message' => __($status)], 400);
+        return $status === Password::PASSWORD_RESET?
+         customResponse([], __('auth.Passoword was reset successfully'), 200, StatusCodesEnum::DONE):
+         customResponse([],__('auth.Passowrd couldn\'t be reset'), 422, StatusCodesEnum::FAILED );
     }
 }

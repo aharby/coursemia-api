@@ -35,7 +35,10 @@ return [
     'Profile updated successfully' => 'Profile updated successfully',
     'Verification code sent successfully' => 'Verification code sent successfully',
     'User not found' => 'User not found',
-    'Password reset successfully' => 'Password reset successfully',
+    'Password reset link sent successfully' => 'Password reset link sent successfully',
+    'Password reset link sent failed' => 'Password reset link sent failed',
+    'Passoword was reset successfully' => 'Passoword was reset successfully',
+    'Passowrd couldn\'t be reset' =>'Passowrd couldn\'t be reset',
     'Account created successfully' => 'Account created successfully',
     'Logged Out Successfully' => 'Logged Out Successfully'
 ];
