@@ -20,16 +20,20 @@ use Illuminate\Support\Str;
 
 class LoginUseCase implements LoginUseCaseInterface
 {
-    public function login(array $request, UserRepositoryInterface $userRepository, string $attribute = 'mobile'): array
+    public function login(array $request, UserRepositoryInterface $userRepository): array
     {
         $user = null;
-        if ($attribute == "email") {
-            $user = $userRepository->findByEmail($request['email'], $request['abilities_user']);
+        $is_verified = false;
+        
+        if (array_key_exists('email', $request)) {
+            $user = $userRepository->findByEmail($request['email']);
+            $is_verified = $user->hasVerifiedEmail();
+        }
+        else{
+            $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
+            $is_verified = $user->is_verified;
         }
 
-        if ($attribute == "mobile") {
-            $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
-        }
         $loginCase = array();
         $loginCase['data'] = (object)[];
         $loginCase['message'] = __('auth.Invalid login details');
@@ -39,7 +43,7 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
-        if(!$user->is_verified){
+        if(!$is_verified){
             $loginCase['message'] = __('auth.User not verified');
             $loginCase['status_code'] = StatusCodesEnum::UNVERIFIED;
             return $loginCase;

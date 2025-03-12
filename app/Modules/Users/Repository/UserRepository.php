@@ -46,26 +46,7 @@ class UserRepository implements UserRepositoryInterface
     public function findByEmail(string $email, bool $abilitiesUser = false): ?User
     {
         return User::query()
-            ->where('email', $email)
-            ->when(
-                $abilitiesUser,
-                function ($query) {
-                    $query->whereNull('username')
-                    ->whereIn('type', UserEnums::userCanLoginThrowAbilities());
-                }
-            )
-            ->unless(
-                $abilitiesUser,
-                function ($query) {
-                    $query->where(
-                        function ($q) {
-                            $q->whereNotNull('username')
-                            ->orWhereIn('type', UserEnums::userCanLoginThrowBladeDashboard());
-                        }
-                    );
-                }
-            )
-            ->first();
+            ->where('email', $email)->first();
     }
 
     /**
