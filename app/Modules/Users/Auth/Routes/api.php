@@ -2,6 +2,8 @@
 
 use App\Enums\StatusCodesEnum;
 use App\Modules\Users\Auth\Controllers\Api\AuthApiController;
+use App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@postLogin');
@@ -17,17 +19,17 @@ Route::Post('/login-otp', '\App\Modules\Users\Auth\Controllers\Api\AuthApiContro
 Route::post('/refresh-token', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@refreshToken')
     ->name('refreshToken');
 
-Route::post('/forget-password', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@sendPasswordResetMail')
-    ->name('sendPasswordResetMail');
+// Route::post('/forget-password', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@sendPasswordResetMail')
+//     ->name('sendPasswordResetMail');
 
-Route::post('/reset-password/{token}', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@resetUserPassword')
-    ->name('resetUserPassword');
+// Route::post('/reset-password/{token}', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@resetUserPassword')
+//     ->name('resetUserPassword');
 
-Route::post('/reset-password/send/code', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@sendResetPasswordCode')
-    ->name('sendResetPasswordCode');
+// Route::post('/reset-password/send/code', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@sendResetPasswordCode')
+//     ->name('sendResetPasswordCode');
 
-Route::post('/reset-password/confirm/code', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@confirmResetCode')
-    ->name('confirmResetCode');
+// Route::post('/reset-password/confirm/code', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@confirmResetCode')
+//     ->name('confirmResetCode');
 
    //logout
 Route::post('/logout', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@logout')->middleware('auth:api');
@@ -45,7 +47,8 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
     Route::get('verify-email', 'AuthApiController@verifyEmail')->name('verification.verify');
     Route::post('resend-verify-email', 'AuthApiController@resendVerifyEmail')->middleware('auth:api');
-    Route::post('reset-password', 'AuthApiController@resetPassword');
+    Route::post('/forgot-password', 'PasswordResetApiController@sendResetLink');
+    Route::post('/reset-password', 'PasswordResetApiController@reset');
     Route::post('send-verification-code', 'AuthApiController@sendVerificationCode');
     Route::post('login', 'AuthApiController@login');
     Route::group(['middleware' => 'userActive'], function (){
