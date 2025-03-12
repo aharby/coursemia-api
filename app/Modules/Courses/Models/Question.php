@@ -21,6 +21,7 @@ class Question extends Model
         'is_active',
         'explanation_image',
         'explanation_voice',
+        'is_qotd'
     ];
 
     protected $translationForeignKey = "question_id";

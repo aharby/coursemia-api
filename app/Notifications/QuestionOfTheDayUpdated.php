@@ -8,7 +8,7 @@ use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
 
-class QuestionOfTheDay extends Notification
+class QuestionOfTheDayUpdated extends Notification
 {
     use Queueable;
     protected $question;
