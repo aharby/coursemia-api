@@ -25,7 +25,7 @@ Route::post('/refresh-token', '\App\Modules\Users\Auth\Controllers\Api\AuthApiCo
 // Route::post('/reset-password/{token}', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@resetUserPassword')
 //     ->name('resetUserPassword');
 
-// Route::post('/reset-password/send/code', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@sendResetPasswordCode')
+// Route::post('phone/reset-password/send/code', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@sendResetPasswordCode')
 //     ->name('sendResetPasswordCode');
 
 // Route::post('/reset-password/confirm/code', '\App\Modules\Users\Auth\Controllers\Api\PasswordResetApiController@confirmResetCode')
@@ -47,8 +47,6 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
     Route::get('verify-email', 'AuthApiController@verifyEmail')->name('verification.verify');
     Route::post('resend-verify-email', 'AuthApiController@resendVerifyEmail')->middleware('auth:api');
-    Route::post('/forgot-password', 'PasswordResetApiController@sendResetLink')->middleware('verified');
-    Route::post('/reset-password', 'PasswordResetApiController@reset')->name('password.reset');
     Route::post('send-verification-code', 'AuthApiController@sendVerificationCode');
     Route::post('login', 'AuthApiController@login');
     Route::group(['middleware' => 'userActive'], function (){
@@ -67,3 +65,14 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     });
 });
 
+Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api',
+'prefix' => 'password-reset'], function (){
+    //using email
+    Route::post('send-email', 'PasswordResetApiController@sendResetLink');
+    Route::post( 'confirm/email', 'PasswordResetApiController@confirmResetUsingMail')->name('password.reset');
+
+    //using phone
+    Route::post('send-email', 'PasswordResetApiController@sendResetPhoneCode');
+    Route::post( 'confirm/phone', 'PasswordResetApiController@confirmResetUsingPhone');
+
+});
