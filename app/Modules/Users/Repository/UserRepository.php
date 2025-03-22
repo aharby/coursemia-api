@@ -363,10 +363,14 @@ class UserRepository implements UserRepositoryInterface
 
     public function findByPhone(string $phone, string $country_code): ?User
     {
-        return User::query()
-            ->where('phone', $phone)
-            ->where('country_code', $country_code)
-            ->first();
+        if(isset($country_code))
+            return User::query()
+                ->where('phone', $phone)
+                ->where('country_code', $country_code)
+                ->first();
+        else 
+            return User::whereRaw("CONCAT(country_code, phone_number) = ?",
+         [$phone])->first();
     }
 
     public function findResetPasswordTokenByPhoneOrMail(User $user)

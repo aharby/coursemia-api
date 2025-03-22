@@ -353,7 +353,7 @@ class AuthApiController extends BaseApiController
 
     public function sendVerificationCode(VerificationCodeRequest $request){
         try {
-        //    $this->sendVerifyMessage($request->country_code.$request->phone_number);
+        //    $this->sendVerifyMessage($request->phone_number);
             return customResponse((object)[], __("auth.Verification code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
