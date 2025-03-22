@@ -4,6 +4,7 @@ return array(
     // LoginUseCase
 
     'User not verified' => 'لم يتم التحقق من المستخدم',
+    'User phone not verified' => 'لم يتم التحقق من رقم الهاتف',
     'Invalid login details' => 'تفاصيل تسجيل الدخول غير صالحة',
     'Oopps Something is broken' => 'عفوًا ، شيء معطل',
     'This account is not confirmed' => 'لم يتم تأكيد هذا الحساب',
@@ -35,11 +36,14 @@ return array(
     'Push notifications disabled' => 'ايقاف الإشعارات الفورية',
     'Device not found' => 'لم يتم العثور على الجهاز',
     'Verification code sent successfully' => 'تم ارسال كود التحقق بنجاح',
+    'Password reset code sent successfully' =>'تم ارسال كود اعادة كلمة السر بنجاح',
     'User not found' => 'لم يتم العثور علي المستخدم',
     'Password reset link sent successfully' => 'تم ارسال بريد اعادة كلمة السر',
     'Password reset link sent failed' => 'فشل ارسال بريد اعادة كلمة السر',
-    'Passoword was reset successfully' => 'تم تحديث كلمة السر',
+    'Password was reset successfully' => 'تم تحديث كلمة السر',
     'Passowrd couldn\'t be reset' =>'فشل تحديث كلمة السر',    
     'Account created successfully' => 'تم انشاء الحساب بنجاح',
-    'Logged Out Successfully' => 'تم تسجيل الخروج بنجاح'
+    'Logged Out Successfully' => 'تم تسجيل الخروج بنجاح',
+
+    'Password Regex' => 'يجب أن تحتوي كلمة السر على حرف صغير ، وحرف كبير، ورقم، وحرف خاص'
 );

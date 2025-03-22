@@ -7,6 +7,7 @@ return [
     'This account is banned' => 'This account is banned',
     'Logged in successfully' => 'Logged in successfully',
     'User not verified' => 'User not verified',
+    'User phone not verified' => 'User phone not verified',
     'This account is not confirmed' => 'This account is not confirmed',
     'Maximum device numbers exceeded' => 'Maximum device numbers exceeded',
     'This account is suspended' => 'This account is suspended',
@@ -34,11 +35,14 @@ return [
     'Push notifications disabled' => 'Push notifications disabled',
     'Profile updated successfully' => 'Profile updated successfully',
     'Verification code sent successfully' => 'Verification code sent successfully',
+    'Password reset code sent successfully' =>'Password reset code sent successfully',
     'User not found' => 'User not found',
     'Password reset link sent successfully' => 'Password reset link sent successfully',
     'Password reset link sent failed' => 'Password reset link sent failed',
-    'Passoword was reset successfully' => 'Passoword was reset successfully',
+    'Password was reset successfully' => 'Password was reset successfully',
     'Passowrd couldn\'t be reset' =>'Passowrd couldn\'t be reset',
     'Account created successfully' => 'Account created successfully',
-    'Logged Out Successfully' => 'Logged Out Successfully'
+    'Logged Out Successfully' => 'Logged Out Successfully',
+
+    'Password Regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'
 ];

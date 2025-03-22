@@ -153,7 +153,7 @@ class AuthApiController extends BaseApiController
             }
             $requestData = [
                 'full_name' => $request->full_name,
-                'phone' => $request->phone_number,
+                'phone' => $request->country_code.$request->phone_number,
                 'email' => $request->email_address,
                 'country_id' => $request->country_id,
                 'photo' => $photo,
@@ -245,7 +245,7 @@ class AuthApiController extends BaseApiController
             // $verification = $twilio->verify->v2->services($twilio_verify_sid)
             //     ->verificationChecks
             //     ->create([
-            //         'to' => $request->country_code.$request->phone_number,
+            //         'to' => $request->phone_number,
             //         'code' => $request->verification_code
             //     ]);
                 
@@ -353,7 +353,7 @@ class AuthApiController extends BaseApiController
 
     public function sendVerificationCode(VerificationCodeRequest $request){
         try {
-        //    $this->sendVerifyMessage($request->country_code.$request->phone_number);
+        //    $this->sendVerifyMessage($request->phone_number);
             return customResponse((object)[], __("auth.Verification code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
@@ -413,37 +413,6 @@ class AuthApiController extends BaseApiController
         $user = Auth::user()->token();
         $user->revoke();
         return customResponse((object)[], __("auth.Logged Out Successfully"),200, StatusCodesEnum::DONE);
-    }
-
-    public function resetPassword(ResetPasswordRequest $request){
-
-        try{
-            // $token = getenv("TWILIO_AUTH_TOKEN");
-            // $twilio_sid = getenv("TWILIO_SID");
-            // $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-            // $twilio = new Client($twilio_sid, $token);
-            // $verification = $twilio->verify->v2->services($twilio_verify_sid)
-            //     ->verificationChecks
-            //     ->create([
-            //         'to' => $request->country_code.$request->phone_number,
-            //         'code' => $request->verification_code
-            //     ]);
-                
-            if (true /*$verification->valid*/) {
-                $user = User::where(['phone' => $request->phone_number, 'country_code' => $request->country_code])
-                ->first();
-                if (isset($user)){
-                    $user->password = Hash::make($request->password);
-                    $user->save();
-                    return customResponse((object)[], __("auth.Password reset successfully"), 200, StatusCodesEnum::DONE);
-                }
-                return customResponse((object)[], __("auth.User not found"), 422, StatusCodesEnum::FAILED);
-            }
-            return customResponse((object)[], 'auth.verification failed',422, StatusCodesEnum::FAILED);
-        }catch (\Exception $e){
-            return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
-        }
-
     }
 
     public function activateOtp(UserActivateOtp $userActivateOtp)
