@@ -43,5 +43,7 @@ return array(
     'Passoword was reset successfully' => 'تم تحديث كلمة السر',
     'Passowrd couldn\'t be reset' =>'فشل تحديث كلمة السر',    
     'Account created successfully' => 'تم انشاء الحساب بنجاح',
-    'Logged Out Successfully' => 'تم تسجيل الخروج بنجاح'
+    'Logged Out Successfully' => 'تم تسجيل الخروج بنجاح',
+
+    'Password Regex' => 'يجب أن تحتوي كلمة السر على حرف صغير ، وحرف كبير، ورقم، وحرف خاص'
 );

@@ -42,5 +42,7 @@ return [
     'Passoword was reset successfully' => 'Passoword was reset successfully',
     'Passowrd couldn\'t be reset' =>'Passowrd couldn\'t be reset',
     'Account created successfully' => 'Account created successfully',
-    'Logged Out Successfully' => 'Logged Out Successfully'
+    'Logged Out Successfully' => 'Logged Out Successfully',
+
+    'Password Regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'
 ];

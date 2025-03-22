@@ -26,13 +26,21 @@ class ApiRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'password'          => 'required',
             'full_name'         => 'required|max:255',
             'phone_number'      => 'required|unique:users,phone',
             'email_address'     => 'required|unique:users,email',
             'country_id'        => 'required|exists:countries,id',
             'refer_code'        => 'nullable|exists:users,refer_code',
             'country_code'      => 'required|exists:countries,country_code',
+            'password' => ['required','min:9',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/']   
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'password.regex' => __('auth.Password Regex'),
         ];
     }
 

@@ -50,8 +50,7 @@ class PasswordResetApiController extends Controller
             'password' => ['required','min:9',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/',
                 'confirmed']    
-        ], ['password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'
-        ]);
+        ], ['password.regex' => __('auth.Password Regex')]);
 
 
         if ($validator->fails()){
