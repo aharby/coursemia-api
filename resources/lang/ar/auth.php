@@ -40,7 +40,7 @@ return array(
     'User not found' => 'لم يتم العثور علي المستخدم',
     'Password reset link sent successfully' => 'تم ارسال بريد اعادة كلمة السر',
     'Password reset link sent failed' => 'فشل ارسال بريد اعادة كلمة السر',
-    'Passoword was reset successfully' => 'تم تحديث كلمة السر',
+    'Password was reset successfully' => 'تم تحديث كلمة السر',
     'Passowrd couldn\'t be reset' =>'فشل تحديث كلمة السر',    
     'Account created successfully' => 'تم انشاء الحساب بنجاح',
     'Logged Out Successfully' => 'تم تسجيل الخروج بنجاح',

@@ -22,7 +22,7 @@ class PasswordResetApiController extends Controller
      */
     public function sendResetLink(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        $request->validate(['email' => 'required|email|exists:users,email']);
  
         $user = User::where('email', $request['email'])->first();
 
@@ -52,7 +52,6 @@ class PasswordResetApiController extends Controller
                 'confirmed']    
         ], ['password.regex' => __('auth.Password Regex')]);
 
-
         if ($validator->fails()){
             return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
         }
@@ -67,19 +66,19 @@ class PasswordResetApiController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET?
-         customResponse([], __('auth.Passoword was reset successfully'), 200, StatusCodesEnum::DONE):
+         customResponse([], __('auth.Password was reset successfully'), 200, StatusCodesEnum::DONE):
          customResponse([],__('auth.Passowrd couldn\'t be reset'), 422, StatusCodesEnum::FAILED );
     }
 
     public function sendResetPhoneCode(Request $request)
     {
         $request->validate([
-            'phone_number' => ['required', new ValidFullPhoneNumber()],
+            'phone_number' => 'required|exists:users,phone',
         ]);
 
         $phone = $request['phone_number'];
 
-        $is_verified = User::whereRaw("CONCAT(country_code, phone_number) = ?", [$phone])
+        $is_verified = User::where('phone', $phone)
             ->where('is_verified', true)
             ->exists();
 
@@ -89,13 +88,13 @@ class PasswordResetApiController extends Controller
         try 
         {
             // send verify message
-            $token = getenv("TWILIO_AUTH_TOKEN");
-            $twilio_sid = getenv("TWILIO_SID");
-            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-            $twilio = new Client($twilio_sid, $token);
-            $twilio->verify->v2->services($twilio_verify_sid)
-                ->verifications
-                ->create($phone, "sms");
+            // $token = getenv("TWILIO_AUTH_TOKEN");
+            // $twilio_sid = getenv("TWILIO_SID");
+            // $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+            // $twilio = new Client($twilio_sid, $token);
+            // $twilio->verify->v2->services($twilio_verify_sid)
+            //     ->verifications
+            //     ->create($phone, "sms");
             return customResponse((object)[], __("auth.Password reset code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
@@ -105,14 +104,18 @@ class PasswordResetApiController extends Controller
 
     public function confirmResetUsingPhone(Request $request)
     {
-        $request->validate([
-            'password' => [
-                'required',
-                'min:9',
-                'confirmed',
+        $validator = Validator::make(
+            $request->all() ,[
+            'phone_number' => 'required|exists:users,phone',
+            'code' => 'required',
+            'password' => ['required','min:9',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/',
-            ]
-        ]);
+                'confirmed']    
+        ], ['password.regex' => __('auth.Password Regex')]);
+
+        if ($validator->fails()){
+            return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
+        }
 
         $phone = $request['phone_number'];
 
@@ -129,12 +132,11 @@ class PasswordResetApiController extends Controller
             //     ]);
                 
             if (true /*$verification->valid*/) {
-                $user = User::whereRaw("CONCAT(country_code, phone_number) = ?", [$phone])->first();
-
+                $user = User::where('phone', $phone)->first();
                 if (isset($user)){
                     $user->password = Hash::make($request->password);
                     $user->save();
-                    return customResponse((object)[], __("auth.Password reset successfully"), 200, StatusCodesEnum::DONE);
+                    return customResponse((object)[], __("auth.Password was reset successfully"), 200, StatusCodesEnum::DONE);
                 }
                 return customResponse((object)[], __("auth.User not found"), 422, StatusCodesEnum::FAILED);
             }
