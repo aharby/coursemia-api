@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Modules\Users\User;
 use App\Rules\ValidFullPhoneNumber;
 use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Validator;
 
 class PasswordResetApiController extends Controller
 {
@@ -23,7 +24,7 @@ class PasswordResetApiController extends Controller
     {
         $request->validate(['email' => 'required|email']);
  
-        $user = User::where('email', $request['email'])->get();
+        $user = User::where('email', $request['email'])->first();
 
         if(!$user->hasVerifiedEmail())
             return customResponse([], __('auth.User not verified'), 422, StatusCodesEnum::UNVERIFIED);
@@ -41,12 +42,21 @@ class PasswordResetApiController extends Controller
      * Handle resetting the password.
      */
     public function confirmResetUsingMail(Request $request)
-    {
-        $request->validate([
+    {        
+        $validator = Validator::make(
+            $request->all() ,[
             'token' => 'required',
             'email' => 'required|email|exists:users,email',
-            'password' => 'required|min:8|confirmed',
+            'password' => ['required','min:9',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/',
+                'confirmed']    
+        ], ['password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'
         ]);
+
+
+        if ($validator->fails()){
+            return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
+        }
 
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),

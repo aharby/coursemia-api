@@ -153,7 +153,7 @@ class AuthApiController extends BaseApiController
             }
             $requestData = [
                 'full_name' => $request->full_name,
-                'phone' => $request->phone_number,
+                'phone' => $request->country_code.$request->phone_number,
                 'email' => $request->email_address,
                 'country_id' => $request->country_id,
                 'photo' => $photo,
@@ -245,7 +245,7 @@ class AuthApiController extends BaseApiController
             // $verification = $twilio->verify->v2->services($twilio_verify_sid)
             //     ->verificationChecks
             //     ->create([
-            //         'to' => $request->country_code.$request->phone_number,
+            //         'to' => $request->phone_number,
             //         'code' => $request->verification_code
             //     ]);
                 

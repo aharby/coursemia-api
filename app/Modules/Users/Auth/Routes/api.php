@@ -72,7 +72,7 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api',
     Route::post( 'confirm/email', 'PasswordResetApiController@confirmResetUsingMail')->name('password.reset');
 
     //using phone
-    Route::post('send-email', 'PasswordResetApiController@sendResetPhoneCode');
+    Route::post('send-phone-code', 'PasswordResetApiController@sendResetPhoneCode');
     Route::post( 'confirm/phone', 'PasswordResetApiController@confirmResetUsingPhone');
 
 });
