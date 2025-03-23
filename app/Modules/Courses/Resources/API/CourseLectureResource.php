@@ -17,6 +17,7 @@ class CourseLectureResource extends JsonResource
     {
         $user = auth('api')->user();
         $want_to_learn = false;
+        $last_position = 0;
         if (isset($user)){
             $want_to_learn = WantToLearnLecture::where(['lecture_id' => $this->id, 'user_id' => $user->id])
                 ->first();
