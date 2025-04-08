@@ -47,9 +47,9 @@ class PasswordResetApiController extends Controller
             $request->all() ,[
             'token' => 'required',
             'email' => 'required|email|exists:users,email',
-            'password' => ['required','min:9',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/',
-                'confirmed']    
+            'password' => ['required',
+            'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{9,}$/',
+            'confirmed']    
         ], ['password.regex' => __('auth.Password Regex')]);
 
         if ($validator->fails()){

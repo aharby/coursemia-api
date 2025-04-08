@@ -33,7 +33,8 @@ class ApiRegisterRequest extends FormRequest
             'refer_code'        => 'nullable|exists:users,refer_code',
             'country_code'      => 'required|exists:countries,country_code',
             'password' => ['required','min:9',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/']   
+                    'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{9,}$/',
+                ]   
         ];
     }
 
