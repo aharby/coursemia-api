@@ -15,9 +15,9 @@ class AuthOrCreateGuestDevice
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
+        if (auth('api')->check()) {
 
-            if (!Auth::user()->is_active) {
+            if (!auth('api')->user()->is_active) {
                 return customResponse(null,__('api.user is not active'),
                  401, StatusCodesEnum::FAILED);
             }
@@ -25,13 +25,14 @@ class AuthOrCreateGuestDevice
             return $next($request);
         }
 
-        // Not authenticated: act as guest
         $deviceId = $request->header('device-id');
 
         if(UserDevice::where('device_id', $deviceId)->exists())
             return customResponse(null,__('api.A user with this device exist. please login'),
          401, StatusCodesEnum::FAILED);
 
+        // Not authenticated: act as guest
+        
         if ($deviceId && !GuestDevice::where('guest_device_id', $deviceId)->exists()) 
             GuestDevice::create([
                 'guest_device_id'=> $deviceId

@@ -45,5 +45,7 @@ return array(
     'Account created successfully' => 'تم انشاء الحساب بنجاح',
     'Logged Out Successfully' => 'تم تسجيل الخروج بنجاح',
 
-    'Password Regex' => 'يجب أن تحتوي كلمة السر على حرف صغير ، وحرف كبير، ورقم، وحرف خاص'
+    'Password Regex' => 'يجب أن تحتوي كلمة السر على حرف صغير ، وحرف كبير، ورقم، وحرف خاص',
+
+    'Unauthorized' => 'غير مصرح'
 );
