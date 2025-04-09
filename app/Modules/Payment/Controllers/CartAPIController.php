@@ -35,12 +35,12 @@ class CartAPIController extends Controller
     {
         $response_data = null;
 
-        $courses = $this->getUserOrGuest()->cartCourses;
+        $courses = $this->getUserOrGuest()->cartCourses->pluck('course');
         
         if($courses)
             $response_data = CoursesResource::collection($courses);
     
-        return customResponse($response_data, __("Fetched cart courses successfully"), 200, StatusCodesEnum::DONE);
+        return customResponse($response_data, __('api.Fetched cart courses successfully'), 200, StatusCodesEnum::DONE);
     }
 
     public function addCourse($courseId)
@@ -57,7 +57,7 @@ class CartAPIController extends Controller
         $courseAlreadyInCart = $this->getUserOrGuest()->cartCourses->contains('course_id', $courseId);
 
         if($courseAlreadyInCart){
-            return customResponse(null, "Course already in cart", 400, StatusCodesEnum::FAILED);
+            return customResponse(null, __('api.Course already in cart'), 400, StatusCodesEnum::FAILED);
         }
 
         $cartCourse = new CartCourse();
@@ -71,7 +71,7 @@ class CartAPIController extends Controller
 
         $cartCourse->save();
 
-        return customResponse(null, "Course added to cart", 200, StatusCodesEnum::DONE);
+        return customResponse(null, ('api.Course added to cart'), 200, StatusCodesEnum::DONE);
 
     }
 
@@ -90,14 +90,14 @@ class CartAPIController extends Controller
         $courseAlreadyInCart = $this->getUserOrGuest()->cartCourses->contains('course_id', $courseId);
 
         if(!$courseAlreadyInCart)
-            return customResponse(null, "Course is not in cart", 400, StatusCodesEnum::FAILED);
+            return customResponse(null, __('api.Course is not in cart'), 400, StatusCodesEnum::FAILED);
 
         if(isset($this->user))
             CartCourse::where(['user_id' => $this->user->id, 'course_id' => $courseId])->delete();
         else
-            CartCourse::where(['user_id' => $this->guest_device->id, 'course_id' => $courseId])->delete();
+            CartCourse::where(['guest_device_id' => $this->guest_device->id, 'course_id' => $courseId])->delete();
 
-        return customResponse(null, "Course was removed from cart", 200, StatusCodesEnum::DONE);
+        return customResponse(null, __('api.Course was removed from cart'), 200, StatusCodesEnum::DONE);
 
     }
 }

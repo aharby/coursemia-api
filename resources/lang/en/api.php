@@ -42,5 +42,12 @@ return array(
     'Verfication email sent' => 'Verfication email sent',
     
     //course lecture position
-    'progress_saved' => 'Last position saved successfully.'
+    'progress_saved' => 'Last position saved successfully.',
+
+    //cart 
+    'Course already in cart' => 'Course already in cart',
+    'Course added to cart' => 'Course added to cart',
+    'Course is not in cart' => 'Course is not in cart',
+    'Course was removed from cart' => 'Course was removed from cart',
+    'Fetched cart courses successfully' => 'Fetched cart courses successfully'
     );
