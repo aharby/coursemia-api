@@ -14,7 +14,7 @@ class AuthOrCreateGuestDevice
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
-            // Ensure user is active
+
             if (!Auth::user()->is_active) {
                 return response()->json(['message' => 'User is not active'], 403);
             }
@@ -25,7 +25,7 @@ class AuthOrCreateGuestDevice
         // Not authenticated: act as guest
         $deviceId = $request->header('device-id');
 
-        if (!$deviceId || !GuestDevice::where('guest_device_id', $deviceId)) 
+        if ($deviceId && !GuestDevice::where('guest_device_id', $deviceId)->exists()) 
             GuestDevice::create([
                 'guest_device_id'=> $deviceId
         ]);
