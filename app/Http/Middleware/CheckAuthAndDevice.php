@@ -18,18 +18,15 @@ class CheckAuthAndDevice
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!auth('api')->check())
-            return customResponse(null,__('auth.Unauthorized'), 401, StatusCodesEnum::UNAUTHORIZED);
-
+        $token = $request->header('Authorization');
 
         $device_id = $request->header('device-id');
         $device = UserDevice::where(function ($query) use ($device_id, $request){
             $query->where('id', $device_id)
                 ->orWhere('device_id', $device_id);
         })->first();
-        if (!isset($device)){
-            return customResponse(null,__('auth.Device not found'), 401, StatusCodesEnum::FAILED);
-        }
+        if (isset($token) && !isset($device))
+            return customResponse(null,__("Device was logged out"), 401, StatusCodesEnum::FAILED);
 
         return $next($request);
     }
