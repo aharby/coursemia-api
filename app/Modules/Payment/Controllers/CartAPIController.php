@@ -12,7 +12,6 @@ use App\Modules\Payment\Models\CartCourse;
 use App\Modules\Courses\Resources\API\CoursesResource;
 
 use App\Models\GuestDevice;
-use function PHPUnit\Framework\throwException;
 
 class CartAPIController extends Controller
 {

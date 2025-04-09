@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GuestDevice;
+use App\Modules\Users\Models\UserDevice;
+use App\Enums\StatusCodesEnum;
 
 class AuthOrCreateGuestDevice
 {
@@ -16,7 +18,8 @@ class AuthOrCreateGuestDevice
         if (Auth::check()) {
 
             if (!Auth::user()->is_active) {
-                return response()->json(['message' => 'User is not active'], 403);
+                return customResponse(null,__('api.user is not active'),
+                 401, StatusCodesEnum::FAILED);
             }
 
             return $next($request);
@@ -24,6 +27,10 @@ class AuthOrCreateGuestDevice
 
         // Not authenticated: act as guest
         $deviceId = $request->header('device-id');
+
+        if(UserDevice::where('device_id', $deviceId)->exists())
+            return customResponse(null,__('api.A user with this device exist. please login'),
+         401, StatusCodesEnum::FAILED);
 
         if ($deviceId && !GuestDevice::where('guest_device_id', $deviceId)->exists()) 
             GuestDevice::create([

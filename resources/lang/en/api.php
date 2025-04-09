@@ -49,5 +49,9 @@ return array(
     'Course added to cart' => 'Course added to cart',
     'Course is not in cart' => 'Course is not in cart',
     'Course was removed from cart' => 'Course was removed from cart',
-    'Fetched cart courses successfully' => 'Fetched cart courses successfully'
+    'Fetched cart courses successfully' => 'Fetched cart courses successfully',
+
+    //other
+    'A user with this device exist. please login' =>
+    'A user with this device exist. please login'
     );
