@@ -30,7 +30,7 @@ class LoginUseCase implements LoginUseCaseInterface
             $is_verified = $user->hasVerifiedEmail();
         }
         else{
-            $user = $userRepository->findByPhone($request['phone_number']);
+            $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
             $is_verified = $user->is_verified;
         }
 

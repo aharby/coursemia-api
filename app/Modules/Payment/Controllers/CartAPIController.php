@@ -11,15 +11,27 @@ use App\Modules\Payment\Models\CartCourse;
 
 use App\Modules\Courses\Resources\API\CoursesResource;
 
+use App\Models\GuestDevice;
+
 class CartAPIController extends Controller
 {
     public function getCourses()
     {
         $user = auth('api')->user();
 
-        $courses = $user->cartCourses->pluck('course');
+        $courses = null;
+
+        if(isset($user))
+            $courses = $user->cartCourses->pluck('course');
+        
+        $guest_device = GuestDevice::where('guest_device_id', request()->header('device-id'))
+                        ->first();
+
+
+        if(isset($guest_device))
+            $guest_device->cartCourses->pluck('course');    
     
-        return customResponse(CoursesResource::collection($courses), __("Fetched cart courses successfully"), 200, StatusCodesEnum::DONE);
+        return customResponse(CoursesResource::collection(null), __("Fetched cart courses successfully"), 200, StatusCodesEnum::DONE);
     }
 
     public function addCourse($courseId)
