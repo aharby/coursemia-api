@@ -16,31 +16,44 @@ use function PHPUnit\Framework\throwException;
 
 class CartAPIController extends Controller
 {
-    protected $user, $guest_device;
+    protected $user, $guestDevice;
 
     public function getUserOrGuest(){
 
         $this->user = auth('api')->user();
 
-        $this->guest_device = GuestDevice::where('guest_device_id', request()->header('device-id'))
+        $this->guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))
                         ->first();
 
-        if(isset($this->user) && isset($this->guest_device))
+        if(isset($this->user) && isset($this->guestDevice))
             throw new \Exception(__('Server Error: device exists for user and guest'));
 
-        return isset($this->user) ? $this->user : $this->guest_device;
+        return isset($this->user) ? $this->user : $this->guestDevice;
     }
 
+    public function getCart() {
+        
+        $courses = $this->getUserOrGuest()->cartCourses->pluck('course');
+
+        $totalPrice = $courses->sum('price');
+        $courseCount = $courses->count();
+
+        return customResponse([
+            'total_price' => $totalPrice,
+            'course_count' => $courseCount
+        ], __('api.Fetched cart courses successfully'), 200, StatusCodesEnum::DONE);
+
+    }
     public function getCourses()
     {
-        $response_data = null;
+        $responseData = null;
 
         $courses = $this->getUserOrGuest()->cartCourses->pluck('course');
         
         if($courses)
-            $response_data = CoursesResource::collection($courses);
+            $responseData = CoursesResource::collection($courses);
     
-        return customResponse($response_data, __('api.Fetched cart courses successfully'), 200, StatusCodesEnum::DONE);
+        return customResponse($responseData, __('api.Fetched cart courses successfully'), 200, StatusCodesEnum::DONE);
     }
 
     public function addCourse($courseId)
@@ -67,11 +80,11 @@ class CartAPIController extends Controller
         if(isset($this->user))
             $cartCourse->user_id = $this->user->id;
         else
-            $cartCourse->guest_device_id = $this->guest_device->id;
+            $cartCourse->guest_device_id = $this->guestDevice->id;
 
         $cartCourse->save();
 
-        return customResponse(null, ('api.Course added to cart'), 200, StatusCodesEnum::DONE);
+        return customResponse(null, __('api.Course added to cart'), 200, StatusCodesEnum::DONE);
 
     }
 
@@ -95,7 +108,7 @@ class CartAPIController extends Controller
         if(isset($this->user))
             CartCourse::where(['user_id' => $this->user->id, 'course_id' => $courseId])->delete();
         else
-            CartCourse::where(['guest_device_id' => $this->guest_device->id, 'course_id' => $courseId])->delete();
+            CartCourse::where(['guest_device_id' => $this->guestDevice->id, 'course_id' => $courseId])->delete();
 
         return customResponse(null, __('api.Course was removed from cart'), 200, StatusCodesEnum::DONE);
 
