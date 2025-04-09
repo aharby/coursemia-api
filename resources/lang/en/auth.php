@@ -44,5 +44,7 @@ return [
     'Account created successfully' => 'Account created successfully',
     'Logged Out Successfully' => 'Logged Out Successfully',
 
-    'Password Regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'
+    'Password Regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',
+
+    'Unauthorized' => 'Unauthorized'
 ];

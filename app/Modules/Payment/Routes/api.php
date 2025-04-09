@@ -7,16 +7,16 @@ use \App\Modules\Payment\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'middleware' => ['userActive'],
-    'prefix' => 'cart', 'as' => 'cart.'
+    'prefix' => 'cart', 'as' => 'cart.',
+    'middleware' => ['auth_or_guest']
 ], function (){
-    Route::group(['middleware' => 'auth:api'], function (){
-        Route::get('get-courses',[CartAPIController::class, 'getCourses']);
-        
-        Route::post('add-course/{course_id}', [CartAPIController::class, 'addCourse']);
+    Route::get('get-courses',[CartAPIController::class, 'getCourses']);
+    
+    Route::post('add-course/{course_id}', [CartAPIController::class, 'addCourse']);
 
-        Route::delete('remove-course/{course_id}', [CartAPIController::class, 'removeCourse']);
-    });
+    Route::delete('remove-course/{course_id}', [CartAPIController::class, 'removeCourse']);
+
+    Route::get('/', [CartAPIController::class, 'getCart']);
 });
 
 Route::group([

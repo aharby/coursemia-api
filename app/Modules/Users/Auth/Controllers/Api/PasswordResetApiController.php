@@ -47,9 +47,9 @@ class PasswordResetApiController extends Controller
             $request->all() ,[
             'token' => 'required',
             'email' => 'required|email|exists:users,email',
-            'password' => ['required','min:9',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/',
-                'confirmed']    
+            'password' => ['required',
+            'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{9,}$/',
+            'confirmed']    
         ], ['password.regex' => __('auth.Password Regex')]);
 
         if ($validator->fails()){
@@ -107,6 +107,7 @@ class PasswordResetApiController extends Controller
         $validator = Validator::make(
             $request->all() ,[
             'phone_number' => 'required|exists:users,phone',
+            'country_code'      => 'required|exists:countries,country_code',
             'code' => 'required',
             'password' => ['required','min:9',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/',
@@ -118,6 +119,7 @@ class PasswordResetApiController extends Controller
         }
 
         $phone = $request['phone_number'];
+        $country_code = $request['country_code'];
 
         try{
             // $token = getenv("TWILIO_AUTH_TOKEN");
@@ -127,12 +129,13 @@ class PasswordResetApiController extends Controller
             // $verification = $twilio->verify->v2->services($twilio_verify_sid)
             //     ->verificationChecks
             //     ->create([
-            //         'to' => $phone,
+            //         'to' => $country_code . $phone,
             //         'code' => $request->verification_code
             //     ]);
                 
             if (true /*$verification->valid*/) {
-                $user = User::where('phone', $phone)->first();
+                $user = User::where('phone', $phone)
+                            ->where('country_code', $country_code)->first();
                 if (isset($user)){
                     $user->password = Hash::make($request->password);
                     $user->save();

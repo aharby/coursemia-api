@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Models\GuestDevice;
+
 
 class LoginUseCase implements LoginUseCaseInterface
 {
@@ -30,7 +32,7 @@ class LoginUseCase implements LoginUseCaseInterface
             $is_verified = $user->hasVerifiedEmail();
         }
         else{
-            $user = $userRepository->findByPhone($request['phone_number']);
+            $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
             $is_verified = $user->is_verified;
         }
 
@@ -67,7 +69,9 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
-        if(!$device_exists && $first_device && $first_device->is_tablet != $request['is_tablet']){
+        if(!$device_exists && 
+            ( !$first_device  || $first_device->is_tablet != $request['is_tablet'])){
+            // save user device
             $user_device = new UserDevice;
             $user_device->user_id = $user->id;
             $user_device->device_type = request()->header('device-type');
@@ -75,6 +79,23 @@ class LoginUseCase implements LoginUseCaseInterface
             $user_device->is_tablet = $request['is_tablet'];
             $user_device->device_name = $request['device_name'];
             $user_device->save();
+
+            //sync guest data
+            $guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))
+                        ->first();
+                        
+            if(isset($guestDevice)){
+                $cartCourses = $guestDevice->cartCourses->pluck('course');
+
+                foreach ($guestDevice->cartCourses as $cartCourse) {
+                    $cartCourse->guest_device_id = null;
+                    $cartCourse->user_id = $user->id;
+                    $cartCourse->save();
+                }
+                $guestDevice->delete();
+
+            }
+
         }
             
         $loginCase['data'] = [];

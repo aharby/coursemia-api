@@ -153,7 +153,7 @@ class AuthApiController extends BaseApiController
             }
             $requestData = [
                 'full_name' => $request->full_name,
-                'phone' => $request->country_code.$request->phone_number,
+                'phone' => $request->phone_number,
                 'email' => $request->email_address,
                 'country_id' => $request->country_id,
                 'photo' => $photo,
@@ -245,7 +245,7 @@ class AuthApiController extends BaseApiController
             // $verification = $twilio->verify->v2->services($twilio_verify_sid)
             //     ->verificationChecks
             //     ->create([
-            //         'to' => $request->phone_number,
+            //         'to' => $request->country_code.$request->phone_number,
             //         'code' => $request->verification_code
             //     ]);
                 
@@ -353,7 +353,7 @@ class AuthApiController extends BaseApiController
 
     public function sendVerificationCode(VerificationCodeRequest $request){
         try {
-        //    $this->sendVerifyMessage($request->phone_number);
+        //    $this->sendVerifyMessage($request->country_code.$request->phone_number,);
             return customResponse((object)[], __("auth.Verification code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);

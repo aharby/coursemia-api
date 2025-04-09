@@ -44,5 +44,16 @@ return array(
     'Verfication email sent' => 'تم ارسال بريد التفعيل',
     //course lecture position
 
-    'progress_saved' => 'تم تحديث آخر موضع بنجاح'
+    'progress_saved' => 'تم تحديث آخر موضع بنجاح',
+
+    // cart
+    'Course already in cart' => 'الكورس موجود بالفعل في عربة التسوق',
+    'Course added to cart' => 'تم اضافة الكورس الي عربة التسوق',
+    'Course is not in cart' => 'الكورس غير موجود بعربة التسوق',
+    'Course was removed from cart' => 'تم حذف الكورس من عربة التسوق',
+    'Fetched cart courses successfully' => 'تم استرجاع عربة التسوق بنجاح'و
+
+    //other
+    'A user with this device exist. please login' => 
+    'يوجد بالفعل مستخدم لهذا الجهاز. برجاء تسجيل الدخول'
 );
