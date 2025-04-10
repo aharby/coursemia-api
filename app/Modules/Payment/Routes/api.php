@@ -16,7 +16,7 @@ Route::group([
 
     Route::delete('remove-course/{course_id}', [CartAPIController::class, 'removeCourse']);
 
-    Route::get('/', [CartAPIController::class, 'getCart']);
+    Route::get('/get-course-count', [CartAPIController::class, 'getCourseCount']);
 });
 
 Route::group([

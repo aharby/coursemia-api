@@ -30,29 +30,32 @@ class CartAPIController extends Controller
         return isset($this->user) ? $this->user : $this->guestDevice;
     }
 
-    public function getCart() {
+    public function getCourseCount() {
         
         $courses = $this->getUserOrGuest()->cartCourses->pluck('course');
 
-        $totalPrice = $courses->sum('price');
         $courseCount = $courses->count();
 
         return customResponse([
-            'total_price' => $totalPrice,
             'course_count' => $courseCount
         ], __('api.Fetched cart courses successfully'), 200, StatusCodesEnum::DONE);
 
     }
     public function getCourses()
     {
-        $responseData = null;
+        $courseCollection = null;
+        $totalPrice = 0;
 
         $courses = $this->getUserOrGuest()->cartCourses->pluck('course');
         
-        if($courses)
-            $responseData = CoursesResource::collection($courses);
+        if($courses){
+            $courseCollection = CoursesResource::collection($courses);
+            $totalPrice = $courses->sum('price');
+        }
     
-        return customResponse($responseData, __('api.Fetched cart courses successfully'), 200, StatusCodesEnum::DONE);
+        return customResponse([
+            'courses' => $courseCollection,
+            'total_price' => $totalPrice], __('api.Fetched cart courses successfully'), 200, StatusCodesEnum::DONE);
     }
 
     public function addCourse($courseId)
