@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(UpdateCategoryJob::class)->everyMinute();
-        $schedule->command('send:question-of-the-day')->dailyAt('12:00'); 
+        $schedule->command('update:question-of-the-day')->dailyAt('12:00'); 
     }
 
     /**
