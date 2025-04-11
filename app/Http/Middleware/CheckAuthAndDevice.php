@@ -26,7 +26,7 @@ class CheckAuthAndDevice
                 ->orWhere('device_id', $device_id);
         })->first();
         if (isset($token) && !isset($device))
-            return customResponse(null,__("Device was logged out"), 401, StatusCodesEnum::FAILED);
+            return customResponse(null,__("Device was logged out"), 401, StatusCodesEnum::UNAUTHORIZED);
 
         return $next($request);
     }
