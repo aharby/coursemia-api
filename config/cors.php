@@ -2,11 +2,11 @@
 
 return [
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000'], // or whatever your Vue dev server runs on
+    'allowed_origins' => ['*'], // or whatever your Vue dev server runs on
 
     'allowed_origins_patterns' => [],
 
