@@ -51,9 +51,11 @@ return array(
     'Course added to cart' => 'تم اضافة الكورس الي عربة التسوق',
     'Course is not in cart' => 'الكورس غير موجود بعربة التسوق',
     'Course was removed from cart' => 'تم حذف الكورس من عربة التسوق',
-    'Fetched cart courses successfully' => 'تم استرجاع عربة التسوق بنجاح'و
+    'Fetched cart courses successfully' => 'تم استرجاع عربة التسوق بنجاح',
 
     //other
     'A user with this device exist. please login' => 
-    'يوجد بالفعل مستخدم لهذا الجهاز. برجاء تسجيل الدخول'
+    'يوجد بالفعل مستخدم لهذا الجهاز. برجاء تسجيل الدخول',
+
+    'Device Token Added Successfully' => 'تمت إضافة رمز الجهاز بنجاح'
 );

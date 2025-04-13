@@ -53,5 +53,7 @@ return array(
 
     //other
     'A user with this device exist. please login' =>
-    'A user with this device exist. please login'
+    'A user with this device exist. please login',
+
+    'Device Token Added Successfully' => 'Device Token Added Successfully'
     );
