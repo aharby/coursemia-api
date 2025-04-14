@@ -18,8 +18,9 @@ class CheckUserVerified
     public function handle(Request $request, Closure $next)
     {
         $user = auth('api')->user();
-        if (isset($user) && !$user->is_verified){
-            return customResponse(null,__("User not verified"), 422, StatusCodesEnum::FAILED);
+        //is_verified = is_phone_verified
+        if (isset($user) && !($user->is_verified || $user->hasVerifiedEmail())) {
+            return customResponse(null,__("User not verified"), 422, StatusCodesEnum::UNVERIFIED);
         }
         return $next($request);
     }
