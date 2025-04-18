@@ -46,8 +46,9 @@ class ConfigsController extends Controller {
 
     public function getAdmins()
     {
+        $admins = Admin::all()->makeHidden(['password']);
         return customResponse([
-            'data' => Admin::get()
+            'data' => $admins
         ], 'Done', 200, StatusCodesEnum::DONE);
     }
 }
