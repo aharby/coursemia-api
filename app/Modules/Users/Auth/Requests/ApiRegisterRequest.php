@@ -41,6 +41,8 @@ class ApiRegisterRequest extends FormRequest
     {
         return [
             'password.regex' => __('auth.Password Regex'),
+            'email_address.unique' => 'The :attribute is already taken. Please login.',
+            'phone_number.unique'  => 'The :attribute is already taken. Please login.',
         ];
     }
 

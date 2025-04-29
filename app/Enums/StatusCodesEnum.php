@@ -15,4 +15,6 @@ final class StatusCodesEnum extends Enum
     const FAILED =   2;
     const UNAUTHORIZED = 3;
     const UNVERIFIED = 4;
+
+    const EMAIL_OR_PHONE_ALREADY_EXISTS = 5;
 }

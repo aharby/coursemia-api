@@ -125,12 +125,19 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ValidationException) {
             $errorArray = [];
             $errors = $exception->errors();
+            $statusCode = StatusCodesEnum::FAILED;
+
+            if(($errors['email_address'] && str_contains($errors['email_address'][0], 'taken')) ||
+                ($errors['phone_number'] && str_contains($errors['phone_number'][0], 'taken'))) {
+                $statusCode = StatusCodesEnum::EMAIL_OR_PHONE_ALREADY_EXISTS;
+            }
+          
             $index = array_keys($errors)[0];
             throw new HttpResponseException(
                 response()->json([
                     'data'  => null,
                     'message'  => $errors[$index][0],
-                    'status_code' => StatusCodesEnum::FAILED
+                    'status_code' => $statusCode
                 ], 422)
             );
         }
