@@ -45,7 +45,6 @@ Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspe
     require base_path('app/Modules/Specialities/Routes/api.php');
     require base_path('app/Modules/GarbageMedia/Routes/api.php');
     require base_path('app/Modules/Post/Routes/api.php');
-
 });
 
 Route::group([], function () {
@@ -66,3 +65,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     require base_path('app/Modules/Events/Routes/admin.php');
     require base_path('app/Modules/Offers/Routes/admin.php');
 });
+
+Route::group([], function () {
+    Route::post('delete-user/{id}',[\App\Modules\Users\Admin\Controllers\UsersController::class, 'deleteUser']);
+    });
