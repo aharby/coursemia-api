@@ -11,5 +11,5 @@ use BenSampo\Enum\Enum;
  */
 final class NotificationTypeEnum extends Enum
 {
-    const QUESTION_OF_THE_DAY_UPDATED = 1;
+    const QUESTION_OF_THE_DAY_UPDATED = 'question_of_the_day_updated';
 }
