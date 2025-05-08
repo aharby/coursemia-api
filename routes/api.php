@@ -66,6 +66,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     require base_path('app/Modules/Offers/Routes/admin.php');
 });
 
+// these routes are for testing purposes only
 Route::group([], function () {
     Route::post('delete-user/{id}',[\App\Modules\Users\Admin\Controllers\UsersController::class, 'deleteUser']);
+    });
+
+    Route::get('/test-question-of-the-day', function () {
+        Illuminate\Support\Facades\Artisan::call('update:question-of-the-day');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Command executed successfully',
+        ]);
     });
