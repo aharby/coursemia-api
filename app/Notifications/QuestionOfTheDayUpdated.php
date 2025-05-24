@@ -32,7 +32,7 @@ class QuestionOfTheDayUpdated extends Notification
                 ])
             ->setNotification(FcmNotification::create()
                 ->setTitle('🚨 Question of the Day')
-                ->setBody($this->question->title)
+                ->setBody('🏆 Think you\'re the best? Prove it! A new question is live. Can you answer it correctly? 🎯' . $this->question->title)
                 ->setImage(null)
             );
     }
