@@ -37,7 +37,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         // [Abanoub] when the no. of question is large, 
         // the memory limit gets exceeded. 
         // this is a hard coded limit until we implemt limit param
-        $questions_limit = 100;
+        $questions_limit = 300;
         if (request()->exam_type == 2){
             return $questions
                 ->active()

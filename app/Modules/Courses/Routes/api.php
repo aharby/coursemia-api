@@ -16,10 +16,11 @@ Route::group([
         Route::post('add-course-review', 'CourseReviewsAPIController@addCourseReview');
         Route::post('add-course-review', 'CourseReviewsAPIController@addCourseReview');
 
-        // Submit Exam APIs
-        Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@submitExamAnswers');
-
     });
+
+     // Submit Exam APIs
+    Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@submitExamAnswers')->middleware('auth_or_guest');
+
     Route::post('get-courses', 'CoursesAPIController@courses');
     Route::get('get-course-details', 'CoursesAPIController@getCourseById');
     Route::get('get-course-reviews', 'CourseReviewsAPIController@reviews');
