@@ -13,10 +13,12 @@ class QuestionOfTheDayUpdated extends Notification
 {
     use Queueable;
     protected $question;
+    protected $questionTitle;
 
-    public function __construct($question)
+    public function __construct($question, $questionTitle)
     {
         $this->question = $question;
+        $this->questionTitle = $questionTitle;
     }
 
     public function via($notifiable)
@@ -32,7 +34,7 @@ class QuestionOfTheDayUpdated extends Notification
                 ])
             ->setNotification(FcmNotification::create()
                 ->setTitle('🚨 Question of the Day')
-                ->setBody('🏆 Think you\'re the best? Prove it! A new question is live. Can you answer it correctly? 🎯' . $this->question->title)
+                ->setBody('🏆 Think you\'re the best? Prove it! ' . $this->questionTitle)
                 ->setImage(null)
             );
     }

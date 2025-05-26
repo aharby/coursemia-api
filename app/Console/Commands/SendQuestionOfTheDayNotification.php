@@ -15,6 +15,7 @@ class SendQuestionOfTheDayNotification extends Command
     protected $description = 'Question of the Day updated notification as a push notification';
 
     private $qotd;
+    private $qotdTitle;
 
     public function handle()
     {
@@ -43,7 +44,7 @@ class SendQuestionOfTheDayNotification extends Command
         foreach ($users as $user) {
             try{
 
-                $user->notify(new QuestionOfTheDayUpdated($this->qotd));
+                $user->notify(new QuestionOfTheDayUpdated($this->qotd, $this->qotdTitle));
 
                 $notifySuccessCount++;
 
@@ -73,6 +74,8 @@ class SendQuestionOfTheDayNotification extends Command
         $this->logInfo('Question of the day updated');
         
         $this->qotd = (new QuestionResource($newQuestion))->toJson();
+
+        $this->qotdTitle = $newQuestion->title;
 
         return true;
     }
