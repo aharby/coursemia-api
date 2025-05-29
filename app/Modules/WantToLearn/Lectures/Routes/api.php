@@ -7,4 +7,3 @@ Route::group(['prefix' => 'want-to-learn/lectures', 'as' => 'want-to-learn.'], f
     Route::post('/{id}', [WantToLearnApiController::class , 'addWantToLearn']);
     Route::delete('/{id}', [WantToLearnApiController::class , 'deleteWantToLearn']);
 });
-
