@@ -4,6 +4,8 @@ namespace App\Modules\Courses\Resources\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use App\Modules\WantToLearn\Questions\Models\WantToLearnQuestion;
+
 class QuestionResource extends JsonResource
 {
     /**
@@ -37,13 +39,23 @@ class QuestionResource extends JsonResource
                 'voice_duration' => $this->duration
             ];
         }
+
+        $user = auth('api')->user();
+        $want_to_learn = false;
+
+        if (isset($user)){
+            $want_to_learn = WantToLearnQuestion::where(['flashcard_id' => $this->id, 'user_id' => $user->id])
+                ->first();
+        }
+
         return [
             'id'            => $this->id,
             'question'      => $this->translated_title,
             'image'         => $image,
             'is_free_content' => (boolean)$this->is_free_content,
             'answers'       => QuestionAnswersResource::collection($this->answers),
-            'explanation'   => $explanationObject
+            'explanation'   => $explanationObject,
+            'want_to_learn' => $want_to_learn ? true : false
         ];
     }
 }
