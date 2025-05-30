@@ -44,7 +44,7 @@ class QuestionResource extends JsonResource
         $want_to_learn = false;
 
         if (isset($user)){
-            $want_to_learn = WantToLearnQuestion::where(['flashcard_id' => $this->id, 'user_id' => $user->id])
+            $want_to_learn = WantToLearnQuestion::where(['question_id' => $this->id, 'user_id' => $user->id])
                 ->first();
         }
 
