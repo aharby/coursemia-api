@@ -38,9 +38,9 @@ class WantToLearnApiController extends Controller
                 'user_id'   => $user->id
             ]);
             if($wantToLearn->wasRecentlyCreated)
-            return customResponse(null, "Flashcard added successfully", 200, StatusCodesEnum::FAILED);
+            return customResponse(null, "Flashcard added successfully", 200, StatusCodesEnum::DONE);
         else
-            return customResponse((object)[], 'Flashcard exists in want to lean list', 400, StatusCodesEnum::DONE);
+            return customResponse((object)[], 'Flashcard exists in want to lean list', 400, StatusCodesEnum::FAILED);
     }
 
     public function deleteWantToLearn($flashcardId)

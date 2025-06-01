@@ -39,9 +39,9 @@ class WantToLearnApiController extends Controller
             ]);
 
         if($wantToLearn->wasRecentlyCreated)
-            return customResponse(null, "Lecture added successfully", 200, StatusCodesEnum::FAILED);
+            return customResponse(null, "Lecture added successfully", 200, StatusCodesEnum::DONE);
         else
-            return customResponse((object)[], 'Lecture exists in want to lean list', 400, StatusCodesEnum::DONE);
+            return customResponse((object)[], 'Lecture exists in want to lean list', 400, StatusCodesEnum::FAILED);
     }
 
     public function deleteWantToLearn($lectureId)
