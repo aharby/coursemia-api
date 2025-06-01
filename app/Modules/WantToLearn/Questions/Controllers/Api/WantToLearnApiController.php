@@ -39,9 +39,9 @@ class WantToLearnApiController extends Controller
             ]);
 
         if($wantToLearn->wasRecentlyCreated)
-            return customResponse(null, "Question added successfully", 400, StatusCodesEnum::FAILED);
+            return customResponse(null, "Question added successfully", 200, StatusCodesEnum::FAILED);
         else
-            return customResponse((object)[], 'Question exists in want to lean list', 200, StatusCodesEnum::DONE);
+            return customResponse((object)[], 'Question exists in want to lean list', 400, StatusCodesEnum::DONE);
 
     }
 
