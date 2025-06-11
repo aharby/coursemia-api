@@ -50,6 +50,7 @@ Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspe
 
 Route::group([], function () {
     require base_path('app/Modules/Payment/Routes/api.php');
+    require base_path('app/Modules/ContactUs/Routes/api.php');
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function (){
@@ -72,10 +73,11 @@ Route::group([], function () {
     Route::post('delete-user/{id}',[\App\Modules\Users\Admin\Controllers\UsersController::class, 'deleteUser']);
     });
 
-    Route::get('/test-question-of-the-day', function () {
-        Illuminate\Support\Facades\Artisan::call('update:question-of-the-day');
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Command executed successfully',
-        ]);
-    });
+Route::get('/test-question-of-the-day', function () {
+    Illuminate\Support\Facades\Artisan::call('update:question-of-the-day');
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Command executed successfully',
+    ]);
+});
+
