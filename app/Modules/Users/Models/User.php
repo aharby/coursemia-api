@@ -10,14 +10,21 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 use App\Modules\Payment\Models\Order;
 use App\Modules\Payment\Models\CartCourse;
+use App\Modules\Users\Traits\Invitable;
+use App\Modules\Users\Traits\UserRatingable;
+use App\Modules\BaseApp\Traits\HasAttach;
+use App\Modules\Post\Models\Post;
 
-class User extends Authenticatable
+
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens;
+    use HasAttach, Notifiable, Invitable, UserRatingable, HasFactory;
+    use HasApiTokens; //passport auth
 
     /**
      * The attributes that are mass assignable.
@@ -25,12 +32,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+        'full_name',
+        'photo',
+        'referer_id',
+        'country_code',
+        'refer_code',
         'email',
+        'phone',
         'password',
+        'country_id',
         'is_verified'
     ];
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -71,7 +83,7 @@ class User extends Authenticatable
         
         if(array_key_exists('total_correct_answers', $this->attributes))
         {
-            $higherUsers = \App\Modules\Users\Models\User::where('total_correct_answers', '>', $this->attributes['total_correct_answers'])->count();
+            $higherUsers = $this->where('total_correct_answers', '>', $this->attributes['total_correct_answers'])->count();
         }
 
         return $higherUsers+1;
@@ -107,5 +119,59 @@ class User extends Authenticatable
     {
         return $this->hasMany(CartCourse::class);
     }
+
+    protected static $attachFields = [
+        'profile_picture' => [
+            'sizes' => ['small/users/profiles' => 'crop,400x300', 'large/users/profiles' => 'resize,800x600'],
+            'path' => 'uploads'
+        ],
+    ];
+
+    protected $auditExclude = [
+        'password',
+        'profile_picture'
+    ];
+
+
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1)->where('confirmed', 1);
+    }
+
+    public function scopeNotSuperAdmin($query)
+    {
+        return $query->where('super_admin', '=', 0);
+    }
+
+    public function scopeWithoutLoggedUser($query)
+    {
+        return $query->where('id', '!=', auth()->id());
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'language' => $this->language,
+            'type' => $this->type,
+            'email' => $this->email,
+            'mobile' => $this->mobile,
+            'address' => $this->address,
+            'is_admin' => $this->is_admin,
+            'is_active' => $this->is_active,
+            'suspended_at' => $this->suspended_at,
+        ];
+    }
+
 }
 
