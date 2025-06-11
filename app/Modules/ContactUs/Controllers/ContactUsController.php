@@ -54,7 +54,7 @@ class ContactUsController extends Controller
         $isAuthorised = Auth::guard('api')->check();
 
         if(!$isAuthorised) {
-            return customResponse((object)[], __("api.Unauthorized"), 401, StatusCodesEnum::UNAUTHORIZED);
+            return customResponse((object)[], __("auth.Unauthorized"), 401, StatusCodesEnum::UNAUTHORIZED);
         }
 
         $rules = [
