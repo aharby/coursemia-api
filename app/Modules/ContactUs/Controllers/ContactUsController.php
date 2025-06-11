@@ -28,6 +28,7 @@ class ContactUsController extends Controller
                 'name' => 'required|string|max:50',
                 'email' => 'required|email|max:50',
                 'phone' => 'nullable|string|max:20',
+                'country_code'      => 'required_with:phone|exists:countries,country_code'
             ];
         }
 
