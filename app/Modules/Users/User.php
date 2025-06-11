@@ -281,15 +281,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Payment orders
-     * @return HasMany
-     */
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
-
-    /**
      * SME managed subjects
      * @return HasMany
      */

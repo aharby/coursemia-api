@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
+use App\Modules\Payment\Models\Order;
 
 class User extends Authenticatable
 {
@@ -96,4 +97,9 @@ class User extends Authenticatable
     {
         return $this->devices()->pluck('device_token')->toArray();
     }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
+
