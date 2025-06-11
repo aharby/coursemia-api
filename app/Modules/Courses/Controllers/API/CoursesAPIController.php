@@ -52,6 +52,7 @@ class CoursesAPIController extends Controller
 
     public function myCourses()
     {
+        dd(\Illuminate\Support\Facades\Auth::check());
         $user = auth('api')->user();
         $courses = $user->courses;
         return customResponse(CoursesResource::collection($courses), __("Fetched courses successfully"), 200, StatusCodesEnum::DONE);

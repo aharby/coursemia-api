@@ -57,5 +57,11 @@ return array(
     'A user with this device exist. please login' => 
     'يوجد بالفعل مستخدم لهذا الجهاز. برجاء تسجيل الدخول',
 
-    'Device Token Added Successfully' => 'تمت إضافة رمز الجهاز بنجاح'
+    'Device Token Added Successfully' => 'تمت إضافة رمز الجهاز بنجاح',
+
+    'Your message has been received.' => 'تم استلام رسالتك بنجاح',
+
+    'Your feedback has been received.' => 'تم استلام تقييمك بنجاح',
+
+
 );
