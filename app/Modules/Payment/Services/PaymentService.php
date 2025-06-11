@@ -7,6 +7,7 @@ use Stripe\Customer;
 use Stripe\EphemeralKey;
 use Stripe\PaymentIntent;
 use Stripe\Transfer;
+use Illuminate\Support\Facades\Log;
 
 use App\Modules\Users\Models\User;
 use App\Modules\Payment\Models\CartCourse;
@@ -76,8 +77,11 @@ class PaymentService
 
     public function processSuccessfulPayment(PaymentIntent $paymentIntent)
     {
-        $user = User::where('stripe_customer_id', $paymentIntent->customer);
+        $user = User::where('stripe_customer_id', $paymentIntent->customer)->first();
 
+        if (!$user) {
+            Log::error('User not found for the given Stripe customer ID: ', $paymentIntent->customer);
+        }
         //create order
         $order = $user->orders()->create([
             'total_price' => $paymentIntent->amount/100, // price in dollars
