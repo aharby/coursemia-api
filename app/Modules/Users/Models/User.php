@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 use App\Modules\Payment\Models\Order;
+use App\Modules\Payment\Models\CartCourse;
 
 class User extends Authenticatable
 {
@@ -100,6 +101,12 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+    
+    
+    public function cartCourses()
+    {
+        return $this->hasMany(CartCourse::class);
     }
 }
 

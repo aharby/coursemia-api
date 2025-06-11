@@ -529,8 +529,4 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
-    public function cartCourses()
-    {
-        return $this->hasMany(\App\Modules\Payment\Models\CartCourse::class);
-    }
 }
