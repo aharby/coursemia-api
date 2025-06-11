@@ -24,7 +24,7 @@ class PaymentService
     {
         $user = auth('api')->user();
 
-        $customerId = $user->strip_customer_id;
+        $customerId = $user->stripe_customer_id;
 
         if(!$customerId)
         {
