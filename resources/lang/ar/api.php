@@ -59,7 +59,9 @@ return array(
 
     'Device Token Added Successfully' => 'تمت إضافة رمز الجهاز بنجاح',
 
-    'Your message has been received.' => 'تم استلام رسالتك بنجاح'
+    'Your message has been received.' => 'تم استلام رسالتك بنجاح',
+
+    'Your feedback has been received.' => 'تم استلام تقييمك بنجاح',
 
 
 );

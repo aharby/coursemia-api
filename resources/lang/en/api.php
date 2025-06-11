@@ -57,5 +57,7 @@ return array(
 
     'Device Token Added Successfully' => 'Device Token Added Successfully',
 
-    'Your message has been received.' => 'Your message has been received.'
+    'Your message has been received.' => 'Your message has been received.',
+
+    'Your feedback has been received.' => 'Your feedback has been received.',
     );

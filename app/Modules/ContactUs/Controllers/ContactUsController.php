@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Validator;
 use App\Enums\StatusCodesEnum;
 
 use App\Modules\ContactUs\Models\ContactUsForm;
+use App\Modules\ContactUs\Models\FeedbackForm;  
 use App\Mail\ContactMessageNotification;
 use Illuminate\Support\Facades\Mail;
 
 class ContactUsController extends Controller
 {
-    public function submit(Request $request)
+    public function submitContactUs(Request $request)
     {
         $isGuest = !Auth::guard('api')->check();
 
@@ -46,5 +47,32 @@ class ContactUsController extends Controller
         Mail::to($userEmail)->send(new ContactMessageNotification($data));
 
         return customResponse([], __("api.Your message has been received."), 200, StatusCodesEnum::DONE);
+    }
+
+    public function submitFeedback(Request $request)
+    {
+        $isAuthorised = Auth::guard('api')->check();
+
+        if(!$isAuthorised) {
+            return customResponse((object)[], __("api.Unauthorized"), 401, StatusCodesEnum::UNAUTHORIZED);
+        }
+
+        $rules = [
+            'comment' => 'string|max:2000',
+            'rating' => 'required|integer|between:1,5',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return customResponse((object)[], __($validator->errors()->first()), 422, StatusCodesEnum::FAILED);
+        }
+
+        $data = $validator->validated();
+        $data['user_id'] = Auth::guard('api')->id();
+
+        FeedbackForm::create($data);
+
+        return customResponse([], __("api.Your feedback has been received."), 200, StatusCodesEnum::DONE);
     }
 }
