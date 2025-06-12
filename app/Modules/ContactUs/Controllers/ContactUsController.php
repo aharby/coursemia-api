@@ -12,7 +12,7 @@ use App\Modules\ContactUs\Models\ContactUsForm;
 use App\Modules\ContactUs\Models\FeedbackForm;  
 use App\Mail\ContactMessageNotification;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Log;
 class ContactUsController extends Controller
 {
     public function submitContactUs(Request $request)
@@ -47,6 +47,8 @@ class ContactUsController extends Controller
 
         if(!$isGuest)
             $data['name'] = Auth::guard('api')->user()->full_name;
+        
+        Log::info($data['name'] . ' has submitted a contact message.');
         
         Mail::to($userEmail)->send(new ContactMessageNotification($data));
 
