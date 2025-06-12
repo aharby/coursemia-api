@@ -46,7 +46,7 @@ class ContactUsController extends Controller
         $userEmail = $isGuest ? $request->input('email') : Auth::guard('api')->user()->email;
 
         if(!$isGuest)
-            $data['name'] = Auth::guard('api')->user()->name;
+            $data['name'] = Auth::guard('api')->user()->full_name;
         
         Mail::to($userEmail)->send(new ContactMessageNotification($data));
 
