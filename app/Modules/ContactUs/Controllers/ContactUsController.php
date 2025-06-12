@@ -45,6 +45,9 @@ class ContactUsController extends Controller
 
         $userEmail = $isGuest ? $request->input('email') : Auth::guard('api')->user()->email;
 
+        if(!$isGuest)
+            $data['name'] = Auth::guard('api')->user()->name;
+        
         Mail::to($userEmail)->send(new ContactMessageNotification($data));
 
         return customResponse([], __("api.Your message has been received."), 200, StatusCodesEnum::DONE);
