@@ -60,4 +60,6 @@ return array(
     'Your message has been received.' => 'Your message has been received.',
 
     'Your feedback has been received.' => 'Your feedback has been received.',
+
+    'Your Answers have been submitted. Thank you!' => 'Your Answers have been submitted. Thank you!',
     );

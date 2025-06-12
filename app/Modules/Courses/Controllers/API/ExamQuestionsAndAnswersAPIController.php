@@ -26,6 +26,8 @@ use App\Modules\Courses\Resources\API\FlashCardsResource;
 use App\Modules\Courses\Resources\Api\ListCourseQuestionsPaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ExamSubmittedNotification;
 
 class ExamQuestionsAndAnswersAPIController extends Controller
 {
@@ -36,33 +38,75 @@ class ExamQuestionsAndAnswersAPIController extends Controller
         $answers = $request->answers;
         $correctAnswers = 0;
         $count = sizeof($answers);
-        foreach ($answers as $answer){
-//            $question = Question::find($answer['question_id']);
-            if (isset($answer['answer_id'])){
+
+        $user = auth('api')->user();
+
+        // guest
+        if (!isset($user)) {
+            foreach ($answers as $answer){
                 $myAnswer = Answer::find($answer['answer_id']);
-                $myAnswer->selection_count++;
-                $myAnswer->save();
-                $userQuestionAnswer = UserQuestionAnswer::create([
-                    'user_id' => auth('api')->user()->id,
-                    'question_id' => $myAnswer->question_id,
-                    'answer_id' => $myAnswer->id,
-                ]);
-                if ($myAnswer->is_correct){
+                if ($myAnswer->is_correct)
                     $correctAnswers++;
-                }
-            }else{
-                $userQuestionAnswer = UserQuestionAnswer::create([
-                    'user_id' => auth('api')->user()->id,
-                    'question_id' => $answer['question_id'],
-                    'answer_id' => null,
-                ]);
+            }
+            $percentage = ($correctAnswers / $count)*100;
+
+            return customResponse([
+                'score_percentage' => $percentage
+            ], trans('api.Your Answers have been submitted. Thank you!'), 200, StatusCodesEnum::DONE);
+        }
+
+        // authenticated user
+        $emailData['questions'] = [];
+
+        foreach ($answers as $answer) {
+            $myAnswer = Answer::find($answer['answer_id']);
+            $myAnswer->selection_count++;
+            $myAnswer->save();
+            
+            UserQuestionAnswer::create([
+                'user_id' => auth('api')->user()->id,
+                'question_id' => $myAnswer->question_id,
+                'answer_id' => $myAnswer->id,
+            ]);
+
+            $isCorrect = $myAnswer->is_correct;
+
+            if($isCorrect)
+                $correctAnswers++;
+
+            $question = Question::find($answer['question_id']);
+            $questionData = [
+            'title' => $question ? $question->title : null,
+            'is_correctly_answered' => $isCorrect,
+            'selected_answer' => $myAnswer ? $myAnswer->answer : null,
+            ];
+
+            if (!$isCorrect) {
+                $correctAnswer = Answer::where('question_id', $question->id)
+                    ->where('is_correct', 1)
+                    ->first();
+                $questionData['correct_answer'] = $correctAnswer ? $correctAnswer->answer : null;
             }
 
+            $emailData['questions'][] = $questionData;
         }
+
         $percentage = ($correctAnswers / $count)*100;
+
+        $emailData['score_percentage'] = $percentage;
+        $emailData['user_name'] = $user->full_name;
+        $emailData['submitted_at'] = now()->format('Y-m-d H:i:s');
+        $emailData['correct_answers'] = $correctAnswers;
+        $emailData['total_questions'] = $count;
+        $emailData['course_title'] = Course::find($course_id)->getTitleAttribute();
+        $emailData['passing_score'] = 50;
+        
+        Mail::to($user->email)->send(new ExamSubmittedNotification($emailData));
+
         return customResponse([
             'score_percentage' => $percentage
-           ], trans('api.submit exam'), 200, StatusCodesEnum::DONE);
+           ], trans('api.Your Answers have been submitted. Thank you!'),
+            200, StatusCodesEnum::DONE);
     }
 
     public function submitFlashCardAnswer(SubmitFlashCardAnswersRequest $request){
