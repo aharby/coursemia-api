@@ -63,5 +63,7 @@ return array(
 
     'Your feedback has been received.' => 'تم استلام تقييمك بنجاح',
 
+    'Your Answers have been submitted. Thank you!' => 'تم ارسال الأجوبة بنجاح. شكرا لك!',
+
 
 );
