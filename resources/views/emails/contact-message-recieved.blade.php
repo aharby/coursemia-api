@@ -39,7 +39,7 @@
                         </td>
                     </tr>
                 </table>
-                <p style="font-size: 11px; color: #cccccc; margin-top: 20px;">© {{ date('Y') }} Your Company. All rights reserved.</p>
+                <p style="font-size: 11px; color: #cccccc; margin-top: 20px;">© {{ date('Y') }} Coursemia. All rights reserved.</p>
             </td>
         </tr>
     </table>
