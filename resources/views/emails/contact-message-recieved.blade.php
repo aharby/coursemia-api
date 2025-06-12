@@ -12,7 +12,7 @@
                     <tr>
                         <td style="text-align: center;">
                             <h2 style="color: #333333; margin-bottom: 10px;">Thank You for Contacting Us</h2>
-                            <p style="color: #555555; font-size: 16px;">Hi {{ $data['name'] ?? 'User' }},</p>
+                            <p style="color: #555555; font-size: 16px;">Hi {{ $data['name'] }},</p>
                         </td>
                     </tr>
                     <tr>
