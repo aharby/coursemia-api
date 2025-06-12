@@ -99,6 +99,7 @@ class ExamQuestionsAndAnswersAPIController extends Controller
         $emailData['correct_answers'] = $correctAnswers;
         $emailData['total_questions'] = $count;
         $emailData['course_title'] = Course::find($course_id)->getTitleAttribute();
+        $emailData['passing_score'] = 50;
         
         Mail::to($user->email)->send(new ExamSubmittedNotification($emailData));
 
