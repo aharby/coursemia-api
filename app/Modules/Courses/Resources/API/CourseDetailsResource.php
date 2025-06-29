@@ -42,10 +42,10 @@ class CourseDetailsResource extends JsonResource
         $notes = $this->notes();
         $questions = $this->questions();
         $flashcards = $this->flashCards();
-        $lectures_categories = $lectures->pluck('category_id');
-        $notes_categories = $notes->pluck('category_id');
-        $questions_categories = $questions->pluck('category_id');
-        $flashcards_categories = $flashcards->pluck('category_id');
+        $lectures_categories = $lectures->pluck('category_id')->unique();
+        $notes_categories = $notes->pluck('category_id')->unique();
+        $questions_categories = $questions->pluck('category_id')->unique();
+        $flashcards_categories = $flashcards->pluck('category_id')->unique();
         $images = $this->images()->pluck('image');
         $offer_courses_check = OfferCourse::where('course_id', $this->id)->first();
         $price_after_discount = null;
@@ -77,10 +77,10 @@ class CourseDetailsResource extends JsonResource
             'notes_count'   => $notes->count(),
             'questions_count'=> $questions->count(),
             'flash_cards_count'=> $flashcards->count(),
-            'lectures_categories' => LectureCategoriesResource::collection(Category::whereIn('id', $lectures_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
-            'notes_categories' => NotesCategoriesResource::collection(Category::whereIn('id', $notes_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
-            'questions_categories' => QuestionsCategoriesResource::collection(Category::whereIn('id', $questions_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
-            'flash_cards_categories' => FlashCardsCategoriesResource::collection(Category::whereIn('id', $flashcards_categories)->distinct('parent_id')->groupBy('parent_id')->get()),
+            'lectures_categories' => LectureCategoriesResource::collection(Category::whereIn('id', $lectures_categories)->groupBy('id','parent_id')->get()),
+            'notes_categories' => NotesCategoriesResource::collection(Category::whereIn('id', $notes_categories)->groupBy('id','parent_id')->get()),
+            'questions_categories' => QuestionsCategoriesResource::collection(Category::whereIn('id', $questions_categories)->groupBy('id','parent_id')->get()),
+            'flash_cards_categories' => FlashCardsCategoriesResource::collection(Category::whereIn('id', $flashcards_categories)->groupBy('id','parent_id')->get()),
         ];
     }
 }
