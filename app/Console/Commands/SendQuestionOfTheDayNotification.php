@@ -44,7 +44,8 @@ class SendQuestionOfTheDayNotification extends Command
         foreach ($users as $user) {
             try{
 
-                $user->notify(new QuestionOfTheDayUpdated($this->qotd, $this->qotdTitle));
+                $cleanTitle = html_entity_decode(strip_tags($this->qotdTitle));
+                $user->notify(new QuestionOfTheDayUpdated($this->qotd, $cleanTitle));
 
                 $notifySuccessCount++;
 
