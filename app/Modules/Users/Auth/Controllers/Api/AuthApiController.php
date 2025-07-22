@@ -238,18 +238,18 @@ class AuthApiController extends BaseApiController
     public function verifyPhone(VerificationRequest $request)
     {
         try{
-            // $token = getenv("TWILIO_AUTH_TOKEN");
-            // $twilio_sid = getenv("TWILIO_SID");
-            // $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-            // $twilio = new Client($twilio_sid, $token);
-            // $verification = $twilio->verify->v2->services($twilio_verify_sid)
-            //     ->verificationChecks
-            //     ->create([
-            //         'to' => $request->country_code.$request->phone_number,
-            //         'code' => $request->verification_code
-            //     ]);
+            $token = getenv("TWILIO_AUTH_TOKEN");
+            $twilio_sid = getenv("TWILIO_SID");
+            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+            $twilio = new Client($twilio_sid, $token);
+            $verification = $twilio->verify->v2->services($twilio_verify_sid)
+                ->verificationChecks
+                ->create([
+                    'to' => $request->country_code.$request->phone_number,
+                    'code' => $request->verification_code
+                ]);
                 
-            if (true/*$verification->valid*/) {
+            if ($verification->valid) {
                 $user = User::where('phone', $request->phone_number)->first();
                 $user->is_verified = 1;
                 $user->save();
@@ -353,7 +353,7 @@ class AuthApiController extends BaseApiController
 
     public function sendVerificationCode(VerificationCodeRequest $request){
         try {
-        //    $this->sendVerifyMessage($request->country_code.$request->phone_number,);
+           $this->sendVerifyMessage($request->country_code.$request->phone_number,);
             return customResponse((object)[], __("auth.Verification code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
