@@ -11,6 +11,15 @@
   |
  */
 
-Route::get('/test', function () {
-        dd("Welcome Here");
+Route::get('/health', function () {
+        echo 'Coursemia API is up and running!';
+});
+
+Route::get('/pages/privacy-policy', function () {
+    return view('privacy-policy', [
+        'title' => 'Coursemia Privacy Policy',
+        'content' => \Illuminate\Support\Facades\DB::table('settings')
+                        ->where('key', 'privacy_policy')
+                        ->value('value')
+    ]);
 });
