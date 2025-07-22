@@ -42,7 +42,8 @@ class PaymentAPIController extends Controller
             return customResponse([
                 "paymentIntent" => $paymentIntent->client_secret,
                 'ephemeralKey' => $ephemeralKey->secret,
-                'customer' => $customerId
+                'customer' => $customerId,
+                'publishableKey' => env('STRIPE_PUBLISHABLE_KEY')
             ], "Payment Intent Created successfully", 200, StatusCodesEnum::DONE);
 
         } catch (\Exception $e) {
