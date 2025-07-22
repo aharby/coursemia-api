@@ -17,7 +17,7 @@ Route::get('/health', function () {
 
 Route::get('/pages/privacy-policy', function () {
     return view('privacy-policy', [
-        'title' => 'Coursemia Privacy Policy',
+        'title' => 'Privacy Policy',
         'content' => \Illuminate\Support\Facades\DB::table('settings')
                         ->where('key', 'privacy_policy')
                         ->value('value')

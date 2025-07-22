@@ -84,11 +84,34 @@
                 border-top-color: #444;
             }
         }
+
+        .header-flex {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            /* flex-wrap: wrap; */
+            margin-bottom: 0;
+        }
+
+        .header-flex h1 {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin: 0;
+        }
+
+        .logo {
+            height: 100px;
+            width: auto;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>{{ $title }}</h1>
+        <div class="header-flex">
+            <h1>{{ $title }}</h1>
+            <img src="{{ asset('images/logo.png') }}" alt="Coursemia Logo" class="logo">
+        </div>
 
         {{-- This will render HTML content from the backend --}}
         {!! $content !!}
