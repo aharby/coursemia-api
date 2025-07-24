@@ -26,7 +26,7 @@ class StripeWebhookController extends Controller
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
         $endpointSecret = env('STRIPE_PAYMENT_INTENT_WEBHOOK_SECRET');
-
+        
         try {
             $event = Webhook::constructEvent(
                 $payload, $sigHeader, $endpointSecret
@@ -40,15 +40,57 @@ class StripeWebhookController extends Controller
         }
 
         // Handle the event
+        $responseMeassage = "";
+
+        $paymentIntent = $event->data->object;
+
         if ($event->type === 'payment_intent.succeeded') {
-            $paymentIntent = $event->data->object; // contains a StripePaymentIntent
-            // Handle the successful payment intent.
-            Log::info('Payment Intent Succeeded', ['payment_intent' => $paymentIntent]);
-            // You can add your own business logic here, e.g., updating order status in your database.
 
             $this->paymentService->processSuccessfulPayment($paymentIntent);
+
+            $responseMeassage = "Payment Intent Succeeded";
         }
 
-        return response()->json(['status' => 'success']);
+        else if ($event->type === 'payment_intent.created')
+            $responseMeassage = "Payment Intent Created";
+
+        else if ($event->type === 'payment_intent.payment_failed') {
+
+            $responseMeassage = "Payment Intent Failed" . ['payment_intent' => $paymentIntent];
+            
+            Log::error($responseMeassage, ['payment_intent' => $paymentIntent]);
+        }
+
+        else if ($event->type === 'payment_intent.requires_action') 
+            $responseMeassage = "Payment Intent Requires Action";
+
+
+            
+        else if ($event->type === 'payment_intent.canceled') {
+            
+            $responseMeassage = "Payment Intent Canceled";
+
+            Log::warning($responseMeassage, ['payment_intent' => $paymentIntent]);
+        }
+
+        else if ($event->type === 'payment_intent.partially_funded') 
+            $responseMeassage = "Payment Intent Partially Funded";
+
+        else if ($event->type === 'payment_intent.processing') 
+            $responseMeassage = "Payment Intent Processing";
+
+        else {
+            $responseMeassage = "Unhandled event type: " . $event->type;
+
+            Log::error($responseMeassage, ['event_type' => $event->type]);
+        }
+        
+
+        return customResponse(
+            ['message' => $responseMeassage],
+            "Webhook processed successfully",
+            200,
+            StatusCodesEnum::DONE
+        );
     }
 }
