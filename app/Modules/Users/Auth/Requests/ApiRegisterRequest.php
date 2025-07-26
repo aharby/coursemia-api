@@ -29,7 +29,7 @@ class ApiRegisterRequest extends FormRequest
             'full_name'         => 'required|max:255',
             'phone_number'      => 'required|unique:users,phone',
             'email_address'     => 'required|unique:users,email',
-            'country_id'        => 'required|exists:countries,id',
+            'country_id'        => 'required|integer|exists:countries,id',
             'refer_code'        => 'nullable|exists:users,refer_code',
             'country_code'      => 'required|exists:countries,country_code',
             'password' => ['required', 
@@ -55,5 +55,12 @@ class ApiRegisterRequest extends FormRequest
         ], 422);
 
         throw new \Illuminate\Validation\ValidationException($validator, $response);
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'country_id' => (int) $this->country_id,
+        ]);
     }
 }
