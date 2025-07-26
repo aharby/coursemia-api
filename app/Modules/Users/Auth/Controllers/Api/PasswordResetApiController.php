@@ -27,7 +27,7 @@ class PasswordResetApiController extends Controller
         $user = User::where('email', $request['email'])->first();
 
         if(!$user->hasVerifiedEmail())
-            return customResponse([], __('auth.User not verified'), 422, StatusCodesEnum::UNVERIFIED);
+            return customResponse([], __('auth.User not verified'), 422, StatusCodesEnum::EMAIL_NOT_VERIFIED);
 
         $status = Password::sendResetLink(
             $request->only('email')
@@ -83,7 +83,7 @@ class PasswordResetApiController extends Controller
             ->exists();
 
         if(!$is_verified)
-            return customResponse([], __('auth.User phone not verified'), 422, StatusCodesEnum::UNVERIFIED);
+            return customResponse([], __('auth.User phone not verified'), 422, StatusCodesEnum::PHONE_NUMBER_NOT_VERIFIED);
 
         try 
         {

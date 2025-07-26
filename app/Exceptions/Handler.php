@@ -127,10 +127,11 @@ class Handler extends ExceptionHandler
             $errors = $exception->errors();
             $statusCode = StatusCodesEnum::FAILED;
 
-            if((array_key_exists('email_address', $errors) && str_contains($errors['email_address'][0], 'taken')) ||
-                (array_key_exists('phone_number', $errors) && str_contains($errors['phone_number'][0], 'taken'))) {
-                $statusCode = StatusCodesEnum::EMAIL_OR_PHONE_ALREADY_EXISTS;
-            }
+            if(array_key_exists('email_address', $errors) && str_contains($errors['email_address'][0], 'taken'))
+                $statusCode = StatusCodesEnum::EMAIL_ALREADY_EXISTS;
+            if(array_key_exists('phone_number', $errors) && str_contains($errors['phone_number'][0], 'taken'))
+                $statusCode = StatusCodesEnum::PHONE_NUMBER_ALREADY_EXISTS;
+            
           
             $index = array_keys($errors)[0];
             throw new HttpResponseException(

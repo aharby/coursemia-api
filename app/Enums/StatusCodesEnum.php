@@ -12,9 +12,19 @@ use BenSampo\Enum\Enum;
 final class StatusCodesEnum extends Enum
 {
     const DONE =   1;
-    const FAILED =   2;
-    const UNAUTHORIZED = 3;
-    const UNVERIFIED = 4;
 
-    const EMAIL_OR_PHONE_ALREADY_EXISTS = 5;
+    const FAILED =   2;
+
+    const UNAUTHORIZED = 3;
+
+    const PHONE_NUMBER_NOT_VERIFIED = 4;
+
+    const EMAIL_NOT_VERIFIED = 5;
+
+    const PHONE_NUMBER_AND_EMAIL_NOT_VERIFIED = 6; 
+
+    const PHONE_NUMBER_ALREADY_EXISTS = 7;
+
+    const EMAIL_ALREADY_EXISTS = 8;
+
 }
