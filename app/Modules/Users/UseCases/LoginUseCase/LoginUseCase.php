@@ -29,11 +29,9 @@ class LoginUseCase implements LoginUseCaseInterface
         
         if (array_key_exists('email', $request)) {
             $user = $userRepository->findByEmail($request['email']);
-            $is_verified = $user->hasVerifiedEmail();
         }
         else{
             $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
-            $is_verified = $user->is_verified;
         }
 
         $loginCase = array();
@@ -50,6 +48,8 @@ class LoginUseCase implements LoginUseCaseInterface
             $loginCase['status_code'] = StatusCodesEnum::UNVERIFIED;
             return $loginCase;
         }
+
+        $is_verified = $user->is_verified && $user->hasVerifiedEmail();
 
         $password_check = Hash::check($request['password'], $user->password);
 

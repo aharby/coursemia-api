@@ -30,7 +30,8 @@ class UsersResource extends JsonResource
             'role'          => 'editor',
             'is_active'     => (bool)$this->is_active,
             'devices'       => UserDeviceResource::collection($this->devices),
-            'verified'      => $this->is_verified ? 'verified' : 'not-verified',
+            'is_phone_verified'      => $this->is_verified,
+            'is_email_verified' => $this->hasVerifiedEmail(),
             'country'       => $this->country->translated_title,
             'ability'       => [
                 [
