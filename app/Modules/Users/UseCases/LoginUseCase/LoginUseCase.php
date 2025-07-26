@@ -43,13 +43,13 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
+        $is_verified = $user->is_verified && $user->hasVerifiedEmail();
+
         if(!$is_verified){
             $loginCase['message'] = __('auth.User not verified');
             $loginCase['status_code'] = StatusCodesEnum::UNVERIFIED;
             return $loginCase;
         }
-
-        $is_verified = $user->is_verified && $user->hasVerifiedEmail();
 
         $password_check = Hash::check($request['password'], $user->password);
 
