@@ -51,6 +51,7 @@ use App\Modules\Users\UseCases\SendActivationMailUseCase\SendActivationMailUseCa
 use App\Modules\Users\Auth\Requests\Api\UserActivateOtpRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
+use App\Models\GuestDevice;
 
 class AuthApiController extends BaseApiController
 {
@@ -264,6 +265,22 @@ class AuthApiController extends BaseApiController
                     $device->is_tablet = $request->is_tablet;
                     $device->save();
                 }
+
+                //sync guest data
+                $guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))
+                            ->first();
+                            
+                if(isset($guestDevice)){
+
+                    foreach ($guestDevice->cartCourses as $cartCourse) {
+                        $cartCourse->guest_device_id = null;
+                        $cartCourse->user_id = $user->id;
+                        $cartCourse->save();
+                    }
+                    $guestDevice->delete();
+
+                }
+
                 /* Authenticate user */
                 return customResponse((object)[], __('auth.Phone number verified successfully'),200, StatusCodesEnum::DONE);
             }
