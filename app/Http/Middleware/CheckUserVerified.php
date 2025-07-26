@@ -20,7 +20,7 @@ class CheckUserVerified
         $user = auth('api')->user();
         //is_verified = is_phone_verified
         if (isset($user)) {
-            if(!($user->is_verified && $user->hasVerifiedEmail())) {
+            if(!$user->is_verified && !$user->hasVerifiedEmail()) {
                 return customResponse(null, __("User not verified"), 422, StatusCodesEnum::PHONE_NUMBER_AND_EMAIL_NOT_VERIFIED);
             }
             else if(!$user->is_verified) {

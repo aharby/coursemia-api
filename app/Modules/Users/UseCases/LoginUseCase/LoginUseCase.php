@@ -43,7 +43,7 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
-        if(!($user->is_verified && $user->hasVerifiedEmail())){
+        if(!$user->is_verified && !$user->hasVerifiedEmail()){
             $loginCase['message'] = __('auth.User not verified');
             $loginCase['status_code'] = StatusCodesEnum::PHONE_NUMBER_AND_EMAIL_NOT_VERIFIED;
             return $loginCase;
@@ -54,7 +54,7 @@ class LoginUseCase implements LoginUseCaseInterface
             $loginCase['status_code'] = StatusCodesEnum::PHONE_NUMBER_NOT_VERIFIED;
             return $loginCase;
         }
-        
+
         if(!$user->hasVerifiedEmail()){
             $loginCase['message'] = __('auth.User not verified');
             $loginCase['status_code'] = StatusCodesEnum::EMAIL_NOT_VERIFIED;
