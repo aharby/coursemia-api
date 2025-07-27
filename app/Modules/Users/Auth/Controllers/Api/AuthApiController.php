@@ -263,6 +263,7 @@ class AuthApiController extends BaseApiController
                     $device->device_id = request()->header('device-id');
                     $device->device_name = $request->device_name;
                     $device->is_tablet = $request->is_tablet;
+                    $device->device_token = $request->device_token;
                     $device->save();
                 }
 

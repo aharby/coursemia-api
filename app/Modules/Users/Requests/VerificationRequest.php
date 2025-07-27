@@ -28,7 +28,8 @@ class VerificationRequest extends FormRequest
         return [
             'phone_number'      => 'required|exists:users,phone',
             'country_code'      => 'required|exists:countries,country_code',
-            'verification_code' => 'required'
+            'verification_code' => 'required',
+            'device_token'    => 'required|string|max:255'
         ];
     }
 
