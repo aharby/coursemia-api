@@ -14,6 +14,12 @@ class UserResorce extends JsonResource
      */
     public function toArray($request)
     {
+        $flag  = $this->country->flag;
+
+        if(!str_starts_with($this->photo, 'https')){
+            $flag = image($flag, 'large');
+        }
+
         return [
             'id'                => $this->id,
             'profile_image'     => asset($this->photo),
