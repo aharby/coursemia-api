@@ -74,9 +74,11 @@ class PasswordResetApiController extends Controller
     {
         $request->validate([
             'phone_number' => 'required|exists:users,phone',
+            'country_code' => ['required', 'exists:countries,country_code']
         ]);
 
         $phone = $request['phone_number'];
+        $country_code = $request['country_code'];
 
         $is_verified = User::where('phone', $phone)
             ->where('is_verified', true)
@@ -94,7 +96,7 @@ class PasswordResetApiController extends Controller
             $twilio = new Client($twilio_sid, $token);
             $twilio->verify->v2->services($twilio_verify_sid)
                 ->verifications
-                ->create($phone, "sms");
+                ->create($country_code.$phone, "sms");
             return customResponse((object)[], __("auth.Password reset code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
