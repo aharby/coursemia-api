@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Modules\Users\User;
+use App\Modules\Users\Models\User;
 use App\Rules\ValidFullPhoneNumber;
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Validator;
@@ -88,13 +88,13 @@ class PasswordResetApiController extends Controller
         try 
         {
             // send verify message
-            // $token = getenv("TWILIO_AUTH_TOKEN");
-            // $twilio_sid = getenv("TWILIO_SID");
-            // $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-            // $twilio = new Client($twilio_sid, $token);
-            // $twilio->verify->v2->services($twilio_verify_sid)
-            //     ->verifications
-            //     ->create($phone, "sms");
+            $token = getenv("TWILIO_AUTH_TOKEN");
+            $twilio_sid = getenv("TWILIO_SID");
+            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+            $twilio = new Client($twilio_sid, $token);
+            $twilio->verify->v2->services($twilio_verify_sid)
+                ->verifications
+                ->create($phone, "sms");
             return customResponse((object)[], __("auth.Password reset code sent successfully"),200, StatusCodesEnum::DONE);
         }catch (\Exception $e){
             return customResponse((object)[], $e->getMessage(),422, StatusCodesEnum::FAILED);
@@ -108,7 +108,7 @@ class PasswordResetApiController extends Controller
             $request->all() ,[
             'phone_number' => 'required|exists:users,phone',
             'country_code'      => 'required|exists:countries,country_code',
-            'code' => 'required',
+            'verification_code' => 'required',
             'password' => ['required','min:9',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/',
                 'confirmed']    
@@ -122,18 +122,18 @@ class PasswordResetApiController extends Controller
         $country_code = $request['country_code'];
 
         try{
-            // $token = getenv("TWILIO_AUTH_TOKEN");
-            // $twilio_sid = getenv("TWILIO_SID");
-            // $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-            // $twilio = new Client($twilio_sid, $token);
-            // $verification = $twilio->verify->v2->services($twilio_verify_sid)
-            //     ->verificationChecks
-            //     ->create([
-            //         'to' => $country_code . $phone,
-            //         'code' => $request->verification_code
-            //     ]);
+            $token = getenv("TWILIO_AUTH_TOKEN");
+            $twilio_sid = getenv("TWILIO_SID");
+            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+            $twilio = new Client($twilio_sid, $token);
+            $verification = $twilio->verify->v2->services($twilio_verify_sid)
+                ->verificationChecks
+                ->create([
+                    'to' => $country_code . $phone,
+                    'code' => $request->verification_code
+                ]);
                 
-            if (true /*$verification->valid*/) {
+            if ($verification->valid) {
                 $user = User::where('phone', $phone)
                             ->where('country_code', $country_code)->first();
                 if (isset($user)){
