@@ -46,8 +46,8 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
     Route::post('delete-devices', 'AuthApiController@deleteDevices');
     Route::post('verify-phone-number', 'AuthApiController@verifyPhone');
     Route::get('verify-email', 'AuthApiController@verifyEmail')->name('verification.verify');
-    Route::post('resend-verify-email', 'AuthApiController@resendVerifyEmail')->middleware('auth:api');
-    Route::post('send-verification-code', 'AuthApiController@sendVerificationCode');
+    Route::post('resend-verify-email', 'AuthApiController@resendVerifyEmail')->middleware('throttle:5,1');
+    Route::post('send-verification-code', 'AuthApiController@sendVerificationCode')->middleware('throttle:5,1');
     Route::post('login', 'AuthApiController@login');
     Route::group(['middleware' => 'userActive'], function (){
         Route::group(['middleware' => 'auth:api'], function (){
@@ -68,11 +68,11 @@ Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], functio
 Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api',
 'prefix' => 'password-reset'], function (){
     //using email
-    Route::post('send-email', 'PasswordResetApiController@sendResetLink');
+    Route::post('send-email', 'PasswordResetApiController@sendResetLink')->middleware('throttle:5,1');;
     Route::post( 'confirm/email', 'PasswordResetApiController@confirmResetUsingMail')->name('password.reset');
 
     //using phone
-    Route::post('send-phone-code', 'PasswordResetApiController@sendResetPhoneCode');
+    Route::post('send-phone-code', 'PasswordResetApiController@sendResetPhoneCode')->middleware('throttle:5,1');;
     Route::post( 'confirm/phone', 'PasswordResetApiController@confirmResetUsingPhone');
 
 });

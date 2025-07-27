@@ -47,5 +47,7 @@ return array(
 
     'Password Regex' => 'يجب أن تحتوي كلمة السر على حرف صغير ، وحرف كبير، ورقم، وحرف خاص',
 
-    'Unauthorized' => 'غير مصرح'
+    'Unauthorized' => 'غير مصرح',
+
+    'Verfication email sent' => 'تم ارسال بريد التحقق'
 );

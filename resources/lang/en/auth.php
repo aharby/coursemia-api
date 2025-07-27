@@ -46,5 +46,7 @@ return [
 
     'Password Regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',
 
-    'Unauthorized' => 'Unauthorized'
+    'Unauthorized' => 'Unauthorized',
+
+    'Verfication email sent' => 'Verfication email sent'
 ];

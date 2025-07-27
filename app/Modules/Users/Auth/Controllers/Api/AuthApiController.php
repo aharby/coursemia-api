@@ -314,12 +314,19 @@ class AuthApiController extends BaseApiController
     }
 
     public function resendVerifyEmail(Request $request)
-    {
-        if ($request->user()->hasVerifiedEmail()) {
+    {        
+        
+        $request->validate(['email' => 'required|email|exists:users,email']);
+        
+        $user = User::where('email', $request->email)->first();
+        if (!isset($user))
+            return customResponse((object)[], __("auth.User not found"), 422, StatusCodesEnum::FAILED);
+
+        if ($user->hasVerifiedEmail()) {
             return customResponse((object)[], __('auth.Email is already verified'), 200, StatusCodesEnum::DONE);
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        $user->sendEmailVerificationNotification();
 
         return customResponse((object)[], __('auth.Verfication email sent'), 200, StatusCodesEnum::DONE);
     }
