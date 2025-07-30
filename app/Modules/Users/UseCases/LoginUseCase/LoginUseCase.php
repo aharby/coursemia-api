@@ -52,7 +52,7 @@ class LoginUseCase implements LoginUseCaseInterface
         $loginCase['data']['user'] = [
                 'country_code' => $user->country_code,
                 'phone_number' => $user->phone,
-                'emai_address' => $user->email
+                'email_address' => $user->email
             ];
 
         if(!$user->is_verified && !$user->hasVerifiedEmail()){
