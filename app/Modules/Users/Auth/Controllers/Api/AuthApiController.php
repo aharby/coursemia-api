@@ -307,7 +307,8 @@ class AuthApiController extends BaseApiController
             return customResponse((object)[], __('auth.Email is already verified'), 200, StatusCodesEnum::DONE);
         }
 
-        $user->markEmailAsVerified();
+        if(!$user->markEmailAsVerified())
+            return customResponse((object)[], __('auth.Email is already verified'), 200, StatusCodesEnum::FAILED);
 
         event(new Verified($user));
 
