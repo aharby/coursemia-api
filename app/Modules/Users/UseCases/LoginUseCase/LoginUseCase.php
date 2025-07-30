@@ -35,7 +35,6 @@ class LoginUseCase implements LoginUseCaseInterface
         }
 
         $loginCase = array();
-        $loginCase['data'] = (object)[];
         $loginCase['message'] = __('auth.Invalid login details');
         $loginCase['status_code'] = StatusCodesEnum::FAILED;
 
@@ -49,7 +48,8 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
-        $loginCase['data'] = [
+        $loginCase['data'] = [];
+        $loginCase['data']['user'] = [
                 'country_code' => $user->country_code,
                 'phone_number' => $user->phone,
                 'email' => $user->email
@@ -114,7 +114,6 @@ class LoginUseCase implements LoginUseCaseInterface
 
         }
             
-        $loginCase['data'] = [];
         $loginCase['data']['user'] = new UserResorce($user);
         $loginCase['data']['token'] = $user->createToken('AccessToken')->accessToken;
         $loginCase['message'] = __('auth.Logged in successfully');
