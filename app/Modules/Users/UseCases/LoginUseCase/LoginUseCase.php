@@ -43,6 +43,18 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
+        $password_check = Hash::check($request['password'], $user->password);
+
+        if(!$password_check){
+            return $loginCase;
+        }
+
+        $loginCase['data'] = [
+                'country_code' => $user->country_code,
+                'phone_number' => $user->phone,
+                'email' => $user->email
+            ];
+
         if(!$user->is_verified && !$user->hasVerifiedEmail()){
             $loginCase['message'] = __('auth.User not verified');
             $loginCase['status_code'] = StatusCodesEnum::PHONE_NUMBER_AND_EMAIL_NOT_VERIFIED;
@@ -58,12 +70,6 @@ class LoginUseCase implements LoginUseCaseInterface
         if(!$user->hasVerifiedEmail()){
             $loginCase['message'] = __('auth.User not verified');
             $loginCase['status_code'] = StatusCodesEnum::EMAIL_NOT_VERIFIED;
-            return $loginCase;
-        }
-
-        $password_check = Hash::check($request['password'], $user->password);
-
-        if(!$password_check){
             return $loginCase;
         }
 
