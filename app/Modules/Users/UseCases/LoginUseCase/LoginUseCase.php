@@ -85,8 +85,8 @@ class LoginUseCase implements LoginUseCaseInterface
         //     return $loginCase;
         // }
 
-        if(!$device_exists && 
-            ( !$first_device  || $first_device->is_tablet != $request['is_tablet'])){
+        if(!$device_exists)//&& 
+           // ( !$first_device  || $first_device->is_tablet != $request['is_tablet'])){
             // save user device
             $user_device = new UserDevice;
             $user_device->user_id = $user->id;
