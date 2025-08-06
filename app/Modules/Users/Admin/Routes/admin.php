@@ -8,7 +8,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
-Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => 'auth:admin'], function () {
     Route::post('/assign-course-to-user', [UsersController::class , 'assignCourseToUser']);
     Route::post('/delete-course-from-user', [UsersController::class , 'deleteCourseFromUser']);
     Route::get('/courses', [UsersController::class , 'getUserCourses']);
