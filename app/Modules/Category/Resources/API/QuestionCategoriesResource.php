@@ -2,13 +2,10 @@
 
 namespace App\Modules\Category\Resources\API;
 
-use App\Modules\Courses\Models\Category;
-use App\Modules\Courses\Models\CourseLecture;
-use App\Modules\Courses\Models\CourseNote;
+use App\Modules\Courses\Models\Question;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
-class NotesCategoriesResource extends JsonResource
+class QuestionCategoriesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,14 +19,14 @@ class NotesCategoriesResource extends JsonResource
         if (isset($parent)){
             $id = $parent->id;
             $title = $parent->title;
-            $lecs = CourseNote::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
+            $lecs = Question::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
                 ->where('is_free_content', 1)->first();
-            $subs = SubCategoriesResource::collection($parent->subs);
+            $subs = QuestionSubCategoriesResource::collection($parent->subs);
         }else{
             $id = $this->id;
             $title = $this->title;
-            $lecs = CourseNote::where('category_id' , $id)->where('is_free_content', 1)->first();
-            $subs = SubCategoriesResource::collection($this->subs);
+            $lecs = Question::where('category_id' , $id)->where('is_free_content', 1)->first();
+            $subs = QuestionSubCategoriesResource::collection($this->subs);
         }
         return [
             'id'            => $id,

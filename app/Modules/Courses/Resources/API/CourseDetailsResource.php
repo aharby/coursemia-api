@@ -2,27 +2,18 @@
 
 namespace App\Modules\Courses\Resources\API;
 
-use App\Modules\Category\Resources\API\CategoriesResource;
-use App\Modules\Category\Resources\API\FlashCardsCategoriesResource;
+use App\Modules\Category\Resources\API\FlashCardCategoriesResource;
 use App\Modules\Category\Resources\API\LectureCategoriesResource;
-use App\Modules\Category\Resources\API\NotesCategoriesResource;
-use App\Modules\Category\Resources\API\QuestionsCategoriesResource;
+use App\Modules\Category\Resources\API\NoteCategoriesResource;
+use App\Modules\Category\Resources\API\QuestionCategoriesResource;
 use App\Modules\Courses\Models\Category;
 use App\Modules\Courses\Models\CourseUser;
-use App\Modules\Payment\Models\CartCourse;
-use App\Modules\Courses\Models\OfferCourse;
+
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
 class CourseDetailsResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
     public function toArray($request)
     {
         $is_purchased = false;
@@ -91,9 +82,9 @@ class CourseDetailsResource extends JsonResource
 
             // Ordered categories preserved
             'lectures_categories' => LectureCategoriesResource::collection($ordered_lecture_categories),
-            'notes_categories' => NotesCategoriesResource::collection($ordered_notes_categories),
-            'questions_categories' => QuestionsCategoriesResource::collection($ordered_questions_categories),
-            'flash_cards_categories' => FlashCardsCategoriesResource::collection($ordered_flashcards_categories),
+            'notes_categories' => NoteCategoriesResource::collection($ordered_notes_categories),
+            'questions_categories' => QuestionCategoriesResource::collection($ordered_questions_categories),
+            'flash_cards_categories' => FlashCardCategoriesResource::collection($ordered_flashcards_categories),
         ];
     }
 

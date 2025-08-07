@@ -2,12 +2,11 @@
 
 namespace App\Modules\Category\Resources\API;
 
-use App\Modules\Courses\Models\Category;
-use App\Modules\Courses\Models\CourseLecture;
+use App\Modules\Courses\Models\Question;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class SubCategoriesResource extends JsonResource
+class QuestionSubCategoriesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +16,7 @@ class SubCategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $lecs = CourseLecture::where('category_id' , $this->id)->where('is_free_content', 1)->first();
+        $lecs = Question::where('category_id' , $this->id)->where('is_free_content', 1)->first();
         return [
             'id'            => $this->id,
             'title'         => $this->title,

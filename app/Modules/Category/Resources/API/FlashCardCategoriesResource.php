@@ -2,11 +2,10 @@
 
 namespace App\Modules\Category\Resources\API;
 
-use App\Modules\Courses\Models\CourseNote;
-use App\Modules\Courses\Models\Question;
+use App\Modules\Courses\Models\CourseFlashcard;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class QuestionsCategoriesResource extends JsonResource
+class FlashCardCategoriesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,14 +19,14 @@ class QuestionsCategoriesResource extends JsonResource
         if (isset($parent)){
             $id = $parent->id;
             $title = $parent->title;
-            $lecs = Question::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
+            $lecs = CourseFlashcard::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
                 ->where('is_free_content', 1)->first();
-            $subs = SubCategoriesResource::collection($parent->subs);
+            $subs = FlashcardSubCategoriesResource::collection($parent->subs);
         }else{
             $id = $this->id;
             $title = $this->title;
-            $lecs = Question::where('category_id' , $id)->where('is_free_content', 1)->first();
-            $subs = SubCategoriesResource::collection($this->subs);
+            $lecs = CourseFlashcard::where('category_id' , $id)->where('is_free_content', 1)->first();
+            $subs = FlashcardSubCategoriesResource::collection($this->subs);
         }
         return [
             'id'            => $id,
