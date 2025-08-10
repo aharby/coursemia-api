@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "LY57M8HJC2.com.coursemia.coursemia",
+        "paths": [
+          "/verify-email/*",
+          "/password-reset/confirm/email*"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.coursemia",
+      "sha256_cert_fingerprints": [
+        "5B:4B:F5:CD:94:37:E1:1B:B3:05:C7:BF:37:AA:75:EF:EB:D2:BF:10:80:4C:BC:E5:14:B6:36:D4:EF:4C:38:BC"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.coursemia",
+      "sha256_cert_fingerprints": [
+        "15:8A:41:ED:81:F8:B7:9D:06:2C:9E:86:9D:CC:9A:C4:06:53:FA:45:D4:0F:45:E4:3F:3E:A8:D9:75:05:D8:0E"
+      ]
+   }
+  }
+]
