@@ -72,7 +72,7 @@ class EventsAdminApiControllers extends Controller
         if ($request->has('event_url')) {
             $data['event_url'] = $request->get('event_url');
         }
-        if (isset($reques->timage)) {
+        if (isset($request->image)) {
             $data['image'] = moveSingleGarbageMedia($request->get('image'), 'events');
         }
         if ($this->eventRepository->update($id, $data)) {
