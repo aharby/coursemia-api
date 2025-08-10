@@ -2,7 +2,7 @@
 
 namespace App\Modules\BaseApp\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 
 class BaseAppRequest extends FormRequest
 {

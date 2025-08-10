@@ -3,7 +3,7 @@
 namespace App\Modules\Users\Auth\Requests\Api;
 
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 
 class ResetUserPasswordRequest extends FormRequest
 {

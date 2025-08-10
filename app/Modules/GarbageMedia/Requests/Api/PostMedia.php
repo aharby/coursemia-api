@@ -2,7 +2,7 @@
 
 namespace App\Modules\GarbageMedia\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 
 class PostMedia extends FormRequest
 {

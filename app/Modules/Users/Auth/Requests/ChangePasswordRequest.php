@@ -3,7 +3,7 @@
 namespace App\Modules\Users\Auth\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
 class ChangePasswordRequest extends FormRequest

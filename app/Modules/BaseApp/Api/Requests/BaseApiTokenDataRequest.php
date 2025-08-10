@@ -2,7 +2,7 @@
 
 namespace App\Modules\BaseApp\Api\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 final class BaseApiTokenDataRequest extends FormRequest

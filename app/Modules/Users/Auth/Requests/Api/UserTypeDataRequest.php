@@ -3,7 +3,7 @@
 namespace App\Modules\Users\Auth\Requests\Api;
 
 use App\Modules\Users\UserEnums;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UserTypeDataRequest extends FormRequest

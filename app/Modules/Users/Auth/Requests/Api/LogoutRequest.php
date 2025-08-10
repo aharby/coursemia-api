@@ -3,7 +3,7 @@
 namespace App\Modules\Users\Auth\Requests\Api;
 
 use App\Modules\Users\Auth\Enum\DeviceEnum;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 
 class LogoutRequest extends FormRequest
 {

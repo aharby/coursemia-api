@@ -4,7 +4,7 @@ namespace App\Modules\MyProgress\Requests;
 
 use App\Enums\StatusCodesEnum;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 

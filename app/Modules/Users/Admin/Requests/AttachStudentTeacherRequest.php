@@ -2,7 +2,7 @@
 
 namespace App\Modules\Users\Admin\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 
 class AttachStudentTeacherRequest extends FormRequest
 {

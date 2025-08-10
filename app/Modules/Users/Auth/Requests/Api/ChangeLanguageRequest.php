@@ -2,7 +2,7 @@
 
 namespace App\Modules\Users\Auth\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Modules\BaseApp\Api\Requests\BaseApiParserRequest;
 
