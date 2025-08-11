@@ -9,7 +9,7 @@ class PostMedia extends FormRequest
     public function rules()
     {
         return [
-            'media' => 'required|mimes:jpeg,png,jpg,gif,svg,pdf,xls,csv,txt,xlsx,mp4,webm,wmv,avi,flv,swf,mpga,audio,mpeg,doc,docx,mp3,one|max:5000',
+            'media' => 'required|mimes:jpeg,png,jpg,gif,svg,pdf,xls,csv,txt,xlsx,mp4,webm,wmv,avi,flv,swf,mpga,audio,mpeg,doc,docx,mp3,one|max:20000',
         ];
     }
 }
