@@ -2053,7 +2053,7 @@ if (!function_exists('resolveSubscribableName')) {
     if (!function_exists('moveImagePath')) {
         function moveImagePath($pathFrom , $pathTo,$storagePath,$fileName)
         {
-            if (!in_array($pathTo.$storagePath , Storage::directories())) {
+            if (!in_array($pathTo.$storagePath , Storage::allDirectories())) {
                 Storage::makeDirectory($pathTo.$storagePath);
             }
             Storage::move($pathFrom . $fileName ,$pathTo . $storagePath . '/' . $fileName);
