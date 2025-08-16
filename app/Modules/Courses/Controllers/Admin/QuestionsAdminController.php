@@ -57,10 +57,20 @@ class QuestionsAdminController extends Controller
         if ($request->explanation_ar){
             $question->{'explanation:ar'} = $request->explanation_ar;
         }
-        if (isset($request->image_id) && $request->image_id != 'undefined')
-            $question->image = moveSingleGarbageMediaToPublic($request->image_id, 'courses');
-        if (isset($request->explanation_image_id) && $request->explanation_image_id != 'undefined')
-            $question->explanation_image = moveSingleGarbageMediaToPublic($request->explanation_image_id, 'courses');
+        if (array_key_exists('image_id', $request->all()))
+        {
+            if(isset($request->image_id) && $request->image_id != 'undefined')
+                $question->image = moveSingleGarbageMediaToPublic($request->image_id, 'courses');
+            else 
+                $question->image = null;
+        }
+        if (array_key_exists('explanation_image_id', $request->all()))
+        {
+            if(isset($request->explanation_image_id))
+                $question->explanation_image = moveSingleGarbageMediaToPublic($request->explanation_image_id, 'courses');
+            else 
+                $question->explanation_image = null;
+        }
         if (array_key_exists('explanation_voice', $request->all()) && $request->explanation_voice !== 'undefined')
             $question->explanation_voice = $request->explanation_voice;
         if (isset($request->is_free_content))
