@@ -11,6 +11,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
+use App\Enums\RolesEnum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -68,5 +70,9 @@ class AppServiceProvider extends ServiceProvider
                 return $namespace . $modelName . 'Factory';
             }
         );
+
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole(RolesEnum::SUPER_ADMIN) ? true : null;
+        });
     }
 }
