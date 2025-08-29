@@ -8,15 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Rename table
-        Schema::rename('order_course', 'student_order_courses');
+        
+        Schema::table('order_course', function (Blueprint $table) {
 
-        // Rename foreign key column inside the table
-        Schema::table('student_order_courses', function (Blueprint $table) {
-            // Drop old foreign key first
+            $table->dropForeign(['course_id']);
             $table->dropForeign(['order_id']);
 
-            // Rename the column
+        });
+
+        Schema::rename('order_course', 'student_order_courses');
+
+        Schema::table('student_order_courses', function (Blueprint $table) {
+
             $table->renameColumn('order_id', 'student_order_id');
 
             // Add the new foreign key
@@ -24,29 +27,27 @@ return new class extends Migration
                   ->references('id')
                   ->on('student_orders')
                   ->onDelete('cascade');
+
+            $table->foreign('course_id')
+                  ->references('id')
+                  ->on('courses')
+                  ->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('student_order_courses', function (Blueprint $table) {
-            // Drop the new foreign key
+            $table->dropForeign(['course_id']);
             $table->dropForeign(['student_order_id']);
-
-            // Rename back the column
             $table->renameColumn('student_order_id', 'order_id');
-
-            // Restore old foreign key
-            $table->foreign('order_id')
-                  ->references('id')
-                  ->on('orders')
-                  ->onDelete('cascade');
         });
 
-        // Rename the table back
         Schema::rename('student_order_courses', 'order_course');
+
+        Schema::table('order_course', function (Blueprint $table) {
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+        });
     }
 };
