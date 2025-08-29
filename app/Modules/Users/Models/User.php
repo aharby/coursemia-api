@@ -68,27 +68,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Country::class);
     }
 
-    public function devices(){
-        return $this->hasMany(UserDevice::class);
-    }
-
-    public function courses(){
-        return $this->hasManyThrough(Course::class, CourseUser::class,'user_id', 'id', 'id', 'course_id');
-    }
-
     public function followers(){
         return $this->hasMany(UserFollow::class, 'followed_id');
-    }
-
-    public function getRankAttribute(){
-        $higherUsers = 0;
-        
-        if(array_key_exists('total_correct_answers', $this->attributes))
-        {
-            $higherUsers = $this->where('total_correct_answers', '>', $this->attributes['total_correct_answers'])->count();
-        }
-
-        return $higherUsers+1;
     }
 
     public function ScopeSorter($query)
@@ -108,18 +89,13 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
+    public function devices(){
+        return $this->hasMany(UserDevice::class);
+    }
+
     public function routeNotificationForFcm($notification)
     {
         return $this->devices()->pluck('device_token')->toArray();
-    }
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
-    
-    public function cartCourses()
-    {
-        return $this->hasMany(CartCourse::class);
     }
 
     protected static $attachFields = [
@@ -173,6 +149,22 @@ class User extends Authenticatable implements MustVerifyEmail
             'is_active' => $this->is_active,
             'suspended_at' => $this->suspended_at,
         ];
+    }
+
+    // relashionship with role-specific models
+        public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function assistant()
+    {
+        return $this->hasOne(Assistant::class);
+    }
+
+    public function instructor()
+    {
+        return $this->hasOne(Instructor::class);
     }
 
 }

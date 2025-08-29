@@ -5,7 +5,7 @@ namespace App\Modules\payment\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Modules\Users\Models\User;
+use App\Modules\Users\Models\Student;
 use App\Modules\Courses\Models\Course;
 
 class Order extends Model
@@ -13,12 +13,12 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'total_price', 'stripe_invoice_id'
+        'student_id', 'total_price', 'stripe_invoice_id'
     ];
 
-    public function user()
+    public function student()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Student::class);
     }
 
     public function courses()
