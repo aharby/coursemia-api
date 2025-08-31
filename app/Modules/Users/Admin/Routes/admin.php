@@ -1,14 +1,14 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Modules\Users\Admin\Controllers\AuthController;
+use App\Modules\Users\Auth\Controllers\Api\AuthApiController;
 use \App\Modules\Users\Admin\Controllers\UsersController;
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('login', [AuthApiController::class, 'login']);
+    Route::post('logout', [AuthApiController::class, 'logout']);
 });
 
-Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => 'auth:admin'], function () {
+Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => ['auth:api', 'role:admin']], function () {
     Route::post('/assign-course-to-user', [UsersController::class , 'assignCourseToUser']);
     Route::post('/delete-course-from-user', [UsersController::class , 'deleteCourseFromUser']);
     Route::get('/courses', [UsersController::class , 'getUserCourses']);

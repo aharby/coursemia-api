@@ -3,23 +3,17 @@
 namespace App\Modules\Users\Models;
 
 use App\Modules\Countries\Models\Country;
-use App\Modules\Courses\Models\Course;
-use App\Modules\Courses\Models\CourseUser;
 use App\UserFollow;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use App\Modules\Payment\Models\Order;
-use App\Modules\Payment\Models\CartCourse;
 use App\Modules\Users\Traits\Invitable;
 use App\Modules\Users\Traits\UserRatingable;
 use App\Modules\BaseApp\Traits\HasAttach;
 use App\Modules\Post\Models\Post;
 use Spatie\Permission\Traits\HasRoles;
-
-
 
 class User extends Authenticatable implements MustVerifyEmail
 {
