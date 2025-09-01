@@ -20,7 +20,7 @@ class AdminAnswersResource extends JsonResource
         return [
             'id'            => $this->id,
             'answer_en'     => $this->translate('en')->answer,
-            'answer_ar'     => $this->translate('ar')->answer,
+'answer_ar' => $this->translate('ar')?->answer ?? '',
             'is_correct'    => $this->is_correct,
         ];
     }
