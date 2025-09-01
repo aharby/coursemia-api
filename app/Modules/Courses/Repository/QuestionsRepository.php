@@ -108,7 +108,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
             }])
             ->take($number_of_questions)
             ->get()
-            ->each(function ($question, $tableStyle) {
+            ->each(function ($question) use ($tableStyle){
                     $question->explanation =  
                         (strpos($question->explanation ?? '', '<table') !== false) ?
                             $tableStyle . $question->explanation : $question->explanation;
