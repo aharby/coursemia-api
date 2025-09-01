@@ -38,6 +38,48 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         // the memory limit gets exceeded. 
         // this is a hard coded limit until we implemt limit param
         $questions_limit = 300;
+
+        // adjusting table styling:
+        $tableStyle = <<<TEXT
+            <style>
+                p, ul, ol {
+                }
+                figure.table {
+                  margin: 0;
+                  padding: 0;
+                  width: 100% !important; /* Ensure figure takes full width, overriding inline styles */
+                }
+                .table-container {
+                  display: block;
+                  width: 100%;
+                  margin: 0;
+                  overflow-x: auto; /* Enable horizontal scrolling for wide content */
+                  -webkit-overflow-scrolling: touch;
+                  padding-bottom: 4px;
+                  margin-bottom: -4px;
+                }
+                .table-container table {
+                  width: 100% !important; /* Force table to take 100% width of container */
+                  min-width: max-content; /* Allow table to expand beyond 100% if content requires */
+                  border-collapse: collapse;
+                  margin: 0;
+                }
+                .table-container img {
+                  pointer-events: auto;
+                  cursor: pointer;
+                  -webkit-touch-callout: none;
+                  -webkit-user-select: none;
+                  user-select: none;
+                  touch-action: manipulation;
+                }
+                img {
+                  width: auto !important;
+                  max-width: 100% !important;
+                  height: auto;
+                  cursor: pointer;
+                }
+            </style>
+        TEXT;
         if (request()->exam_type == 2){
             return $questions
                 ->active()
@@ -48,7 +90,12 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                     $answers->inRandomOrder();
                 }])
                 ->take($questions_limit)
-                ->get();
+                ->get()
+                ->each(function ($question) use ($tableStyle){
+                    $question->explanation =  
+                        (strpos($question->explanation ?? '', '<table') !== false) ?
+                            $tableStyle . $question->explanation : $question->explanation;
+                });
         }
         // Question bank so we have to get certain number of questions
        return $questions
@@ -60,6 +107,11 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                $answers->inRandomOrder();
             }])
             ->take($number_of_questions)
-            ->get();
+            ->get()
+            ->each(function ($question, $tableStyle) {
+                    $question->explanation =  
+                        (strpos($question->explanation ?? '', '<table') !== false) ?
+                            $tableStyle . $question->explanation : $question->explanation;
+                });
     }
 }
