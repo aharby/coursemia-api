@@ -40,15 +40,8 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $questions_limit = 300;
 
         // adjusting table styling:
-        $tableStyle = <<<TEXT
-            <style>
-                p, ul, ol {
-                }
-                td {
-                    text-align: left;
-                }
-            </style>
-        TEXT;
+        $tableStyle = '<style>p,ul,ol{}td{text-align:left;}</style>';
+        
         if (request()->exam_type == 2){
             return $questions
                 ->active()
