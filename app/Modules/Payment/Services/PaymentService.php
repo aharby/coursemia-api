@@ -91,7 +91,7 @@ class PaymentService
         //add courses to user
         $courses = $user->cartCourses->pluck('course');
         if ($courses->isEmpty()) {
-            Log::error('No courses found in cart for user: ', $user->id);
+            Log::error('No courses found in cart for user: ' . $user->id);
             return;
         }
         Log::info('Processing payment for user: ', ['user_id' => $user->id, 'courses_count' => $courses->count()]);

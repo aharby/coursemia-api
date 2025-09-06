@@ -56,9 +56,12 @@ class StripeWebhookController extends Controller
 
         else if ($event->type === 'payment_intent.payment_failed') {
 
-            $responseMeassage = "Payment Intent Failed" . ['payment_intent' => $paymentIntent];
+            $responseMeassage = "Payment Intent Failed";
             
-            Log::error($responseMeassage, ['payment_intent' => $paymentIntent]);
+            Log::error($responseMeassage, [
+                'payment_intent_id' => $paymentIntent->id ?? null,
+                'status' => $paymentIntent->status ?? null,
+            ]);
         }
 
         else if ($event->type === 'payment_intent.requires_action') 
@@ -70,7 +73,10 @@ class StripeWebhookController extends Controller
             
             $responseMeassage = "Payment Intent Canceled";
 
-            Log::warning($responseMeassage, ['payment_intent' => $paymentIntent]);
+            Log::error($responseMeassage, [
+                'payment_intent_id' => $paymentIntent->id ?? null,
+                'status' => $paymentIntent->status ?? null,
+            ]);  
         }
 
         else if ($event->type === 'payment_intent.partially_funded') 

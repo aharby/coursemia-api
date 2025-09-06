@@ -38,6 +38,10 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         // the memory limit gets exceeded. 
         // this is a hard coded limit until we implemt limit param
         $questions_limit = 300;
+
+        // adjusting table styling:
+        $tableStyle = '<style>p,ul,ol{}td{text-align:left;}</style>';
+        
         if (request()->exam_type == 2){
             return $questions
                 ->active()
@@ -48,7 +52,12 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                     $answers->inRandomOrder();
                 }])
                 ->take($questions_limit)
-                ->get();
+                ->get()
+                ->each(function ($question) use ($tableStyle){
+                    $question->explanation =  
+                        (strpos($question->explanation ?? '', '<table') !== false) ?
+                            $tableStyle . $question->explanation : $question->explanation;
+                });
         }
         // Question bank so we have to get certain number of questions
        return $questions
@@ -60,6 +69,11 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                $answers->inRandomOrder();
             }])
             ->take($number_of_questions)
-            ->get();
+            ->get()
+            ->each(function ($question) use ($tableStyle){
+                    $question->explanation =  
+                        (strpos($question->explanation ?? '', '<table') !== false) ?
+                            $tableStyle . $question->explanation : $question->explanation;
+                });
     }
 }
