@@ -4,28 +4,65 @@ declare(strict_types=1);
 
 namespace App\Modules\Users\UseCases\LoginUseCase;
 
+use App\Enums\RolesEnum;
 use App\Enums\StatusCodesEnum;
 use App\Modules\Users\Auth\Enum\DeviceEnum;
 use App\Modules\Users\Auth\Enum\LoginEnum;
 use App\Modules\Users\Models\UserDevice;
 use App\Modules\Users\Repository\UserRepositoryInterface;
 use App\Modules\Users\Resources\UserResorce;
-use App\Modules\Users\UseCases\SendLoginOtp\SendLoginOtp;
-use App\Modules\Users\User;
-use App\Modules\Users\UserEnums;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use App\Models\GuestDevice;
 
 
 class LoginUseCase implements LoginUseCaseInterface
 {
+    public function handleUserDevice($user, $request, &$loginCase)
+    {
+        $devices = UserDevice::where('user_id', $user->id)->get(); 
+
+        $devices_count = $devices->count();
+        $device_exists = $devices->firstWhere('device_id', request()->header('device-id')) !== null;
+        $first_device = $devices->first(); 
+
+        if ((!$device_exists && $devices_count >= 2)
+            || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
+            $loginCase['message'] = __('auth.Maximum device numbers exceeded');
+            return $loginCase;
+        }
+
+        if(!$device_exists&& 
+           ( !$first_device  || $first_device->is_tablet != $request['is_tablet'])){
+            // save user device
+            $user_device = new UserDevice;
+            $user_device->user_id = $user->id;
+            $user_device->device_type = request()->header('device-type');
+            $user_device->device_id = request()->header('device-id');
+            $user_device->is_tablet = $request['is_tablet'];
+            $user_device->device_name = $request['device_name'];
+            $user_device->save();
+
+            //sync guest data
+            $guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))
+                        ->first();
+                        
+            if(isset($guestDevice)){
+                $cartCourses = $guestDevice->cartCourses->pluck('course');
+
+                foreach ($guestDevice->cartCourses as $cartCourse) {
+                    $cartCourse->guest_device_id = null;
+                    $cartCourse->user_id = $user->id;
+                    $cartCourse->save();
+                }
+                $guestDevice->delete();
+            }
+        }
+    }
+
     public function login(array $request, UserRepositoryInterface $userRepository): array
     {
         $user = null;
-        $is_verified = false;
         
         if (array_key_exists('email', $request)) {
             $user = $userRepository->findByEmail($request['email']);
@@ -73,51 +110,13 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
-        $devices = UserDevice::where('user_id', $user->id)->get(); 
-
-        $devices_count = $devices->count();
-        $device_exists = $devices->firstWhere('device_id', request()->header('device-id')) !== null;
-        $first_device = $devices->first(); 
-
-        // if ((!$device_exists && $devices_count >= 2)
-        //     || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
-        //     $loginCase['message'] = __('auth.Maximum device numbers exceeded');
-        //     return $loginCase;
-        // }
-
-        if(!$device_exists){//&& 
-           // ( !$first_device  || $first_device->is_tablet != $request['is_tablet'])){
-            // save user device
-            $user_device = new UserDevice;
-            $user_device->user_id = $user->id;
-            $user_device->device_type = request()->header('device-type');
-            $user_device->device_id = request()->header('device-id');
-            $user_device->is_tablet = $request['is_tablet'];
-            $user_device->device_name = $request['device_name'];
-            $user_device->save();
-
-            //sync guest data
-            $guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))
-                        ->first();
-                        
-            if(isset($guestDevice)){
-                $cartCourses = $guestDevice->cartCourses->pluck('course');
-
-                foreach ($guestDevice->cartCourses as $cartCourse) {
-                    $cartCourse->guest_device_id = null;
-                    $cartCourse->user_id = $user->id;
-                    $cartCourse->save();
-                }
-                $guestDevice->delete();
-
-            }
-
-        }
-            
         $loginCase['data']['user'] = new UserResorce($user);
         $loginCase['data']['token'] = $user->createToken('AccessToken')->accessToken;
         $loginCase['message'] = __('auth.Logged in successfully');
         $loginCase['status_code'] = StatusCodesEnum::DONE;
+
+        if($user->hasRole(RolesEnum::STUDENT))
+            $this->handleUserDevice($user, $request, $loginCase);
 
         return $loginCase;
     }

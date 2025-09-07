@@ -4,7 +4,6 @@ namespace App\Modules\Users\Auth\Controllers\Api;
 
 use App\Enums\StatusCodesEnum;
 use App\Modules\Users\Auth\Requests\AddDeviceTokenRequest;
-use App\Modules\Users\Auth\Requests\Api\ResetPasswordRequest;
 use App\Modules\Users\Auth\Requests\ApiRegisterRequest;
 use App\Modules\Users\Auth\Requests\ChangePasswordRequest;
 use App\Modules\Users\Auth\Requests\VerificationCodeRequest;
@@ -15,7 +14,6 @@ use App\Modules\Users\Resources\DeviceResorce;
 use App\Modules\Users\Resources\UserConfigurationsResourceResorce;
 use App\Modules\Users\Resources\UserResorce;
 use App\Modules\Users\Models\User;
-use App\Modules\Users\UseCases\ActivateUserUseCase\ActivateUserUseCaseInterface;
 use Dompdf\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,35 +21,28 @@ use Illuminate\Support\Str;
 use App\Modules\Users\UserEnums;
 use Intervention\Image\Facades\Image;
 use Twilio\Rest\Client;
-use function GuzzleHttp\Psr7\str;
-use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Exceptions\CustomErrorException;
-use App\Modules\Users\Events\UserModified;
 use App\Modules\BaseApp\Api\BaseApiController;
 use App\Modules\Users\Auth\Enum\TokenNameEnum;
 use App\Modules\BaseApp\Enums\ResourceTypesEnums;
-use App\Modules\Users\Auth\Requests\Api\LogoutRequest;
 use App\Modules\Users\Transformers\UserAuthTransformer;
 use App\Modules\Users\Auth\Requests\Api\UserActivateOtp;
-use App\Modules\Users\Auth\Requests\Api\UserLoginRequest;
 use App\Modules\Users\Repository\UserRepositoryInterface;
-use App\Modules\Users\Auth\Requests\Api\UserRegisterRequest;
 use App\Modules\Users\Auth\Requests\Api\UserTypeDataRequest;
 use App\Modules\Users\Auth\Requests\Api\UserBasicDataRequest;
 use App\Modules\Users\Auth\Requests\Api\ChangeLanguageRequest;
 use App\Modules\Users\Auth\TokenManager\TokenManagerInterface;
 use App\Modules\Users\Auth\Requests\Api\UserLoginSocialRequest;
 use App\Modules\Users\UseCases\LoginUseCase\LoginUseCaseInterface;
-use App\Modules\Users\UseCases\LoginSocialUseCase\LoginSocialUseCase;
 use App\Modules\Users\UseCases\RegisterUseCase\RegisterUseCaseInterface;
-use App\Modules\Users\UseCases\SendActivationMailUseCase\SendActivationMailUseCaseInterface;
 use App\Modules\Users\Auth\Requests\Api\UserActivateOtpRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use App\Models\GuestDevice;
+use App\Enums\RolesEnum;
 
 class AuthApiController extends BaseApiController
 {
@@ -434,10 +425,15 @@ class AuthApiController extends BaseApiController
     }
 
     public function logout(){
+        
         $user = auth('api')->user();
-        $user->devices()->where('is_tablet', request()->is_tablet)->delete();
-        $user = Auth::user()->token();
-        $user->revoke();
+       
+        $token = Auth::user()->token();
+        $token->revoke();
+
+        if($user->hasRole(RolesEnum::STUDENT))
+            $user->devices()->where('is_tablet', request()->is_tablet)->delete();
+
         return customResponse((object)[], __("auth.Logged Out Successfully"),200, StatusCodesEnum::DONE);
     }
 

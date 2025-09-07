@@ -5,7 +5,7 @@ use \App\Modules\Users\Admin\Controllers\UsersController;
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('login', [AuthApiController::class, 'login']);
-    Route::post('logout', [AuthApiController::class, 'logout']);
+    Route::post('logout', [AuthApiController::class, 'logout'])->middleware('auth:api');
 });
 
 Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => ['auth:api', 'role:admin']], function () {

@@ -18,6 +18,10 @@ class CheckAuthAndDevice
      */
     public function handle(Request $request, Closure $next)
     {
+        dd('CheckDeviceAndToken fired', [
+        'url' => $request->url(),
+        'route' => optional($request->route())->getName(),
+    ]);
         $token = $request->header('Authorization');
 
         $device_id = $request->header('device-id');
@@ -25,6 +29,7 @@ class CheckAuthAndDevice
             $query->where('id', $device_id)
                 ->orWhere('device_id', $device_id);
         })->first();
+        
         if (isset($token) && !isset($device))
             return customResponse(null,__("Device was logged out"), 401, StatusCodesEnum::UNAUTHORIZED);
 

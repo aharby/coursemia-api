@@ -6,7 +6,7 @@ namespace App\Modules\Users\Repository;
 use App\Modules\SchoolAccounts\SchoolAccounts\SchoolAccount;
 use App\Modules\Users\Models\PasswordReset;
 use App\Modules\Users\Models\Student;
-use App\Modules\Users\User;
+use App\Modules\Users\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
