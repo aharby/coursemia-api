@@ -40,7 +40,28 @@ class QuestionsRepository implements QuestionsRepositoryInterface
         $questions_limit = 300;
 
         // adjusting table styling:
-        $tableStyle = '<style>p,ul,ol{}td{text-align:left;}</style>';
+                $tableStyle = <<<CSS
+<style>
+
+    .table {
+      overflow-x: auto;     /* Enable horizontal scroll */
+      -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
+       margin: 0 ;
+}
+    
+    table {
+      width: max-content; /* Prevent table from squishing */
+      min-width: 100%;
+border-spacing: 0.05rem;    /* Ensure it spans the container */
+    }
+    td {
+      text-align:left;
+      vertical-align: middle !important;
+      padding: 0.2rem 0.2rem !important;
+font-size: 0.7rem;    
+}
+</style>
+CSS;
         
         if (request()->exam_type == 2){
             return $questions
@@ -56,11 +77,11 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                 ->each(function ($question) use ($tableStyle){
                     $question->explanation =  
                         (strpos($question->explanation ?? '', '<table') !== false) ?
-                            $tableStyle . $question->explanation : $question->explanation;
+                             $question->explanation . $tableStyle : $question->explanation;
                 });
         }
-        // Question bank so we have to get certain number of questions
-       return $questions
+        // Question bank so we have to get certain number of questions       
+return $questions
             ->active()
             ->filter()
             ->inRandomOrder()
@@ -72,8 +93,8 @@ class QuestionsRepository implements QuestionsRepositoryInterface
             ->get()
             ->each(function ($question) use ($tableStyle){
                     $question->explanation =  
-                        (strpos($question->explanation ?? '', '<table') !== false) ?
-                            $tableStyle . $question->explanation : $question->explanation;
+                        (strpos($question->explanation ?? '', '<table') !== false) ?                           
+ $question->explanation .  $tableStyle : $question->explanation;
                 });
     }
 }
