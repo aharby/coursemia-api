@@ -105,7 +105,7 @@ class UsersController extends AjaxController
         return customResponse(new UsersResource($user), trans('api.Device deleted successfully'), 200, StatusCodesEnum::DONE);
     }
 
-    public function deleteUser($id)
+    public function delete($id)
     {
         $user = User::find($id);
         
