@@ -20,15 +20,17 @@ class NoteCategoriesResource extends JsonResource
     {
         $id = $this->id;
         $title = $this->title;
+        $subs = NoteSubCategoriesResource::collection($this->subs);
         $haveFreeContent = CourseNote::where('category_id' , $id)
                         ->where('is_free_content', 1)
-                        ->first();
-        $subs = NoteSubCategoriesResource::collection($this->subs);
+                        ->first()
+                        || collect($subs->resolve())
+                            ->pluck('have_free_content')->contains(true);
     
         return [
             'id'            => $id,
             'title'         => $title,
-            'have_free_content' => $haveFreeContent ? true : false,
+            'have_free_content' => $haveFreeContent,
             'subs'          => $subs
         ];
     }

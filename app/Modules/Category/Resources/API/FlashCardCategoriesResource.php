@@ -17,15 +17,17 @@ class FlashCardCategoriesResource extends JsonResource
     {
         $id = $this->id;
         $title = $this->title;
+        $subs = FlashcardSubCategoriesResource::collection($this->subs);
         $haveFreeContent = CourseFlashcard::where('category_id' , $id)
                             ->where('is_free_content', 1)
-                            ->first();
-        $subs = FlashcardSubCategoriesResource::collection($this->subs);
+                            ->first()
+                        || collect($subs->resolve())
+                            ->pluck('have_free_content')->contains(true);
         
         return [
             'id'            => $id,
             'title'         => $title,
-            'have_free_content' => $haveFreeContent ? true : false,
+            'have_free_content' => $haveFreeContent,
             'subs'          => $subs
         ];
     }

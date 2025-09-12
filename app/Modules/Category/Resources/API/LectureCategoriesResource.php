@@ -11,14 +11,16 @@ class LectureCategoriesResource extends JsonResource
     {
         $id = $this->id;
         $title = $this->title;
-        $haveFreeContent = CourseLecture::where('category_id' , $id)
-            ->where('is_free_content', 1)->first();
         $subs = LectureSubCategoriesResource::collection($this->subs);
+        $haveFreeContent = CourseLecture::where('category_id' , $id)
+            ->where('is_free_content', 1)->first()
+            || collect($subs->resolve())
+                            ->pluck('have_free_content')->contains(true);
     
         return [
             'id'            => $id,
             'title'         => $title,
-            'have_free_content' => $haveFreeContent ? true : false,
+            'have_free_content' => $haveFreeContent,
             'subs'          => $subs
         ];
     }
