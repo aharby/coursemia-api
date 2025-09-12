@@ -1,5 +1,6 @@
 <?php
 
+
 Route::group(['as' => 'api.', 'middleware' => ['checkDeviceAndToken', 'userSuspended']], function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         require base_path('app/Modules/Users/Auth/Routes/api.php');
@@ -38,6 +39,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     require base_path('app/Modules/Courses/Routes/admin.php');
     require base_path('app/Modules/Events/Routes/admin.php');
     require base_path('app/Modules/Offers/Routes/admin.php');
+});
+
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function(){
+    require base_path('app/Modules/Users/Auth/Routes/noAuth.php');    
 });
 
 // these routes are for testing purposes only
