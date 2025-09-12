@@ -16,5 +16,5 @@ Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => 'auth:admin
     Route::put('/{id}', [UsersController::class , 'update']);
     Route::get('/{id}', [UsersController::class , 'show']);
     Route::post('/delete-device/{id}', [UsersController::class , 'deleteDevice']);
-    Route::post('/delete-user/{id}', [UsersController::class , 'deleteUser']);
+    Route::delete('/delete-user/{id}', [UsersController::class , 'deleteUser']);
 });
