@@ -17,6 +17,7 @@ use App\Modules\Courses\Resources\API\CoursesCollection;
 use App\Modules\Courses\Resources\API\CoursesResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Enums\RolesEnum;
 
 class CoursesAPIController extends Controller
 {
@@ -26,7 +27,17 @@ class CoursesAPIController extends Controller
 
     public function courses(Request $request)
     {
-        $courses = Course::query()->active();
+        $courses = Course::query();
+        
+        $user = auth('api')->user();
+
+        if ($user->hasRole(RolesEnum::INSTRUCTOR))
+            $courses->where('instructor_id', $user->id);
+        elseif ($user->hasRole(RolesEnum::ASSISTANT))
+            $courses->where('instructor_id', $user->assistant->instructor_id);
+        elseif ($user->hasRole(RolesEnum::GUEST) || !$user || $user->hasRole(RolesEnum::STUDENT))
+            $courses->active();
+        
         if (isset($request->query_text)) {
             $courses->where(function ($query) use ($request) {
                 $query->where('title_ar', 'LIKE', '%' . $request->query_text . '%')

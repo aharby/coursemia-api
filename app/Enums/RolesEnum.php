@@ -11,4 +11,5 @@ final class RolesEnum extends Enum
     const INSTRUCTOR = 'instructor';
     const ASSISTANT = 'assistant';
     const STUDENT = 'student';  
+    const GUEST = 'guest';
 }
