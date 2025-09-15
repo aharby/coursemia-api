@@ -43,6 +43,10 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                 $tableStyle = <<<CSS
 <style>
 
+    html, body {
+    -webkit-text-size-adjust: 100%;
+    }
+    
     .table {
       overflow-x: auto;     /* Enable horizontal scroll */
       -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
