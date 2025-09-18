@@ -77,6 +77,8 @@ class PaymentService
 
     public function processSuccessfulPayment(PaymentIntent $paymentIntent)
     {
+        Log::info('Processing successful payment for PaymentIntent: ', ['id' => $paymentIntent->id]);
+        
         $user = User::where('stripe_customer_id', $paymentIntent->customer)->first();
 
         if (!$user) {
