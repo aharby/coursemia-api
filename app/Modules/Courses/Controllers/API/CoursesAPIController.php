@@ -64,6 +64,10 @@ class CoursesAPIController extends Controller
     public function myCourses()
     {
         $user = auth('api')->user();
+
+        if(!$user || !$user->hasRole(RolesEnum::STUDENT))
+            return customResponse([], __("No content"), 201, StatusCodesEnum::DONE);
+
         $courses = $user->courses;
         return customResponse(CoursesResource::collection($courses), __("Fetched courses successfully"), 200, StatusCodesEnum::DONE);
     }
