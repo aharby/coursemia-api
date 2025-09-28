@@ -5,11 +5,18 @@ namespace App\Modules\Courses\Models;
 use App\Modules\Users\Admin\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Modules\Courses\Services\VideoService;
+use Log;
+
 class CourseLecture extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $fillable = [
+        'duration_seconds'
+    ];
 
     public function category(){
         return $this->belongsTo(Category::class);
@@ -51,5 +58,29 @@ class CourseLecture extends Model
     {
         return $this->hasOne(LectureProgress::class)
         ->where('user_id', $user_id)->first();
+    }
+
+    protected static function booted()
+    {
+        // Automatically fetch duration when lecture is created with video_url
+        static::created(function ($lecture) {
+            if ($lecture->url && !$lecture->duration_seconds) {
+                $videoService = new VideoService();
+                $duration = $videoService->getVideoDuration($lecture->url);
+                if ($duration !== null) 
+                    $lecture->update(['duration_seconds' => $duration]);    
+            }
+        });
+
+        // Fetch duration when video_url is updated
+        static::updated(function ($lecture) {
+            if ($lecture->isDirty('url') && $lecture->url){
+
+                $videoService = new VideoService();
+                $duration = $videoService->getVideoDuration($lecture->url);
+                if ($duration !== null) 
+                    $lecture->update(['duration_seconds' => $duration]); 
+            }             
+        });
     }
 }
