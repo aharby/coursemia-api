@@ -80,6 +80,11 @@ class UsersController extends AjaxController
 
     public function update(Request $request, $id){
         $user = User::find($id);
+
+        if (!$user) {
+            return customResponse((object)[], __('User not found'), 404, StatusCodesEnum::FAILED);
+        }
+
         if ($request->has('is_active')) {
             $user->is_active = $request->get('is_active');
         }
@@ -89,6 +94,11 @@ class UsersController extends AjaxController
 
     public function show($id){
         $user = User::find($id);
+
+        if (!$user) {
+            return customResponse((object)[], __('User not found'), 404, StatusCodesEnum::FAILED);
+        }
+
         return customResponse(new UsersResource($user), trans('api.Updated successfully'), 200, StatusCodesEnum::DONE);
     }
 
@@ -99,7 +109,7 @@ class UsersController extends AjaxController
         return customResponse(new UsersResource($user), trans('api.Device deleted successfully'), 200, StatusCodesEnum::DONE);
     }
 
-    public function deleteUser($id)
+    public function delete($id)
     {
         $user = User::find($id);
         

@@ -28,7 +28,7 @@ class CoursesFlashCardsAPIController extends Controller
         $user = auth('api')->user();
         $category_id = \request()->category_id;
         $sub_category_ids = json_decode($request->sub_category_ids);
-        $flashes = CourseFlashcard::query();
+        $flashes = CourseFlashcard::query()->inRandomOrder();
         $flashes->where('course_id', $request->course_id);
         if (isset($category_id) && empty($sub_category_ids)){
             $flashes = $flashes->where('category_id', request()->category_id)

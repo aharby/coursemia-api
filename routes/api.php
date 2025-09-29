@@ -47,7 +47,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function(){
 
 // these routes are for testing purposes only
 Route::group([], function () {
-    Route::post('delete-user/{id}',[\App\Modules\Users\Admin\Controllers\UsersController::class, 'deleteUser']);
+    Route::post('delete-user/{id}',[\App\Modules\Users\Admin\Controllers\UsersController::class, 'delete']);
     });
 
 Route::get('/test-question-of-the-day', function () {

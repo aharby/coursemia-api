@@ -15,23 +15,19 @@ class FlashCardCategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $parent = $this->parent;
-        if (isset($parent)){
-            $id = $parent->id;
-            $title = $parent->title;
-            $lecs = CourseFlashcard::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
-                ->where('is_free_content', 1)->first();
-            $subs = FlashcardSubCategoriesResource::collection($parent->subs);
-        }else{
-            $id = $this->id;
-            $title = $this->title;
-            $lecs = CourseFlashcard::where('category_id' , $id)->where('is_free_content', 1)->first();
-            $subs = FlashcardSubCategoriesResource::collection($this->subs);
-        }
+        $id = $this->id;
+        $title = $this->title;
+        $subs = FlashcardSubCategoriesResource::collection($this->subs);
+        $haveFreeContent = CourseFlashcard::where('category_id' , $id)
+                            ->where('is_free_content', 1)
+                            ->first()
+                        || collect($subs->resolve())
+                            ->pluck('have_free_content')->contains(true);
+        
         return [
             'id'            => $id,
             'title'         => $title,
-            'have_free_content' => $lecs ? true : false,
+            'have_free_content' => $haveFreeContent,
             'subs'          => $subs
         ];
     }

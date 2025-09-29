@@ -110,6 +110,46 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
+        $devices = UserDevice::where('user_id', $user->id)->get(); 
+
+        $devices_count = $devices->count();
+        $device_exists = $devices->firstWhere('device_id', request()->header('device-id')) !== null;
+        $first_device = $devices->first(); 
+
+        if ((!$device_exists && $devices_count >= 2)
+            || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
+            $loginCase['message'] = __('auth.Maximum device numbers exceeded');
+            return $loginCase;
+        }
+
+        if(!$device_exists&& 
+           ( !$first_device  || $first_device->is_tablet != $request['is_tablet'])){
+            // save user device
+            $user_device = new UserDevice;
+            $user_device->user_id = $user->id;
+            $user_device->device_type = request()->header('device-type');
+            $user_device->device_id = request()->header('device-id');
+            $user_device->is_tablet = $request['is_tablet'];
+            $user_device->device_name = $request['device_name'];
+            $user_device->save();
+
+            //sync guest data
+            $guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))
+                        ->first();
+                        
+            if(isset($guestDevice)){
+
+                foreach ($guestDevice->cartCourses as $cartCourse) {
+                    $cartCourse->guest_device_id = null;
+                    $cartCourse->user_id = $user->id;
+                    $cartCourse->save();
+                }
+                $guestDevice->delete();
+
+            }
+
+        }
+            
         $loginCase['data']['user'] = new UserResorce($user);
         $loginCase['data']['token'] = $user->createToken('AccessToken')->accessToken;
         $loginCase['message'] = __('auth.Logged in successfully');

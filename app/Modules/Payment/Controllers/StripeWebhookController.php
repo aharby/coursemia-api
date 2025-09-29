@@ -44,6 +44,12 @@ class StripeWebhookController extends Controller
 
         $paymentIntent = $event->data->object;
 
+        if (($paymentIntent->metadata->source ?? null) !== 'coursemia-app') {
+            // Ignore, wasn't created from our app
+            Log::Info('Ignoring webhook for PaymentIntent not created from our app', ['payment_intent_id' => $paymentIntent->id ?? null]);
+            return;
+        }
+
         if ($event->type === 'payment_intent.succeeded') {
 
             $this->paymentService->processSuccessfulPayment($paymentIntent);

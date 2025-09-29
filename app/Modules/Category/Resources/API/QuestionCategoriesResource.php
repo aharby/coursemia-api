@@ -15,23 +15,21 @@ class QuestionCategoriesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $parent = $this->parent;
-        if (isset($parent)){
-            $id = $parent->id;
-            $title = $parent->title;
-            $lecs = Question::whereIn('category_id' , $parent->subs()->pluck('id')->toArray())
-                ->where('is_free_content', 1)->first();
-            $subs = QuestionSubCategoriesResource::collection($parent->subs);
-        }else{
-            $id = $this->id;
-            $title = $this->title;
-            $lecs = Question::where('category_id' , $id)->where('is_free_content', 1)->first();
-            $subs = QuestionSubCategoriesResource::collection($this->subs);
-        }
+        $id = $this->id;
+        $title = $this->title;
+       
+        $subs = QuestionSubCategoriesResource::collection($this->subs);
+    
+        $haveFreeContent = Question::where('category_id' , $id)
+                        ->where('is_free_content', 1)
+                        ->first()
+                        || collect($subs->resolve())
+                            ->pluck('have_free_content')->contains(true);
+
         return [
             'id'            => $id,
             'title'         => $title,
-            'have_free_content' => $lecs ? true : false,
+            'have_free_content' => $haveFreeContent,
             'subs'          => $subs
         ];
     }

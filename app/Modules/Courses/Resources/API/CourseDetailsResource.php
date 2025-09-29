@@ -30,16 +30,6 @@ class CourseDetailsResource extends JsonResource
             $is_in_cart = $user->cartCourses()->where(['course_id' => $this->id])->exists();
         }
 
-        $lectures = $this->lectures();
-        $notes = $this->notes();
-        $questions = $this->questions();
-        $flashcards = $this->flashCards();
-
-        $lectures_categories_ids = $lectures->pluck('category_id')->unique()->filter();
-        $notes_categories_ids = $notes->pluck('category_id')->unique()->filter();
-        $questions_categories_ids = $questions->pluck('category_id')->unique()->filter();
-        $flashcards_categories_ids = $flashcards->pluck('category_id')->unique()->filter();
-
         $images = $this->images()->pluck('image');
 
         $price_after_discount = $this->price_after_discount;
@@ -48,19 +38,12 @@ class CourseDetailsResource extends JsonResource
             ? Carbon::parse($this->expire_date)->format('Y-m-d')
             : $this->expire_duration;
 
-        // Preserve category order
-        $lecture_cats = Category::whereIn('id', $lectures_categories_ids)->get()->keyBy('id');
-        $ordered_lecture_categories = $lectures_categories_ids->map(fn($id) => $lecture_cats[$id])->filter();
-
-        $notes_cats = Category::whereIn('id', $notes_categories_ids)->get()->keyBy('id');
-        $ordered_notes_categories = $notes_categories_ids->map(fn($id) => $notes_cats[$id])->filter();
-
-        $questions_cats = Category::whereIn('id', $questions_categories_ids)->get()->keyBy('id');
-        $ordered_questions_categories = $questions_categories_ids->map(fn($id) => $questions_cats[$id])->filter();
-
-        $flashcards_cats = Category::whereIn('id', $flashcards_categories_ids)->get()->keyBy('id');
-        $ordered_flashcards_categories = $flashcards_categories_ids->map(fn($id) => $flashcards_cats[$id])->filter();
-
+        // content
+        $lectures = $this->lectures();
+        $notes = $this->notes();
+        $questions = $this->questions();
+        $flashcards = $this->flashCards();
+        
         return [
             'id' => $this->id,
             'is_in_my_cart' => false, // @todo implement is in my cart
@@ -81,11 +64,33 @@ class CourseDetailsResource extends JsonResource
             'flash_cards_count' => $flashcards->count(),
 
             // Ordered categories preserved
-            'lectures_categories' => LectureCategoriesResource::collection($ordered_lecture_categories),
-            'notes_categories' => NoteCategoriesResource::collection($ordered_notes_categories),
-            'questions_categories' => QuestionCategoriesResource::collection($ordered_questions_categories),
-            'flash_cards_categories' => FlashCardCategoriesResource::collection($ordered_flashcards_categories),
+            'questions_categories' => QuestionCategoriesResource::collection($this->getContentCategories($questions)),
+            'flash_cards_categories' => FlashCardCategoriesResource::collection($this->getContentCategories($flashcards)),
+            'lectures_categories' => LectureCategoriesResource::collection($this->getContentCategories($lectures)),
+            'notes_categories' => NoteCategoriesResource::collection($this->getContentCategories($notes))
         ];
+    }
+
+    public function getContentCategories($content)
+    {
+        $categoryIds = $content->pluck('category_id')->filter()->unique();
+
+        $categories = Category::whereIn('id', $categoryIds)->get();
+
+        $parentIds = $categories->pluck('parent_id')->filter()->unique();
+
+        $parents = Category::whereIn('id', $parentIds)->get()->keyBy('id');
+
+        // Replace children with parents if parent exists
+        $categories = $categories->map(function ($category) use ($parents) {
+            return $category->parent_id
+                ? $parents->get($category->parent_id)
+                : $category;
+        })
+        ->unique()
+        ->sortBy('id');                  
+
+        return $categories;
     }
 
 }

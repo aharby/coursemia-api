@@ -35,7 +35,9 @@ class CourseLectureResource extends JsonResource
             'want_to_learn' => $want_to_learn ? true : false,
             'is_free_content'=> (boolean)$this->is_free_content,
             'course'        => $this->course->title,
-            'last_position' => $last_position
+            'last_position' => $last_position,
+            'duration_seconds' => $this->duration_seconds,
+            'duration_formated'      => gmdate("H:i:s", $this->duration_seconds)
         ];
     }
 }
