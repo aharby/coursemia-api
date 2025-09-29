@@ -8,7 +8,7 @@ use App\Modules\Courses\Resources\Admin\CoursesResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class UsersResource extends JsonResource
+class StudentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -29,7 +29,7 @@ class UsersResource extends JsonResource
             'avatar'        => asset($this->photo),
             'role'          => 'editor',
             'is_active'     => (bool)$this->is_active,
-            'devices'       => UserDeviceResource::collection($this->devices),
+            'devices'       => StudentDeviceResource::collection($this->devices),
             'is_phone_verified'      => $this->is_verified,
             'is_email_verified' => $this->hasVerifiedEmail(),
             'country'       => $this->country->translated_title,

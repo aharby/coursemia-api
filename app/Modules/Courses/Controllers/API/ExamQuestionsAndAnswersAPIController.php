@@ -12,7 +12,7 @@ use App\Modules\Courses\Models\CourseLecture;
 use App\Modules\Courses\Models\CourseNote;
 use App\Modules\Courses\Models\FlashCardAnswer;
 use App\Modules\Courses\Models\Question;
-use App\Modules\Courses\Models\UserQuestionAnswer;
+use App\Modules\Courses\Models\StudentQuestionAnswer;
 use App\Modules\Courses\Repository\QuestionsRepositoryInterface;
 use App\Modules\Courses\Requests\Api\StorePostRequest;
 use App\Modules\Courses\Requests\Api\SubmitExamAnswersRequest;
@@ -63,7 +63,7 @@ class ExamQuestionsAndAnswersAPIController extends Controller
             $myAnswer->selection_count++;
             $myAnswer->save();
             
-            UserQuestionAnswer::create([
+            StudentQuestionAnswer::create([
                 'user_id' => auth('api')->user()->id,
                 'question_id' => $myAnswer->question_id,
                 'answer_id' => $myAnswer->id,
