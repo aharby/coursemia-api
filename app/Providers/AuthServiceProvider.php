@@ -7,6 +7,9 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Laravel\Passport\Passport;
 use App\Enums\RolesEnum;
 
+use App\Modules\Courses\Models\Course;
+use App\Modules\Courses\Policies\CoursePolicy;
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -16,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
          'App\Model' => 'App\Policies\ModelPolicy',
+         Course::class => CoursePolicy::class,
     ];
 
     /**

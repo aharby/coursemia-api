@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies;
+namespace App\Modules\Courses\Policies;
 
 use App\Modules\Courses\Models\Course;
 
