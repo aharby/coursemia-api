@@ -8,10 +8,10 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GuestDevice;
-use App\Modules\Users\Models\UserDevice;
+use App\Modules\Users\Models\StudentDevice;
 use App\Enums\StatusCodesEnum;
 
-class AuthOrCreateGuestDevice
+class AuthStudentOrGuest
 {
     public function handle(Request $request, Closure $next): Response
     {
@@ -27,7 +27,7 @@ class AuthOrCreateGuestDevice
 
         $deviceId = $request->header('device-id');
 
-        if(UserDevice::where('device_id', $deviceId)->exists())
+        if(StudentDevice::where('device_id', $deviceId)->exists())
             return customResponse(null,__('api.A user with this device exist. please login'),
          401, StatusCodesEnum::FAILED);
 

@@ -19,7 +19,7 @@ Route::group([
     });
 
      // Submit Exam APIs
-    Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@submitExamAnswers')->middleware('auth_or_guest');
+    Route::post('submit-exam', 'ExamQuestionsAndAnswersAPIController@submitExamAnswers')->middleware('authStudentOrGuest');
 
     Route::post('get-courses', 'CoursesAPIController@courses');
     Route::get('get-course-details', 'CoursesAPIController@getCourseById');
