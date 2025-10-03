@@ -5,7 +5,7 @@ namespace App\Modules\MyProgress\Controllers;
 use App\Enums\StatusCodesEnum;
 use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\FlashCardAnswer;
-use App\Modules\Courses\Models\UserQuestionAnswer;
+use App\Modules\Courses\Models\StudentQuestionAnswer;
 use App\Modules\MyProgress\Requests\GetMyProgressRequest;
 use Carbon\Carbon;
 
@@ -17,7 +17,7 @@ class MyProgressApiController extends Controller
         $user = auth('api')->user();
         if ($type == 'weekly')
         {
-            $answers = UserQuestionAnswer::where('user_id', $user->id)
+            $answers = StudentQuestionAnswer::where('user_id', $user->id)
                 ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
                 ->get();
             $flashCards = FlashCardAnswer::where('user_id', $user->id)
@@ -39,7 +39,7 @@ class MyProgressApiController extends Controller
             ], 'Done', 200, StatusCodesEnum::DONE);
         }elseif ($type == 'monthly')
         {
-            $answers = UserQuestionAnswer::where('user_id', $user->id)
+            $answers = StudentQuestionAnswer::where('user_id', $user->id)
                 ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
                 ->get();
             $flashCards = FlashCardAnswer::where('user_id', $user->id)

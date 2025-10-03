@@ -35,7 +35,7 @@ use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
-use App\Http\Middleware\AuthOrCreateGuestDevice;
+use App\Http\Middleware\AuthStudentOrGuest;
 
 class Kernel extends HttpKernel
 {
@@ -106,7 +106,7 @@ class Kernel extends HttpKernel
         'userActive'=>CheckUserVerified::class,
         'userSuspended' => CheckUserActive::class,
         'checkDeviceAndToken'=>CheckAuthAndDevice::class,
-        'auth_or_guest' => AuthOrCreateGuestDevice::class
+        'authStudentOrGuest' => AuthStudentOrGuest::class
     ];
 
     /**

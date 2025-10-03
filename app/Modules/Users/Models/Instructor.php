@@ -2,61 +2,27 @@
 
 namespace App\Modules\Users\Models;
 
-use Carbon\Carbon;
-use App\Modules\Users\User;
-use App\Modules\Schools\School;
-use App\Modules\BaseApp\BaseModel;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Modules\VCRSchedules\Models\VCRSession;
-use App\Modules\VCRSchedules\Models\VCRSchedule;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Modules\Courses\Models\Course;
+use App\Modules\Users\Models\User;
+use App\Modules\Users\Models\Assistant;
 
-class Instructor extends BaseModel
+class Instructor extends Model
 {
-    use SoftDeletes, HasFactory;
-
-    protected $table = 'instructors';
-
-    protected $fillable = [
-        'about_instructor',
-        'hire_date',
-        'school_id',
-        'user_id'
-    ];
-
-    protected $appends = ['instructor_total_hours'];
-
-    public function getInstructorTotalHoursAttribute()
-    {
-        $duration = 0;
-        foreach ($this->vcrSessions as $vcrSession) {
-            if ($vcrSession->ended_at) {
-                $endedAt = Carbon::parse($vcrSession->ended_at);
-                $startedAt = Carbon::parse($vcrSession->created_at);
-                $duration += $endedAt->diffInHours($startedAt);
-            }
-        }
-
-        return $duration;
-    }
-
-    public function school()
-    {
-        return $this->belongsTo(School::class, 'school_id');
-    }
+    protected $fillable = ['user_id'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function vcrSessions()
+    public function courses()
     {
-        return $this->hasMany(VCRSession::class);
+        return $this->hasMany(Course::class);
     }
 
-    public function vcrSchedule()
+    public function assistants()
     {
-        return $this->hasMany(VCRSchedule::class);
+        return $this->hasMany(Assistant::class);
     }
 }

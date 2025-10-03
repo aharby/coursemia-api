@@ -37,9 +37,6 @@ Route::post('/logout', '\App\Modules\Users\Auth\Controllers\Api\AuthApiControlle
 Route::get('/confirm', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@getConfirm');
 
 Route::post('/change-language', '\App\Modules\Users\Auth\Controllers\Api\AuthApiController@changeLanguage')->middleware('auth:api');
-Route::any('/no-auth', function(){
-    return customResponse(null,"Authentication required", 401, StatusCodesEnum::UNAUTHORIZED);
-});
 
 Route::group(['namespace' => '\App\Modules\Users\Auth\Controllers\Api'], function (){
     Route::post('create-account', 'AuthApiController@register');

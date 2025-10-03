@@ -8,7 +8,7 @@ use App\Modules\Courses\Resources\Admin\CoursesResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class UsersResource extends JsonResource
+class StudentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
