@@ -1,0 +1,45 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        $defaultCountryId = DB::table('countries')
+            ->where('country_code', '+20')
+            ->value('id');
+
+        Schema::table('users', function (Blueprint $table) use ($defaultCountryId) {
+            $table->string('language')->default(config('app.locale'))->change();
+
+            $table->string('full_name')->nullable()->change();
+            $table->string('email')->nullable()->change();
+            $table->string('phone')->nullable()->change();
+            $table->string('password')->nullable()->change();
+
+            $table->boolean('is_verified')->default(false)->change();
+            $table->boolean('is_active')->default(true)->change();
+
+            $table->unsignedBigInteger('country_id')->default($defaultCountryId)->change();
+            $table->string('country_code')->default('+20')->change();
+        });
+}
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        //
+    }
+};

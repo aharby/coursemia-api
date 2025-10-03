@@ -43,6 +43,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $instructor = Role::firstOrCreate(['name' => RolesEnum::INSTRUCTOR]);
         $assistant = Role::firstOrCreate(['name' => RolesEnum::ASSISTANT]);
         $student = Role::firstOrCreate(['name' => RolesEnum::STUDENT]);
+        $student = Role::firstOrCreate(['name' => RolesEnum::GUEST]);
 
         // Assign Permissions
         $admin->givePermissionTo(array_diff($permissions, [PermissionsEnum::MANAGE_PAYMENTS]));

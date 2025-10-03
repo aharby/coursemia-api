@@ -29,7 +29,7 @@ class StudentResource extends JsonResource
             'avatar'        => asset($this->photo),
             'role'          => 'editor',
             'is_active'     => (bool)$this->is_active,
-            'devices'       => StudentDeviceResource::collection($this->devices),
+            'devices'       => UserDeviceResource::collection($this->devices),
             'is_phone_verified'      => $this->is_verified,
             'is_email_verified' => $this->hasVerifiedEmail(),
             'country'       => $this->country->translated_title,

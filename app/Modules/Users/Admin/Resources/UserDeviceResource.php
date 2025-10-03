@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class StudentDeviceResource extends JsonResource
+class UserDeviceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

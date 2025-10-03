@@ -5,7 +5,7 @@ namespace App\Modules\Users\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StudentDevice extends Model
+class UserDevice extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -17,7 +17,7 @@ class StudentDevice extends Model
             return 'iOS';
     }
 
-    public function student(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
 }
