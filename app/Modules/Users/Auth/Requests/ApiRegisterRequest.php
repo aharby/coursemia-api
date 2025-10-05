@@ -27,11 +27,8 @@ class ApiRegisterRequest extends FormRequest
     {
         return [
             'full_name'         => 'required|max:255',
-            'phone_number'      => 'required|unique:users,phone',
             'email_address'     => 'required|unique:users,email',
-            'country_id'        => 'required|integer|exists:countries,id',
             'refer_code'        => 'nullable|exists:users,refer_code',
-            'country_code'      => 'required|exists:countries,country_code',
             'password' => ['required', 
                     'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{9,}$/']   
         ];
@@ -42,7 +39,6 @@ class ApiRegisterRequest extends FormRequest
         return [
             'password.regex' => __('auth.Password Regex'),
             'email_address.unique' => 'The :attribute is already taken. Please login.',
-            'phone_number.unique'  => 'The :attribute is already taken. Please login.',
         ];
     }
 
