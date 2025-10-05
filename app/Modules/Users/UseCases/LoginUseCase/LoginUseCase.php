@@ -63,12 +63,14 @@ class LoginUseCase implements LoginUseCaseInterface
     public function login(array $request, UserRepositoryInterface $userRepository): array
     {
         $user = null;
+        $isPhoneLogin = false;
         
         if (array_key_exists('email', $request)) {
             $user = $userRepository->findByEmail($request['email']);
         }
         else{
             $user = $userRepository->findByPhone($request['phone_number'], $request['country_code']);
+            $isPhoneLogin = true;
         }
 
         $loginCase = array();
@@ -92,21 +94,16 @@ class LoginUseCase implements LoginUseCaseInterface
                 'email_address' => $user->email
             ];
 
-        if(!$user->is_verified && !$user->hasVerifiedEmail()){
-            $loginCase['message'] = __('auth.User not verified');
-            $loginCase['status_code'] = StatusCodesEnum::PHONE_NUMBER_AND_EMAIL_NOT_VERIFIED;
-            return $loginCase;
-        }
-
-        if(!$user->is_verified){
-            $loginCase['message'] = __('auth.User not verified');
-            $loginCase['status_code'] = StatusCodesEnum::PHONE_NUMBER_NOT_VERIFIED;
-            return $loginCase;
-        }
-
+        // email address has to be verified.
         if(!$user->hasVerifiedEmail()){
             $loginCase['message'] = __('auth.User not verified');
             $loginCase['status_code'] = StatusCodesEnum::EMAIL_NOT_VERIFIED;
+            return $loginCase;
+        }
+
+        if( $isPhoneLogin && !$user->is_verified){
+            $loginCase['message'] = __('auth.User not verified');
+            $loginCase['status_code'] = StatusCodesEnum::PHONE_NUMBER_NOT_VERIFIED;
             return $loginCase;
         }
 

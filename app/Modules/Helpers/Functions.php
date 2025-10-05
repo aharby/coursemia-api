@@ -2086,5 +2086,19 @@ if (!function_exists('resolveSubscribableName')) {
             }
         }
     }
+
+    if(!function_exists('getEnumValues')) {
+        function getEnumValues(string $enumClass): array
+        {
+            // If it’s a native PHP 8.1+ enum
+            if (enum_exists($enumClass)) {
+                return array_map(fn($case) => $case->value, $enumClass::cases());
+            }
+
+            // Fallback for class-based enum (constants)
+            $reflection = new ReflectionClass($enumClass);
+            return array_values($reflection->getConstants());
+        }
+    }
 }
 
