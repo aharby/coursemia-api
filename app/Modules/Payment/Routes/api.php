@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
     'prefix' => 'cart', 'as' => 'cart.',
-    'middleware' => ['auth_or_guest']
+    'middleware' => ['AuthStudentOrGuest']
 ], function (){
     Route::get('get-courses',[CartAPIController::class, 'getCourses']);
     

@@ -10,7 +10,7 @@ use App\Modules\Subjects\Models\Subject;
 use App\Modules\Subjects\Models\SubModels\SubjectInstructors;
 use App\Modules\Users\Models\PasswordReset;
 use App\Modules\Users\Models\Student;
-use App\Modules\Users\User;
+use App\Modules\Users\Models\User;
 use App\Modules\Users\UserEnums;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
