@@ -154,18 +154,14 @@ class AuthApiController extends BaseApiController
             }
             $requestData = [
                 'full_name' => $request->full_name,
-                'phone' => $request->phone_number,
                 'email' => $request->email_address,
-                'country_id' => $request->country_id,
                 'photo' => $photo,
                 'password' => Hash::make($request->password),
-                'country_code' => $request->country_code,
                 'referer_id' => $referer_id,
                 'refer_code' => $this->getUniqueReferCode()
-
             ];
-            $user = $this->registerUseCase->register($requestData, $this->repository);
 
+            $user = $this->registerUseCase->register($requestData, $this->repository);
 
             if (!is_null($user)) {
 
