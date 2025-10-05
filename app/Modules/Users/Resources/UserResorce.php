@@ -14,9 +14,9 @@ class UserResorce extends JsonResource
      */
     public function toArray($request)
     {
-        $flag  = $this->country->flag;
+        $flag  = $this->country?->flag;
 
-        if(!str_starts_with($this->photo, 'https')){
+        if($flag && !str_starts_with($this->photo, 'https')){
             $flag = image($flag, 'large');
         }
 
@@ -28,7 +28,7 @@ class UserResorce extends JsonResource
             'phone_number'      => $this->phone,
             'email_address'     => $this->email,
             'country_id'        => $this->country_id,
-            'country_name'      => $this->country->translated_title,
+            'country_name'      => $this->country?->translated_title,
             'country_flag'     =>  $flag,
             'is_phone_verified' => (bool) $this->is_verified,
             'referral_code'     => $this->refer_code,
