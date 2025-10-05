@@ -38,7 +38,7 @@
         "spatie/laravel-event-sourcing": "^7.0",
         "spatie/laravel-fractal": "^6.0",
         "spatie/laravel-ignition": "^1.0",
-        "spatie/laravel-permission": "^5.10",
+        "spatie/laravel-permission": "^6.21",
         "spatie/laravel-queued-db-cleanup": "^1.1.2",
         "stripe/stripe-php": "^14.7",
         "twilio/sdk": "^6.42",
