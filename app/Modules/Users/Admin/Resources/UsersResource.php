@@ -18,12 +18,17 @@ class UsersResource extends JsonResource
      */
     public function toArray($request)
     {
+        $phone = null;
+
+        if($this->country)
+            $phone = $this->country_code.$this->phone;
+
         return [
             'id'            => $this->id,
             'fullName'      => $this->full_name,
             'username'      => $this->full_name,
             'email'         => $this->email,
-            'phone'         => $this->country_code.$this->phone,
+            'phone'         => $phone,
             'referral_code' => $this->refer_code,
             'courses_bought'=> CoursesResource::collection($this->courses),
             'avatar'        => asset($this->photo),
@@ -32,7 +37,7 @@ class UsersResource extends JsonResource
             'devices'       => UserDeviceResource::collection($this->devices),
             'is_phone_verified'      => $this->is_verified,
             'is_email_verified' => $this->hasVerifiedEmail(),
-            'country'       => $this->country->translated_title,
+            'country'       => $this->country?->translated_title,
             'ability'       => [
                 [
                   "action" => 'manage',
