@@ -8,6 +8,8 @@ class VideoService
     {
         $command = "ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($videoUrl) . " 2>/dev/null";
         $duration = shell_exec($command);
+
+        info($duration);
         
         return $duration ? (float) trim($duration) : null;
     }
