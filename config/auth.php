@@ -74,16 +74,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => \App\Modules\Users\Models\User::class,
-        ],
-        'admins' => [
-            'driver' => 'eloquent',
-            'model' => \App\Modules\Users\Admin\Models\Admin::class,
-        ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        ]
     ],
 
     /*
@@ -106,12 +97,7 @@ return [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
-        ],
-        'admins' => [
-            'provider' => 'admins',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
+        ]
     ],
 
 ];

@@ -68,5 +68,6 @@ class AppServiceProvider extends ServiceProvider
                 return $namespace . $modelName . 'Factory';
             }
         );
+
     }
 }

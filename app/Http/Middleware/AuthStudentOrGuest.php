@@ -11,7 +11,7 @@ use App\Models\GuestDevice;
 use App\Modules\Users\Models\UserDevice;
 use App\Enums\StatusCodesEnum;
 
-class AuthOrCreateGuestDevice
+class AuthStudentOrGuest
 {
     public function handle(Request $request, Closure $next): Response
     {

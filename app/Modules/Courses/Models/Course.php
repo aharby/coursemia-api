@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Modules\Payment\Models\Order;
+use App\Modules\Users\Models\Instructor;
+use App\Modules\Users\Models\Student;
 
 class Course extends Model
 {
@@ -15,11 +17,6 @@ class Course extends Model
 
     public function images(){
         return $this->hasMany(CourseImage::class);
-    }
-
-    public function admin()
-    {
-        return $this->belongsTo(Admin::class);
     }
 
     public function speciality(){
@@ -105,4 +102,20 @@ class Course extends Model
     {
         return $this->belongsToMany(Order::class, 'order_course')->withTimestamps();
     }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(Instructor::class);
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_courses');
+    }
+
 }
