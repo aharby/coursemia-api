@@ -59,7 +59,7 @@ class QuestionsRepository implements QuestionsRepositoryInterface
 border-spacing: 0.05rem;    /* Ensure it spans the container */
     }
     td {
-      text-align:left;
+      text-align:left !important;
       vertical-align: middle !important;
       padding: 0.2rem 0.2rem !important;
 font-size: 0.7rem;    

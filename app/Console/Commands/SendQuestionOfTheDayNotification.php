@@ -50,7 +50,14 @@ class SendQuestionOfTheDayNotification extends Command
                 $notifySuccessCount++;
 
             } catch (CouldNotSendNotification $e) { // Catch notification-specific exceptions
-                $this->logWarn('Notification failed: ' . $e->getMessage(). ' Code: '. $e->getCode());
+                $this->logWarn(sprintf(
+                'Notification failed: User %d (%s) | %s (Code %d)',
+                $user->id,
+                    $user->full_name,
+                    $e->getMessage(),
+                    $e->getCode()
+                ));
+
                 //clean expired tokens
                 $notifyFailureCount++;
             }
