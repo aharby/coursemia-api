@@ -49,10 +49,11 @@ class SuperAdminSeeder extends Seeder
             ]
         );
 
-        if($user) {
+        if($user && !$user->hasVerifiedEmail()) 
             event(new Registered($user));
 
+        if($user && !$user->hasRole(RolesEnum::SUPER_ADMIN))
             $user->assignRole(RolesEnum::SUPER_ADMIN);
-        }
+        
     }
 }
