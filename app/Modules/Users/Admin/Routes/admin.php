@@ -1,11 +1,11 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Modules\Users\Admin\Controllers\AuthController;
 use \App\Modules\Users\Admin\Controllers\UsersController;
+use App\Modules\Users\Auth\Controllers\Api\AuthApiController;
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('login', [AuthApiController::class, 'login']);
+    Route::post('logout', [AuthApiController::class, 'logout']);
 });
 
 Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => 'auth:admin'], function () {

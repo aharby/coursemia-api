@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Models\GuestDevice;
+use App\Enums\RolesEnum;
 
 
 class LoginUseCase implements LoginUseCaseInterface
@@ -69,44 +70,12 @@ class LoginUseCase implements LoginUseCaseInterface
             return $loginCase;
         }
 
-        $devices = UserDevice::where('user_id', $user->id)->get(); 
-
-        $devices_count = $devices->count();
-        $device_exists = $devices->firstWhere('device_id', request()->header('device-id')) !== null;
-        $first_device = $devices->first(); 
-
-        if ((!$device_exists && $devices_count >= 2)
-            || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
-            $loginCase['message'] = __('auth.Maximum device numbers exceeded');
-            return $loginCase;
-        }
-
-        if(!$device_exists&& 
-           ( !$first_device  || $first_device->is_tablet != $request['is_tablet'])){
-            // save user device
-            $user_device = new UserDevice;
-            $user_device->user_id = $user->id;
-            $user_device->device_type = request()->header('device-type');
-            $user_device->device_id = request()->header('device-id');
-            $user_device->is_tablet = $request['is_tablet'];
-            $user_device->device_name = $request['device_name'];
-            $user_device->save();
-
-            //sync guest data
-            $guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))
-                        ->first();
-                        
-            if(isset($guestDevice)){
-
-                foreach ($guestDevice->cartCourses as $cartCourse) {
-                    $cartCourse->guest_device_id = null;
-                    $cartCourse->user_id = $user->id;
-                    $cartCourse->save();
-                }
-                $guestDevice->delete();
-
+        if($user->hasRole(RolesEnum::STUDENT)){
+            $deviceValidation = $this->handleUserDevice($user, $request);
+            if (!$deviceValidation['success']) {
+                $loginCase['message'] = $deviceValidation['message'];
+                return $loginCase;
             }
-
         }
             
         $loginCase['data']['user'] = new UserResorce($user);
@@ -298,5 +267,70 @@ class LoginUseCase implements LoginUseCaseInterface
         }
 
         return $loginCase;
+    }
+
+    private function handleUserDevice($user, array $request): array
+    {
+        $devices = UserDevice::where('user_id', $user->id)->get();
+        $devices_count = $devices->count();
+        $device_exists = $devices->firstWhere('device_id', request()->header('device-id')) !== null;
+        $first_device = $devices->first();
+
+        // Check if device limit is exceeded
+        if ((!$device_exists && $devices_count >= 2)
+            || (!$device_exists && $first_device && $first_device->is_tablet == $request['is_tablet'])) {
+            return [
+                'success' => false,
+                'message' => __('auth.Maximum device numbers exceeded')
+            ];
+        }
+
+        // Register new device if conditions are met
+        if (!$device_exists && 
+            (!$first_device || $first_device->is_tablet != $request['is_tablet'])) {
+            
+            $this->registerUserDevice($user, $request);
+            $this->syncGuestData($user);
+        }
+
+        return ['success' => true];
+    }
+
+    /**
+     * Register a new user device
+     *
+     * @param User $user
+     * @param array $request
+     * @return void
+     */
+    private function registerUserDevice($user, array $request): void
+    {
+        $user_device = new UserDevice;
+        $user_device->user_id = $user->id;
+        $user_device->device_type = request()->header('device-type');
+        $user_device->device_id = request()->header('device-id');
+        $user_device->is_tablet = $request['is_tablet'];
+        $user_device->device_name = $request['device_name'];
+        $user_device->save();
+    }
+
+    /**
+     * Sync guest device data to user
+     *
+     * @param User $user
+     * @return void
+     */
+    private function syncGuestData($user): void
+    {
+        $guestDevice = GuestDevice::where('guest_device_id', request()->header('device-id'))->first();
+        
+        if (isset($guestDevice)) {
+            foreach ($guestDevice->cartCourses as $cartCourse) {
+                $cartCourse->guest_device_id = null;
+                $cartCourse->user_id = $user->id;
+                $cartCourse->save();
+            }
+            $guestDevice->delete();
+        }
     }
 }

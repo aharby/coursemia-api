@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
+use App\Enums\RolesEnum;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -29,5 +30,9 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
 
         Passport::loadKeysFrom(storage_path('secret'));
+
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole(RolesEnum::SUPER_ADMIN) ? true : null;
+        });
     }
 }

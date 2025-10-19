@@ -17,7 +17,7 @@ use App\Modules\Users\Traits\Invitable;
 use App\Modules\Users\Traits\UserRatingable;
 use App\Modules\BaseApp\Traits\HasAttach;
 use App\Modules\Post\Models\Post;
-
+use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -25,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable, HasApiTokens;
     use HasAttach, Notifiable, Invitable, UserRatingable, HasFactory;
     use HasApiTokens; //passport auth
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
